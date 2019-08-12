@@ -1,0 +1,53 @@
+#
+# mscm.txt
+#
+
+Documentation for the MSCM data:
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+   id        = mother-child id
+   day       = study day t=(1,2,...,30)
+   stress    = maternal stress at day(t):  1=yes, 0=no
+   s1        = maternal stress at day(t-1):  1=yes, 0=no
+   s2        = maternal stress at day(t-2):  1=yes, 0=no
+   s3        = maternal stress at day(t-3):  1=yes, 0=no
+   s4        = maternal stress at day(t-4):  1=yes, 0=no
+   s5        = maternal stress at day(t-5):  1=yes, 0=no
+   s6        = maternal stress at day(t-6):  1=yes, 0=no
+   illness   = child illness on day(t):  1=yes, 0=no
+   i1        = child illness on day(t-1):  1=yes, 0=no
+   i2        = child illness on day(t-2):  1=yes, 0=no
+   i3        = child illness on day(t-3):  1=yes, 0=no
+   i4        = child illness on day(t-4):  1=yes, 0=no
+   i5        = child illness on day(t-5):  1=yes, 0=no
+   i6        = child illness on day(t-6):  1=yes, 0=no
+   married   = marital status: 1=married, 0=other
+   education = highest educational level:  1=less than high school
+                                           2=some high school
+                                           3=high school graduate
+                                           4=some college
+                                           5=college graduate
+   employed  = employment status:  1=employed, 0=unemployed
+   chlth     = child health status at baseline:  1=very poor
+                                                 2=poor
+                                                 3=fair
+                                                 4=good
+                                                 5=very good
+   mhlth     = mother health status at baseline: 1=very poor
+                                                 2=poor
+                                                 3=fair
+                                                 4=good 
+                                                 5=very good
+   race      = child race:  1=non-white, 0=white
+   csex      = child gender:  1=male, 2=female
+   housize   = size of household:  1=more than 3 people, 0=2-3 people
+   bIllness  = baseline illness:  mean of illness(1) through illness(7)
+   bStress   = baseline stress:  mean of stress(1) through stress(7)
+
+
+
+
+
+
+

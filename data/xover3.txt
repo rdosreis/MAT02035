@@ -1,0 +1,28 @@
+THE DATA SET CALLED  xover3.dat  IS CODED AS FOLLOWS.                
+                                                                      
+   VAR. 1 = ID (1 TO 86)                                              
+                                                                      
+   VAR. 2 = CLASS                                                     
+                                                                      
+   VAR. 3 = 1 IF AFFECTED AND 0 O.W. (Y)                              
+                                                                      
+   VAR. 4 = 1 (INTERCEPT)                                             
+                                                                      
+   VAR. 5 = 1 IF TX. 2 AND 0 O.W. (X1)                                
+                                                                      
+   VAR. 6 = 1 IF TX. 3 AND 0 O.W. (X2)                                
+                                                                      
+   VAR. 7 = 1 IF PERIOD 2 AND 0 O.W. (X3)                             
+                                                                      
+   VAR. 8 = 1 IF PERIOD 3 AND 0 O.W. (X4)                             
+                                                                      
+   VAR. 9 = 1 IF THE PREVIOUS TX. ASSIGNMENT IS 1 (X5)                
+                                                                      
+   VAR. 10 = 1 IF THE PREVIOUS TX. ASSIGNMENT IS 2 (X6)               
+                                                                      
+   VAR. 11 = 1 IF THE PREVIOUS TX. ASSIGNMENT IS 3 (X7)               
+                                                                      
+                                                                      
+                                                                      
+  REFERENCE: JONES AND KENWARD(1987). STATISTICS IN MEDICINE 
+

@@ -1,0 +1,37 @@
+#
+##
+### enter the data
+##
+#
+day <- c( 152, 174, 201, 227, 258 )
+data <- matrix( scan("spruce.data"), ncol=5, byrow=T )
+tx <- c( rep(1,54), rep(0,25) )
+chamber <- c( rep(1,27), rep(2,27), rep(3,12), rep(4,13) )
+#
+wide.spruce88 <- data
+wide.day <- day
+#
+##
+### build stacked data
+##
+#
+ntrees <- nrow(data)
+nobs <- ncol(data)
+#
+spruce88 <- data.frame(
+
+	y = as.vector( t(data) ),
+	
+	day = rep( day, ntrees ) - 201,
+
+	tx = rep( tx, rep(nobs,ntrees) ),
+
+	chamber = rep( chamber, rep(nobs,ntrees) ),
+
+	id = rep( c(1:ntrees), rep(nobs,ntrees) )  )
+#
+rm( day, data, tx, chamber )
+#
+#
+# end-of-file...
+

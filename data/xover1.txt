@@ -1,0 +1,25 @@
+IN BOTH XOVER1 DATA A AND XOVER2 DATA A, THE VARIABLES WERE CODED AS  
+FOLLOWS.                                                              
+                                                                      
+    ID = CLUSTER VARIABLE                                             
+                                                                      
+    CLASS = 1, NEEDED TO RUN GEE2                                     
+                                                                      
+    Y = 1 IF AFFECTED AND 0, O.W.                                     
+                                                                      
+    X1 = 1 (INTERCEPT)                                                
+                                                                      
+    X2 = 1 IF TX B AND 0 IF TX A                                      
+                                                                      
+    X3 = 1 IF PERIOD 2 AND 0 IF PERIOD 1                              
+                                                                      
+    X4 = X2*X3                                                        
+                                                                      
+    X5 = 1 IF BA AND 0 IF AB (NEEDED FOR REGRESSION MODEL ON OR)      
+                                                                      
+                                                                      
+   REFERENCES :                                                       
+                                                                      
+     XOVER1 DATA IS FROM JONES AND KENWARD(1989) CHAPMAN AND HALL, P.9
+                                                                      
+

@@ -1,0 +1,7 @@
+The variables are (in column order):
+
+     diet 
+     cow 
+     week 
+     protein
+

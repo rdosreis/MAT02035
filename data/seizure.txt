@@ -1,0 +1,11 @@
+THE FOLLOWING DESCRIBES THE COLUMNS OF  thall5.dat:
+
+	ID
+	Seizure counts
+	Visit  		(visit==1, through visit==5)
+	TX     		1 if progabide; 0 otherwise
+	Age		
+	Weeks		# weeks over which seizures were recorded
+
+REFERENCE:   Thall and Vail (1991) Biometrics
+

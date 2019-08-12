@@ -1,0 +1,18 @@
+
+Madras schizophrenia symptom data
+*********************************
+
+Symptom = thought disorders
+
+
+
+The variables are (in column order):
+
+     ID     = patient ID
+     Y      = symptom indicator
+     MONTH  = month since hospitalization
+     AGE    = age-at-onset (1= age<20 ; 0= age>=20)
+     GENDER = gender (1=female; 0=male)
+     MONTH*AGE
+     MONTH*GENDER
+
