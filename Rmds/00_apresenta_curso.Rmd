@@ -1,6 +1,7 @@
 ---
-title: |
-  | MAT02035 - Modelos para dados correlacionados
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Apresentações"
+fontsize: 10pt
 author: |
   | Rodrigo Citton P. dos Reis
   | `citton.padilha@ufrgs.br`
@@ -10,16 +11,204 @@ institute: |
   | \textsc{Departamento de Estatística}
 date: |
   | Porto Alegre, 2019
+header-includes:
+  - \titlegraphic{\hfill\includegraphics[height=1.5cm]{logos/Logo-40-anos-estatistica.png}}
 ---
 
-## Objetivos
+# O professor
 
-- Apresentar o desenvolvimento teórico e aplicações da __teoria de Processos Estocásticos__. 
-- Capacitar o aluno para a __modelagem de problemas__, __utilização de ferramentas__ abordadas no curso e __interpretação dos resultados__.
+## Olá!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', out.height='80%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'rodrigo_cartoon.jpg'))
+
+```
+
+## Olá!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', out.height='80%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'hi_my_name_is.png'))
+
+```
+
+## Graduação
+
+- __Estatística - UFRGS__
+  + 2002 - 2007
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='15%', out.height='20%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'AC.png'))
+
+```
+
+- __Orientador:__ Prof. Alberto Cargnelutti
+- __"Métodos de agrupamento para o estudo da divergência genética em cultivares de feijão"__
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='15%', out.height='20%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'feijao.jpg'))
+
+```
+
+## Mestrado
+
+- __Estatística - UFMG__
+  + 2008 - 2010
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='40%', out.height='20%', paged.print=FALSE}
+
+library(cowplot)
+library(ggplot2)
+
+p1 <- ggdraw() + draw_image(here('images', 'EC.jpg'), scale = 1)
+p2 <- ggdraw() + draw_image(here('images', 'MCPN.jpg'), scale = 0.82)
+
+plot_grid(p1, p2)
+
+```
+
+- __Orientadores:__ Prof. Enrico A. Colosimo e Prof.ª Maria do Carmo P. Nunes
+- __"Técnicas estatísticas para avaliação de novos marcadores de risco"__
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='40%', out.height='20%', paged.print=FALSE}
+
+p1 <- ggdraw() + draw_image(here('images', 'barbeiro_errado.jpg'), scale = 1)
+p2 <- ggdraw() + draw_image(here('images', 'barbeiro_certo.jpg'), scale = 1)
+
+plot_grid(p1, p2)
+
+```
+
+- __PPG em Infectologia e Medicina Tropical__
+    + Cardiopatia em pacientes com doença de Chagas
+    
+## Doutorado
+
+- __Estatística - UFMG__
+  + 2010 - 2014
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='40%', out.height='20%', paged.print=FALSE}
+
+library(cowplot)
+library(ggplot2)
+
+p1 <- ggdraw() + draw_image(here('images', 'EC.jpg'), scale = 0.95)
+p2 <- ggdraw() + draw_image(here('images', 'GG2.jpg'), scale = 1)
+
+plot_grid(p1, p2)
+
+```
+
+- __Orientadores:__ Prof. Enrico A. Colosimo e Prof. Gustavo L. Gilardoni
+- __"Análise hierárquica de múltiplos sistemas reparáveis"__
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='90%', out.height='30%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'happy_sad.png'))
+
+```
+
+- __ELSA - Brasil__
+
+## Pós-Doutorado
+
+- __Saúde Pública - UFMG__
+  + 2015 - 2017
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='20%', out.height='25%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'SB.png'))
+
+```
+
+- __Supervisora:__ Prof.ª Sandhi M. Barreto
+- __"Análise de mediação causal"__
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='40%', out.height='20%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'mediation.png'))
+
+```
+
+- __++ ELSA - Brasil__
+
+## Um caminho potencial
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', out.height='80%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'vio.jpg'))
+
+```
+
+## Atividades atuais
+
+- __Departamento de Estatística da UFRGS__
+- __Pós-Graduação em Epidemiologia da UFRGS__
+    + Gabriel Dalla Costa. Predição do tempo de permanência hospitalar através de métodos de aprendizagem de máquina (Orientação de mestrado em conjunto com a Prof.ª Patrícia Ziegelmann).
+    + Letícia Menegotto. Análise de mediação em modelos de curva de crescimento (Orientação de mestrado em conjunto com a Prof.ª Vanessa Leotti)
+    + Luísa Back. Efeito mediador da trajetória de índice de massa corporal na relação peso ao nascer e desenvolvimento de diabetes na vida adulta: o Estudo Longitudinal de Saúde do Adulto (Orientação de mestrado em conjunto com a Prof. Alvaro Vigo)
+- __+++++++++ ELSA - Brasil__
+
+## ELSA - Brasil
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='90%', out.height='50%', paged.print=FALSE}
+
+p1 <- ggdraw() + draw_image(here('images', 'elsa_errado.jpg'), scale = 0.6)
+p2 <- ggdraw() + draw_image(here('images', 'logo_elsa.png'), scale = 1)
+
+plot_grid(p1, p2)
+
+```
+
+\footnotesize
+
+- O __Estudo Longitudinal de Saúde do Adulto__ é uma investigação multicêntrica de coorte composta por 15 mil funcionários de seis instituições públicas de ensino superior e pesquisa das regiões Nordeste, Sul e Sudeste do Brasil.
+- A pesquisa tem o propósito de investigar a __incidência__ e os __fatores de risco__ para doenças crônicas, em particular, as cardiovasculares e o __diabetes__.
+- Em cada centro integrante do estudo, os sujeitos da pesquisa --- com idade entre 35 e 74 anos --- fazem exames e entrevistas nas quais são avaliados aspectos como condições de vida, diferenças sociais, relação com o trabalho, gênero e especificidades da dieta da população brasileira.
+
+## ELSA - Brasil
+
+__Centro de investigação Minas Gerais (Hospital Borges da Costa)__
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', out.height='80%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'hospborges.jpg'))
+
+```
+
+## ELSA - Brasil
+
+__Centro de investigação Rio Grande do Sul (Centro de Pesquisas Clínicas)__
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', out.height='70%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'cirs.png'))
+
+```
+
+## ELSA - Brasil
+### Uma propaganda: mural de bolsa da UFRGS
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', out.height='80%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'bolsa_elsa.png'))
+
+```
+
+# A disciplina
+
+## Objetivos 
+
+- Capacitar os alunos para identificar situações em que pode existir __correlação nos dados__ observados.
+- Apresentar aos alunos as técnicas de __Equações de Estimação Generalizadas__ e __Modelos Mistos Lineares__.
+- Capacitar os alunos no uso das técnicas para análise de dados correlacionados proporcionando __domínio teórico, aplicado e computacional__ dos conceitos envolvidos.
 
 ## Organização
 
-- __Disciplina:__ Processos Estocásticos
+- __Disciplina:__ Modelos para dados correlacionados
 - __Turma:__ U
 - __Modalidade:__ Presencial com apoio online (Moodle)
 - __Professor:__ Rodrigo Citton Padilha dos Reis
@@ -27,8 +216,8 @@ date: |
     + Sala: B215 do Instituto de Matemática e Estatística
 - __Monitoria:__ _em breve teremos os horários da monitoria_
 
-- Sala 109 do Prédio Salas de Aula Campus do Vale - 43324
-- Horário: Segundas e quartas, das 10hs 30min às 12hs 10min
+- Sala F105 do Instituto de Química - Salas de Aula - Campus do Vale - 43123
+- Horário: Terças e quintas, das 10hs 30min às 12hs 10min
 
 ## Aulas e material didático
 
@@ -38,7 +227,6 @@ date: |
     + Resolução de exercícios
 - __Notas de aula__
 - __Listas de exercícios__
-    + Soluções comentadas e respostas __(para alguns exercícios)__
 - __Canais de comunicação:__
     + Durante as aulas
     + Moodle: aulas, materiais, listas de exercícios
@@ -56,42 +244,45 @@ knitr::include_graphics(here('images','Rlogo.png'))
 
 ## Conteúdo programático
 
-__Semanas de 1 a 9__
+1. Dados longitudinais e agrupados
+    + Introdução, exemplos, modelos, organização
+2. Revisão de vetores, matrizes e propriedades de esperanças e variâncias
+3. Dados longitudinais: conceitos básicos
+    + objetivos, características, fontes de correlação
+4. Visão geral dos modelos lineares para dados longitudinais
+    + notação e suposições distribucionais
+    + métodos descritivos de análise
+    + modelagem da média e da variância
+    + Abordagens históricas
+5. Estimação e inferência estatística
+    + Máxima verossimilhança e MV restrita
+    + Inferência estatística: testes de hipóteses e ICs
+6. Modelando a média: análise de perfis de respostas
+7. Modelando a média: curvas paramétricas
 
-1. Processos Estocásticos
-    + Notação e terminologia
-    + Conceitos básicos
-2. Cadeias de Markov a Parâmetro Discreto
-    + Probabilidades de transição
-    + Classificação dos estados
-    + Distribuições estacionárias
-    + Distribuições limites
-3. Cadeias de Markov com Espaço de Estado Finito
-    + Passeio Aleatório
-    + Cadeias de Eherenfest
-    + Cadeias de Nascimentos e Mortes
-    + Cadeias de Filas
-    + Cadeias de Ramificação
-    
-## Conteúdo programático
+## Conteúdo programático (cont.)
 
-__Semanas de 10 a 18__
-
-4. Cadeias de Markov a Parâmetro Contínuo
-    + Distribuições finito-dimensionais
-    + Propriedade fraca de Markov
-    + Probabilidade de transição 
-5. Processos Estocásticos a Parâmetro Contínuo
-    + Processo de Poisson
-    + Processo de Filas
-    + Processo de Nascimentos e Mortes
+8. Modelando a covariância
+9. Modelos lineares de efeitos mistos
+10. Análise de resíduos e diagnóstico
+11. Modelos marginais: introdução
+12. Modelos marginais: Equações de Estimação Generalizadas (GEE)
+13. Tópicos complementares:
+    + Dados ausentes
+    + Modelos multiníveis
+    + Modelos lineares para dados longitudinais
+        - Modelos marginais
+        - Modelos de efeitos aleatórios
+        - Modelos de transição (Markov)
 
 ## Avaliação
 
-- Serão realizadas duas provas ($P$) e quatro listas ($ML$ é a média das listas) como atividades de avaliação
-    + __As datas das provas serão definidas em breve__
-- __As provas são presenciais, individuais e sem consulta__
-- As listas conterão exercícios teóricos e aplicados; alguns exercícios podem necessitar do uso do computador
+- Serão realizadas quatro listas de exercícios ($ML$ é a média das listas), uma prova ($P$) e um seminário ($S$; apresentação) como atividades de avaliação
+    + __As datas da prova e do seminário serão definidas em breve__
+    + __A prova é presencial, individual e sem consulta__
+    + As listas de exercícios podem ser feitas em duplas
+    + O seminário será um trabalho de grupo
+    + As listas conterão exercícios teóricos e aplicados; alguns exercícios podem necessitar do uso do computador
 - Cada atividade de avaliação vale 10 pontos
 - Será realizada uma prova como atividade de recuperação ($PR$)
     + Para os alunos que não atingirem o conceito mínimo __e__ com frequência mínimia de 75% 
@@ -100,7 +291,7 @@ __Semanas de 10 a 18__
 ## Avaliação
 
 $$
-NF = 0,4 \times P1 + 0,4 \times P2 + 0,2 \times ML
+NF = 0,34 \times P + 0,33 \times S + 0,33 \times ML
 $$
 
 + __A:__ $9 \leq NF \leq 10$
@@ -116,7 +307,7 @@ $$
 - __C:__ $NF' \geq 6$
 - __D:__ $NF' < 6$
 
-<!-- ## Referências bibliográficas -->
+## Referências bibliográficas
 
 <!-- \begin{columns}[c] -->
 <!-- \column{1.3in} -->
@@ -136,128 +327,52 @@ $$
 <!-- } -->
 <!-- \end{columns} -->
 
-<!-- ## Introdução -->
+# Os dados correlacionados
 
-<!-- - Uma __cadeia de Markov__ é um modelo matemático de um fenômeno aleatório que evolui com o tempo de modo que __o passado afeta o futuro apenas através do presente__. -->
-<!--     + O __"tempo"__ pode ser __discreto__ (isto é, os inteiros), __contínuo__ (isto é, os números reais) ou, de maneira mais geral, um conjunto totalmente ordenado. -->
-<!--     + Na área 1, discutiremos apenas cadeias de Markov em tempo discreto. -->
-<!--     + Na área 2, estudaremos cadeias de tempo contínuo. -->
-<!-- - Na __Matemática__, um fenômeno que evolui com o tempo de maneira que somente o presente afeta o futuro é chamado de __SISTEMA DINÂMICO__. -->
+## Séries temporais
 
-<!-- ## Introdução -->
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', out.height='80%', paged.print=FALSE}
 
-<!-- - Vamos desenvolver uma teoria que nos diz como descrever, analisar e usar esses modelos matemáticos que são chamados de cadeias de Markov.  -->
-<!-- - Também veremos porque eles são úteis e discutimos como eles são aplicados. -->
-<!-- - Além disso, veremos que tipo de perguntas podemos fazer e que tipo de respostas podemos esperar. -->
+knitr::include_graphics(here('images', 'series_temporais.png'))
 
-<!-- ## Exemplos -->
-
-<!-- ### O rato na gaiola -->
-
-<!-- Um rato está em uma gaiola com duas células, 1 e 2, contendo queijo fresco e fedido, respectivamente. Um rato vive na gaiola. O trabalho de um cientista é registrar a posição do rato a cada minuto. Quando o rato está na célula 1 no tempo $n$ (minutos), então, no tempo $n + 1$, ele ainda está em 1 ou moveu-se para 2. -->
-
-<!-- ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE} -->
-<!-- knitr::include_graphics('images/rato_gaiola.png') -->
-<!-- ``` -->
-
-<!-- ## Exemplos -->
-
-<!-- ### O rato na gaiola -->
-
-<!-- Observações estatísticas levam o cientista a acreditar que o rato se move da célula 1 para a célula 2 com probabilidade $\alpha = 0.05$; ele faz isso, independentemente de onde esteve em tempos anteriores. Similarmente, ele se move de 2 para 1 com probabilidade $\beta = 0.99$. -->
-
-<!-- Podemos resumir essa informação pelo __DIAGRAMA DE TRANSIÇÃO__: -->
-
-<!-- ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE} -->
-<!-- knitr::include_graphics('images/rato_gaiola2.png') -->
-<!-- ``` -->
-
-<!-- ## Exemplos -->
-
-<!-- ### O rato na gaiola -->
-
-<!-- Outra maneira de resumir as informações é pela MATRIZ DE PROBABILIDADES DE TRANSIÇÃO $2 \times 2$: -->
+```
 
 
-<!-- $$ -->
-<!-- P = \left(\begin{array}{cc} -->
-<!-- 1 - \alpha & \alpha\\ -->
-<!-- \beta & 1 - \beta -->
-<!-- \end{array}\right) = \left(\begin{array}{cc} -->
-<!-- 0.95 & 0.05\\ -->
-<!-- 0.99 & 0.01 -->
-<!-- \end{array}\right) -->
-<!-- $$ -->
+## Dados espaciais
 
-<!-- ## Exemplos -->
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', out.height='80%', paged.print=FALSE}
 
-<!-- ### O rato na gaiola -->
+knitr::include_graphics(here('images', 'dados_espaciais.jpeg'))
 
-<!-- __Questões de interesse:__ -->
+```
 
-<!-- 1. Quanto tempo leva para o rato, em média, se deslocar da célula 1 para a célula 2? -->
-<!-- 2. Com que frequência o rato está na célula 1? -->
+## Dados espaço-temporais
 
-<!-- ## Exemplos -->
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', out.height='80%', paged.print=FALSE}
 
-<!-- ### Passeio aleatório simples (o andar do bêbado) -->
+knitr::include_graphics(here('images', 'dados_espaco_temporais.jpeg'))
 
-<!-- Considere uma pessoa completamente bêbada que anda por uma rua. Estando bêbado, ele não tem senso de direção. Então ele pode avançar com a mesma probabilidade de que ele se move para trás. -->
+```
 
-<!-- ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', paged.print=FALSE} -->
-<!-- knitr::include_graphics('images/passeio_simples.png') -->
-<!-- ``` -->
+## Dados longitudinais
 
-<!-- ## Exemplos -->
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', out.height='80%', paged.print=FALSE}
 
-<!-- ### Passeio aleatório simples (o andar do bêbado) -->
+knitr::include_graphics(here('output_figs', 'capa.png'))
 
-<!-- __Questões de interesse:__ -->
+```
 
-<!-- 1. Se ele começar da posição 0, com que frequência ele estará visitando 0? -->
-<!-- 2. Existem lugares que ele nunca visitará? -->
-<!-- 3. Há algum lugar que ele visitará infinitas vezes? -->
-<!-- 4. Se o _pub_ estiver na posição 0 e sua casa na posição 100, quanto tempo ele levará, em média, para ir do _pub_ para casa? -->
+## Dados agrupados
 
-<!-- ## Exemplos -->
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', out.height='80%', paged.print=FALSE}
 
-<!-- ### Passeio aleatório (generalizando) -->
+knitr::include_graphics(here('images', 'Multilevel_data_structure.png'))
 
-<!-- - Podemos considerar que o sujeito não está completamente bêbado, e que a probabilidade de ir para direita é diferente de ir para esquerda ($p \neq 0.5$) -->
-<!-- - Podemos considerar que o sujeito toma diferentes direções (além de esquerda e direita): -->
+```
 
-<!-- ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE} -->
-<!-- knitr::include_graphics('images/drunkard.png') -->
-<!-- ``` -->
+## O que veremos nesta disciplina?
 
-<!-- ## Exemplos -->
-
-<!-- ### Cadeias atuariais -->
-
-<!-- Uma companhia de seguros de vida quer descobrir quanto dinheiro cobrar de seus clientes. Claramente, a empresa deve ter uma ideia de quanto tempo os clientes viverão. Ela propõe o seguinte modelo resumindo o estado de saúde de um indivíduo mensalmente (__H__ - saudável; __S__ - doente; __D__ - morto): -->
-
-<!-- ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='60%', paged.print=FALSE} -->
-<!-- knitr::include_graphics('images/acturial_chains.png') -->
-<!-- ``` -->
-
-<!-- ## Exemplos -->
-
-<!-- ### Cadeias atuariais -->
-
-<!-- Assim, existe uma probabilidade de $p_{H,S} = \Pr(X_{n+1} = S| X_n = H) = 0.3$ que a pessoa ficará doente, dado que ele está atualmente saudável, etc. Observe que o diagrama omite $p_{H,H}$ e $p_{S,S}$ porque $p_{H,H} = 1 - p_{H,S} - p_{H,D}$ e $p_{S,S} = 1 - p_{S,H} - p_{S,D}$. Além disso, $p_{D,D}$ é omitido, a razão é que a empresa não acredita que seus clientes estão sujeitos a ressurreição; portanto, $p_{D,D} = 1$. -->
-
-<!-- __Pergunta:__ Qual é a distribuição da vida (em meses) de um indivíduo atualmente saudável? -->
-
-<!-- Claramente, a resposta para isso é crucial para a determinação da política. -->
-
-<!-- ## Próxima aula -->
-
-<!-- - Preliminares: revisão de probabilidade -->
-
-<!-- ## Sejam todos bem-vindos! -->
-
-<!-- ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='90%', paged.print=FALSE} -->
-<!-- knitr::include_graphics('images/keep_walking_2.jpg') -->
-<!-- ``` -->
-
-
+- Daremos atenção a estruturas de dados longitudinais e dados agrupados (multiníveis ou hierárquicos)
+    + Descrever os dados
+    + Modelar os dados
+    + Fazer inferência com respeito a quantidades de interesse
