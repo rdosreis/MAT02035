@@ -235,12 +235,20 @@ knitr::include_graphics(here('images', 'bolsa_elsa.png'))
 
 ## Aulas e material didático
 
-- __Exemplos e exercícios com o apoio do computador__
-    + `R` e `RStudio`
-
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='30%', paged.print=FALSE}
 knitr::include_graphics(here('images','Rlogo.png'))
 ```
+
+### Exemplos e exercícios com o apoio do computador: `R` e `RStudio`
+
++ Manipulação de dados
+    - Preparação dos dados, transformação e criação de variáveis
++ Visualização de dados
++ Modelagem de dados
++ Estimação de parâmetros
+    - métodos de otimização, integração e aproximação numérica
++ Inferência estatística: avaliação da incerteza e testes de hipóteses
++ Comunicação estatística
 
 ## Conteúdo programático
 
@@ -309,6 +317,20 @@ $$
 
 ## Referências bibliográficas
 
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='30%', paged.print=FALSE}
+knitr::include_graphics(here('images','ctanlion.png'))
+```
+
+### Principal
+
+Fitzmaurice, G., Laird, N., Ware, J. __Applied Longitudinal Analysis__. John Wiley & Sons, 2011, 2ed.
+
+Diggle, P., Heagerty, P., Liang, K. Y., Zeger, S. __Analysis of Longitudinal Data__. Oxford University Press, 2002, 2ed.
+
+### Complementar
+
+Singer, J. M., Nobre, J. S., Rocha, F. M. M. __Análise de dados longitudinais__. USP, 2018.
+
 <!-- \begin{columns}[c] -->
 <!-- \column{1.3in} -->
 <!-- \begin{figure}[!h] -->
@@ -336,7 +358,6 @@ $$
 knitr::include_graphics(here('images', 'series_temporais.png'))
 
 ```
-
 
 ## Dados espaciais
 

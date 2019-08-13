@@ -1,3 +1,6 @@
+library(here)
+library(rmarkdown)
+
 pasta <- "Rmds"
 arquivo <- "00_apresenta_curso"
 

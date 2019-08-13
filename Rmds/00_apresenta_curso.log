@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.2.11)  13 AUG 2019 03:59
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.2.11)  13 AUG 2019 13:01
 entering extended mode
 **C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aul
 as/MAT02035/output_pdf/00_apresenta_curso.tex
@@ -1729,8 +1729,10 @@ File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
 <use C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/
 aulas/MAT02035/images/Rlogo.png>
 Package pdftex.def Info: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/D
-adosCorrelacionados/aulas/MAT02035/images/Rlogo.png used on input line 16.
-(pdftex.def)             Requested size: 153.64493pt x 119.08334pt.
+adosCorrelacionados/aulas/MAT02035/images/Rlogo.png used on input line 4.
+(pdftex.def)             Requested size: 92.1879pt x 71.44716pt.
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 7.
 ) [19
 
  <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aul
@@ -1742,13 +1744,25 @@ as/MAT02035/images/Rlogo.png>] [20
 
 ] [23
 
-] [24
+]
+<C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aula
+s/MAT02035/images/ctanlion.png, id=211, 248.93pt x 206.7725pt>
+File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
+/aulas/MAT02035/images/ctanlion.png Graphic file (type png)
 
-] [25
+<use C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/
+aulas/MAT02035/images/ctanlion.png>
+Package pdftex.def Info: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/D
+adosCorrelacionados/aulas/MAT02035/images/ctanlion.png used on input line 694.
+(pdftex.def)             Requested size: 92.1879pt x 76.57718pt.
+[24
+
+ <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aul
+as/MAT02035/images/ctanlion.png (PNG copy)>] [25
 
 ]
 <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aula
-s/MAT02035/images/series_temporais.png, id=223, 499.11469pt x 336.50719pt>
+s/MAT02035/images/series_temporais.png, id=225, 499.11469pt x 336.50719pt>
 File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
 /aulas/MAT02035/images/series_temporais.png Graphic file (type png)
 
@@ -1756,14 +1770,14 @@ File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
 aulas/MAT02035/images/series_temporais.png>
 Package pdftex.def Info: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/D
 adosCorrelacionados/aulas/MAT02035/images/series_temporais.png used on input li
-ne 664.
+ne 704.
 (pdftex.def)             Requested size: 307.30022pt x 198.84558pt.
 [26
 
  <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aul
 as/MAT02035/images/series_temporais.png>]
 <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aula
-s/MAT02035/images/dados_espaciais.jpeg, id=231, 176.15813pt x 184.43906pt>
+s/MAT02035/images/dados_espaciais.jpeg, id=233, 176.15813pt x 184.43906pt>
 File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
 /aulas/MAT02035/images/dados_espaciais.jpeg Graphic file (type jpg)
 
@@ -1771,14 +1785,14 @@ File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
 aulas/MAT02035/images/dados_espaciais.jpeg>
 Package pdftex.def Info: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/D
 adosCorrelacionados/aulas/MAT02035/images/dados_espaciais.jpeg used on input li
-ne 671.
+ne 711.
 (pdftex.def)             Requested size: 245.8348pt x 198.84222pt.
 [27
 
  <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aul
 as/MAT02035/images/dados_espaciais.jpeg>]
 <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aula
-s/MAT02035/images/dados_espaco_temporais.jpeg, id=238, 752.8125pt x 564.60938pt
+s/MAT02035/images/dados_espaco_temporais.jpeg, id=240, 752.8125pt x 564.60938pt
 >
 File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
 /aulas/MAT02035/images/dados_espaco_temporais.jpeg Graphic file (type jpg)
@@ -1787,21 +1801,21 @@ File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
 aulas/MAT02035/images/dados_espaco_temporais.jpeg>
 Package pdftex.def Info: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/D
 adosCorrelacionados/aulas/MAT02035/images/dados_espaco_temporais.jpeg used on i
-nput line 678.
+nput line 718.
 (pdftex.def)             Requested size: 245.83282pt x 198.8482pt.
 [28
 
  <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aul
 as/MAT02035/images/dados_espaco_temporais.jpeg>]
 <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aula
-s/MAT02035/output_figs/capa.png, id=245, 308.352pt x 154.176pt>
+s/MAT02035/output_figs/capa.png, id=247, 308.352pt x 154.176pt>
 File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
 /aulas/MAT02035/output_figs/capa.png Graphic file (type png)
 
 <use C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/
 aulas/MAT02035/output_figs/capa.png>
 Package pdftex.def Info: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/D
-adosCorrelacionados/aulas/MAT02035/output_figs/capa.png used on input line 685.
+adosCorrelacionados/aulas/MAT02035/output_figs/capa.png used on input line 725.
 
 (pdftex.def)             Requested size: 307.2973pt x 198.84784pt.
 [29
@@ -1809,7 +1823,7 @@ adosCorrelacionados/aulas/MAT02035/output_figs/capa.png used on input line 685.
  <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aul
 as/MAT02035/output_figs/capa.png>]
 <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aula
-s/MAT02035/images/Multilevel_data_structure.png, id=253, 853.1875pt x 423.5825p
+s/MAT02035/images/Multilevel_data_structure.png, id=255, 853.1875pt x 423.5825p
 t>
 File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
 /aulas/MAT02035/images/Multilevel_data_structure.png Graphic file (type png)
@@ -1818,7 +1832,7 @@ File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
 aulas/MAT02035/images/Multilevel_data_structure.png>
 Package pdftex.def Info: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/D
 adosCorrelacionados/aulas/MAT02035/images/Multilevel_data_structure.png used on
- input line 692.
+ input line 732.
 (pdftex.def)             Requested size: 307.29047pt x 198.84465pt.
 [30
 
@@ -1829,21 +1843,21 @@ as/MAT02035/images/Multilevel_data_structure.png>] [31
 \tf@nav=\write5
 \tf@toc=\write6
 \tf@snm=\write7
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 706.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 706.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 756.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 756.
 
 (C:\Users\Rodrigo\Documents\UFRGS\Disciplinas\2019-02\DadosCorrelacionados\aula
 s\MAT02035\Rmds\00_apresenta_curso.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 706.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 706.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 706.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 756.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 756.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 756.
  ) 
 Here is how much of TeX's memory you used:
- 24596 strings out of 493921
- 455084 string characters out of 3147276
- 517210 words of memory out of 3000000
- 27196 multiletter control sequences out of 15000+200000
- 70641 words of font info for 83 fonts, out of 3000000 for 9000
+ 24607 strings out of 493921
+ 455631 string characters out of 3147276
+ 518927 words of memory out of 3000000
+ 27203 multiletter control sequences out of 15000+200000
+ 71060 words of font info for 85 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  61i,13n,97p,1842b,682s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/lm/lm-mathsy.enc}{C:/Program Fil
@@ -1858,10 +1872,11 @@ ram Files/MiKTeX 2.9/fonts/type1/public/lm/lmss9.pfb><C:/Program Files/MiKTeX 2
 .9/fonts/type1/public/lm/lmssbx10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/
 public/lm/lmsso10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmsy10
 .pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmsy7.pfb><C:/Program F
-iles/MiKTeX 2.9/fonts/type1/public/lm/lmtt9.pfb>
-Output written on 00_apresenta_curso.pdf (31 pages, 4794698 bytes).
+iles/MiKTeX 2.9/fonts/type1/public/lm/lmtk10.pfb><C:/Program Files/MiKTeX 2.9/f
+onts/type1/public/lm/lmtt9.pfb>
+Output written on 00_apresenta_curso.pdf (31 pages, 4844944 bytes).
 PDF statistics:
- 343 PDF objects out of 1000 (max. 8388607)
+ 348 PDF objects out of 1000 (max. 8388607)
  90 named destinations out of 1000 (max. 500000)
- 12465 words of extra memory for PDF output out of 14400 (max. 10000000)
+ 12470 words of extra memory for PDF output out of 14400 (max. 10000000)
 
