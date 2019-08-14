@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.2.11)  13 AUG 2019 22:10
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.2.11)  14 AUG 2019 16:00
 entering extended mode
 **C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aul
 as/MAT02035/output_pdf/00_apresenta_curso.tex
@@ -1840,23 +1840,38 @@ adosCorrelacionados/aulas/MAT02035/images/Multilevel_data_structure.png used on
 as/MAT02035/images/Multilevel_data_structure.png>] [31
 
 ]
+<C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aula
+s/MAT02035/images/Logo-40-anos-estatistica.png, id=270, 453.695pt x 291.0875pt>
+File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
+/aulas/MAT02035/images/Logo-40-anos-estatistica.png Graphic file (type png)
+
+<use C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/
+aulas/MAT02035/images/Logo-40-anos-estatistica.png>
+Package pdftex.def Info: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/D
+adosCorrelacionados/aulas/MAT02035/images/Logo-40-anos-estatistica.png used on 
+input line 761.
+(pdftex.def)             Requested size: 153.64493pt x 98.57756pt.
+[32
+
+ <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aul
+as/MAT02035/images/Logo-40-anos-estatistica.png>]
 \tf@nav=\write5
 \tf@toc=\write6
 \tf@snm=\write7
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 756.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 756.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 763.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 763.
 
 (C:\Users\Rodrigo\Documents\UFRGS\Disciplinas\2019-02\DadosCorrelacionados\aula
 s\MAT02035\Rmds\00_apresenta_curso.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 756.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 756.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 756.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 763.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 763.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 763.
  ) 
 Here is how much of TeX's memory you used:
- 24607 strings out of 493921
- 455631 string characters out of 3147276
+ 24614 strings out of 493921
+ 456205 string characters out of 3147276
  518927 words of memory out of 3000000
- 27203 multiletter control sequences out of 15000+200000
+ 27207 multiletter control sequences out of 15000+200000
  71060 words of font info for 85 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  61i,13n,97p,1842b,682s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1874,9 +1889,9 @@ public/lm/lmsso10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmsy10
 .pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmsy7.pfb><C:/Program F
 iles/MiKTeX 2.9/fonts/type1/public/lm/lmtk10.pfb><C:/Program Files/MiKTeX 2.9/f
 onts/type1/public/lm/lmtt9.pfb>
-Output written on 00_apresenta_curso.pdf (31 pages, 4845162 bytes).
+Output written on 00_apresenta_curso.pdf (32 pages, 4857821 bytes).
 PDF statistics:
- 348 PDF objects out of 1000 (max. 8388607)
- 90 named destinations out of 1000 (max. 500000)
- 12470 words of extra memory for PDF output out of 14400 (max. 10000000)
+ 357 PDF objects out of 1000 (max. 8388607)
+ 93 named destinations out of 1000 (max. 500000)
+ 12475 words of extra memory for PDF output out of 14400 (max. 10000000)
 

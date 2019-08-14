@@ -190,7 +190,7 @@ knitr::include_graphics(here('images', 'cirs.png'))
 ```
 
 ## ELSA - Brasil
-### Uma propaganda: mural de bolsa da UFRGS
+### Uma propaganda: mural de bolsas da UFRGS
 
 ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', out.height='80%', paged.print=FALSE}
 
@@ -379,3 +379,11 @@ knitr::include_graphics(here('images', 'Multilevel_data_structure.png'))
     + Descrever os dados
     + Modelar os dados
     + Fazer inferência com respeito a quantidades de interesse
+
+## Por hoje é só! Sejam todos bem-vindos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE}
+knitr::include_graphics(here('images', 'Logo-40-anos-estatistica.png'))
+```
+
+

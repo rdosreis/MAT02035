@@ -143,3 +143,7 @@ knitr::include_graphics(here('output_figs', 'capa.png'))
 knitr::include_graphics(here('images', 'Multilevel_data_structure.png'))
 
 
+
+## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE----
+knitr::include_graphics(here('images', 'Logo-40-anos-estatistica.png'))
+
