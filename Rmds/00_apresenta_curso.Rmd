@@ -293,7 +293,7 @@ knitr::include_graphics(here('images','Rlogo.png'))
     + As listas conterão exercícios teóricos e aplicados; alguns exercícios podem necessitar do uso do computador
 - Cada atividade de avaliação vale 10 pontos
 - Será realizada uma prova como atividade de recuperação ($PR$)
-    + Para os alunos que não atingirem o conceito mínimo __e__ com frequência mínimia de 75% 
+    + Para os alunos que não atingirem o conceito mínimo __e__ com frequência mínima de 75% 
     + __Esta prova abrange todo o conteúdo da disciplina__
     
 ## Avaliação
@@ -330,24 +330,6 @@ Diggle, P., Heagerty, P., Liang, K. Y., Zeger, S. __Analysis of Longitudinal Dat
 ### Complementar
 
 Singer, J. M., Nobre, J. S., Rocha, F. M. M. __Análise de dados longitudinais__. USP, 2018.
-
-<!-- \begin{columns}[c] -->
-<!-- \column{1.3in} -->
-<!-- \begin{figure}[!h] -->
-<!-- \begin{center} -->
-<!-- \includegraphics[width=0.9\columnwidth]{images/ctanlion} -->
-<!-- \end{center} -->
-<!-- \end{figure} -->
-<!-- \column{3.3in} -->
-<!-- {\footnotesize -->
-<!-- \begin{itemize}\setlength{\itemsep}{+2mm} -->
-<!-- \item \structure{Durrett, R.} \emph{Essentials of Stochastic Processes}, Springer, 2012. -->
-<!-- \item \structure{Resnick, S.} \emph{Adventures in Stochastic Processes}, Birkhauser, 1992. -->
-<!-- \item \structure{Atuncar, G. S.} \emph{Conceitos Básicos de Processos Estocásticos}, UFMG - DEst, 2011. -->
-<!-- \item \structure{Hinojosa, A. e Milanés, A} \emph{Uma introduação aos processos estocásticos com aplicações}, UFMG - DEst. -->
-<!-- \end{itemize} -->
-<!-- } -->
-<!-- \end{columns} -->
 
 # Os dados correlacionados
 
