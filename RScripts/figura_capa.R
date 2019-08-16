@@ -10,6 +10,8 @@ library(haven)
 library(tidyr)
 library(ggplot2)
 library(ggthemes)
+library(hexSticker)
+library(showtext)
 
 # ----------------------------------------------------
 # Carregando o arquivo de dados
@@ -46,3 +48,21 @@ p
 ggsave(plot = p,
        filename = here("output_figs", "capa.png"),
        width = 10.84, height = 5.42, units = "cm", dpi = 300)
+
+
+font_add_google("Gochi Hand", "gochi")
+
+## Automatically use showtext to render text for future devices
+showtext_auto()
+
+## use the ggplot2 example
+
+p <- ggplot(data = chol.df.longo,
+            mapping = aes(x = tempo, y = colesterol, group = id)) +
+  geom_line(size = 0.2) +
+  labs(x = "Tempo", y = "") + 
+  theme(legend.position = "none")
+p <- p + theme_transparent()
+
+sticker(p, package = "MAT02035", p_size = 16, s_x = .8, s_y = .75, s_width = 1.8, s_height = 1.5,
+        p_family = "gochi", filename = here("output_figs", "mat02035hex.png"))
