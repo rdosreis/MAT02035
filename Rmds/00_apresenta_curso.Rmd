@@ -254,7 +254,7 @@ knitr::include_graphics(here('images','Rlogo.png'))
 
 1. Dados longitudinais e agrupados
     + Introdução, exemplos, modelos, organização
-2. Revisão de vetores, matrizes e propriedades de esperanças e variâncias
+2. Revisão de vetores, matrizes e propriedades de esperança e variância
 3. Dados longitudinais: conceitos básicos
     + objetivos, características, fontes de correlação
 4. Visão geral dos modelos lineares para dados longitudinais
