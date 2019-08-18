@@ -1,0 +1,40 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Introdução aos dados longitudinais e agrupados"
+fontsize: 10pt
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2019
+header-includes:
+  - \titlegraphic{\hfill\includegraphics[height=1.5cm]{logos/Logo-40-anos-estatistica.png}}
+---
+
+# Introdução
+
+## Introdução
+
+A pesquisa estatística em métodos para o delineamento e análise de investigações humanas expandiu explosivamente na segunda metade do século 20.
+
+- Nos EUA (métada do século 20): mudança de suporte de pesquisa da área militar para a área biomédica.
+- Nos EUA (1944): aprovação da Lei do Serviço de Saúde Pública $\Rightarrow$ crescimento do _National Institutes of Health_ (NIH).
+    + Orçamento do NIH: 1947 - \$8 milhões $\Rightarrow$ 1966 - \$1 bilhão.
+
+# Dados longitudinais e agrupados
+
+# Exemplos
+
+# Modelos de regressão para respostas correlacionadas
+
+## Por hoje é só! Sejam todos bem-vindos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE}
+knitr::include_graphics(here('images', 'Logo-40-anos-estatistica.png'))
+```
+
+
