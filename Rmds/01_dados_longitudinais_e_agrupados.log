@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.2.11)  19 AUG 2019 07:47
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.2.11)  19 AUG 2019 23:05
 entering extended mode
 **C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aul
 as/MAT02035/output_pdf/01_dados_longitudinais_e_agrupados.tex
@@ -1530,42 +1530,75 @@ input line 365.
  <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aul
 as/MAT02035/images/CS_Vs_Longitudinal_Study.jpg>] [14
 
-] [15
+]
+<C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aula
+s/MAT02035/output_pdf/01_dados_longitudinais_e_agrupados_files/figure-beamer/lo
+ng_eh_agrupado-1.pdf, id=121, 722.7pt x 505.89pt>
+File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
+/aulas/MAT02035/output_pdf/01_dados_longitudinais_e_agrupados_files/figure-beam
+er/long_eh_agrupado-1.pdf Graphic file (type pdf)
+
+<use C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/
+aulas/MAT02035/output_pdf/01_dados_longitudinais_e_agrupados_files/figure-beame
+r/long_eh_agrupado-1.pdf>
+Package pdftex.def Info: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/D
+adosCorrelacionados/aulas/MAT02035/output_pdf/01_dados_longitudinais_e_agrupado
+s_files/figure-beamer/long_eh_agrupado-1.pdf used on input line 391.
+(pdftex.def)             Requested size: 245.83604pt x 173.98416pt.
+
+Overfull \vbox (27.18622pt too high) detected at line 391
+ []
+
+[15
+
+ <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aul
+as/MAT02035/output_pdf/01_dados_longitudinais_e_agrupados_files/figure-beamer/l
+ong_eh_agrupado-1.pdf>] [16
+
+] [17
+
+] [18
+
+] [19
+
+] [20
+
+] [21
 
 ]
 <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aula
-s/MAT02035/images/Logo-40-anos-estatistica.png, id=128, 453.695pt x 291.0875pt>
+s/MAT02035/images/long_study.jpg, id=171, 589.9641pt x 294.8616pt>
 File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
-/aulas/MAT02035/images/Logo-40-anos-estatistica.png Graphic file (type png)
+/aulas/MAT02035/images/long_study.jpg Graphic file (type jpg)
 
 <use C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/
-aulas/MAT02035/images/Logo-40-anos-estatistica.png>
+aulas/MAT02035/images/long_study.jpg>
 Package pdftex.def Info: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/D
-adosCorrelacionados/aulas/MAT02035/images/Logo-40-anos-estatistica.png used on 
-input line 379.
-(pdftex.def)             Requested size: 153.64493pt x 98.57756pt.
-[16
+adosCorrelacionados/aulas/MAT02035/images/long_study.jpg used on input line 525
+.
+(pdftex.def)             Requested size: 307.28987pt x 153.58536pt.
+[22
 
  <C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aul
-as/MAT02035/images/Logo-40-anos-estatistica.png>]
+as/MAT02035/images/long_study.jpg>]
 \tf@nav=\write5
 \tf@toc=\write6
 \tf@snm=\write7
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 381.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 381.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 527.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 527.
 
 (C:\Users\Rodrigo\Documents\UFRGS\Disciplinas\2019-02\DadosCorrelacionados\aula
 s\MAT02035\Rmds\01_dados_longitudinais_e_agrupados.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 381.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 381.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 381.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 527.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 527.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 527.
  ) 
 Here is how much of TeX's memory you used:
- 24437 strings out of 493921
- 444488 string characters out of 3147276
- 521121 words of memory out of 3000000
- 27106 multiletter control sequences out of 15000+200000
- 77276 words of font info for 89 fonts, out of 3000000 for 9000
+ 24468 strings out of 493921
+ 445624 string characters out of 3147276
+ 521122 words of memory out of 3000000
+ 27110 multiletter control sequences out of 15000+200000
+ 77587 words of font info for 92 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  61i,13n,88p,1858b,682s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Program Fil
@@ -1583,10 +1616,10 @@ m/lmsso10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmsso8.pfb><C:
 KTeX 2.9/fonts/type1/public/lm/lmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
 pe1/public/lm/lmsy9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmtt
 9.pfb>
-Output written on 01_dados_longitudinais_e_agrupados.pdf (16 pages, 507143 byte
+Output written on 01_dados_longitudinais_e_agrupados.pdf (22 pages, 856336 byte
 s).
 PDF statistics:
- 211 PDF objects out of 1000 (max. 8388607)
- 44 named destinations out of 1000 (max. 500000)
- 14436 words of extra memory for PDF output out of 17280 (max. 10000000)
+ 256 PDF objects out of 1000 (max. 8388607)
+ 62 named destinations out of 1000 (max. 500000)
+ 14441 words of extra memory for PDF output out of 17280 (max. 10000000)
 

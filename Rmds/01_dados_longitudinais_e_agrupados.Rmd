@@ -86,12 +86,92 @@ knitr::include_graphics(here('images', 'levels_explanation.png'))
 knitr::include_graphics(here('images', 'CS_Vs_Longitudinal_Study.jpg'))
 ```
 
+## Um exemplo:
+
+## Dados longitudinais são dados agrupados
+
+- Uma característica distintiva de dados longitudinais é que eles são __agrupados__.
+
+```{r long_eh_agrupado, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, fig.align='center', out.width="80%", out.height="70%"}
+# ----------------------------------------------------
+# Carregando pacotes do R
+
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+
+chol.df <- read_dta(file = here("data", "cholesterol.dta"))
+
+# ----------------------------------------------------
+# Reformando o objeto: de "largo" para "longo"
+
+chol.df.longo <- gather(data = chol.df, key = "tempo", value = "colesterol", -id, -group)
+
+# ----------------------------------------------------
+# Formata variáveis
+
+chol.df.longo$tempo <- as.factor(as.numeric(as.factor(chol.df.longo$tempo)))
+chol.df.longo$group <- as.factor(chol.df.longo$group)
+chol.df.longo$id <- as.factor(chol.df.longo$id)
+# ----------------------------------------------------
+# Gráfico de perfis
+
+set.seed(10)
+ids <- sample(x = unique(chol.df.longo$id), size = 5, replace = FALSE)
+
+p <- ggplot(data = chol.df.longo[which(chol.df.longo$id %in% ids), ],
+            mapping = aes(x = tempo, y = colesterol, group = id, colour = id)) +
+  geom_line(size = 0.8) +
+  labs(x = "Tempo", y = "Colesterol", colour = "ID")
+p
+```
+
+- Cada indivíduo forma um grupo de observações repetidas ao longo do tempo.
+
+## Dados agrupados
+
+- Observações dentro de um grupo tipicamente irão exibir __correlação positiva__, e esta correlação __deve ser levada em conta__ na análise.
+- Dados agrupados podem surgir de amostragens aleatórias de grupos que se caracterizam naturalmente na população:
+    + Famílias;
+    + Domicílios;
+    + Enfermarias hospitalares;
+    + Práticas médicas;
+    + Vizinhanças;
+    + Escolas.
+- Ainda, dados agrupados podem surgir quando a resposta de interesse é simultaneamente obtida de múltiplos avaliadores (juízes, examinadores) ou de diferentes instrumentos de medição.
+
+## Correlação
+
+- Nestes casos, esperamos que medidas em unidades dentro de um grupo são mais similares que as medidas em unidades de grupos diferentes.
+- O grau de agrupamento pode ser expresso em termos da __correlação__ entre as medidas em unidades do mesmo grupo.
+- Esta correlação __invalida a suposição crucial de independência__ que é o pilar de tantas técnicas estatísticas.
+    + Modelos estatísticos para dados correlacionados devem explicitamente descrever e lever em conta para esta correlação.
+
+## Comentários
+
+- Dados longitudinais são um caso especial de dados agrupados (com uma ordenação natural das medições dentro de um grupo),
+    + Faremos a descrição dos métodos de análise para dados agrupados, mais amplamente definidos.
+- Um dos objetivos deste curso é demonstrar que os métodos para a análise de dados longitudinais são, mais ou menos, casos especiais de métodos de regressão mais gerais para dados agrupados.
+    + Como resultado, uma compreensão abrangente de métodos para a análise de dados longitudinais fornece a base para uma compreensão mais ampla de métodos para analisar a ampla gama de dados agrupados.
+    
+## Comentários
+
+- Os exemplos descritos anteriormente consideram apenas um único nível de agrupamento.
+- Mais recentemente, pesquisadores desenvolveram metodologia para a análise de __dados multiníveis__, em que as observações podem ser agrupadas em mais de um nível.
+    + Os dados podem consistir em medições repetidas em pacientes agrupados por clínica. 
+    + Os dados podem consistir em observações sobre crianças aninhadas dentro de salas de aula, aninhadas dentro das escolas.
+- Os dados multiníveis serão discutidos no final do curso.
+
 # Exemplos
 
 # Modelos de regressão para respostas correlacionadas
 
 ## Por hoje é só! Sejam todos bem-vindos!
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE}
-knitr::include_graphics(here('images', 'Logo-40-anos-estatistica.png'))
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE}
+knitr::include_graphics(here('images', 'long_study.jpg'))
 ```
