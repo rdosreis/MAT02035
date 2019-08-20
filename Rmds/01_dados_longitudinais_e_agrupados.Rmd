@@ -19,7 +19,7 @@ date: |
 
 A pesquisa estatística em métodos para o delineamento e análise de investigações humanas expandiu explosivamente na segunda metade do século 20.
 
-- Nos EUA (métada do século 20): mudança de suporte de pesquisa da área militar para a área biomédica.
+- Nos EUA (métada do século 20): mudança de suporte para pesquisa da área militar para a área biomédica.
 - Nos EUA (1944): aprovação da Lei do Serviço de Saúde Pública $\Rightarrow$ crescimento do _National Institutes of Health_ (NIH\footnote{{\bf Um pouco da história do NIH:} www.nih.gov/about-nih/who-we-are/history}).
     + Orçamento do NIH: 1947 - \$8 milhões $\Rightarrow$ 1966 - \$1 bilhão.
 
@@ -28,16 +28,16 @@ A pesquisa estatística em métodos para o delineamento e análise de investiga�
 - O NIH patrocinou vários dos estudos epidemiológicos importantes e ensaios clínicos daquele período, incluindo o \textbf{\emph{Framingham Heart Study}}\footnote{{\bf Um pouco da história do NIH:} www.ncbi.nlm.nih.gov/pmc/articles/PMC4159698/} (FHS).
 
 - O foco destes primeiros estudos foi a __morbidade__ e, especialmente, a __mortalidade__.
-    + Pesquisadores procuravam __identificar as causas__ da morte prematura e avaliar a efetividade dos tratamentos para atrasar a morte morbidade.
+ Pesquisadores procuravam __identificar as causas__ da morte prematura e avaliar a efetividade dos tratamentos para atrasar a morte e a morbidade.
     + __Regressão logística__ (1960s).
-    + A análise de dados de __tempo até o evento__ foi revolucionada pelo artigo de 1972 de \textbf{\textcolor{darkpastelgreen}{D. R. Cox}}\footnote{Reid, N. A Conversation with Sir David Cox. \emph{Statistical Science}, 9:439-455, 1994.}, descrevendo __modelo de riscos proporcionais__\footnote{\textbf{\textcolor{darkpastelpurple}{Leituras para o fim do dia:}} Cox, D. R. Regression Models and Life-Tables. \emph{Journal of the Royal Statistical Society. Series B}, 34:187-220, 1972.}.
+    + A análise de dados de __tempo até o evento__ foi revolucionada pelo artigo de 1972 de \textbf{\textcolor{darkpastelgreen}{D. R. Cox}}\footnote{Reid, N. A Conversation with Sir David Cox. \emph{Statistical Science}, 9:439-455, 1994.}, descrevendo __modelo de riscos proporcionais__\footnote{\textbf{\textcolor{darkpastelpurple}{Leituras para o fim do dia:}} Cox, D.R. Regression Models and Life-Tables. \emph{Journal of the Royal Statistical Society. Series B}, 34:187-220, 1972.}.
 
 ## Introdução
 
 - Embora o delineamento do FHS exigisse a __medição periódica__ das características do paciente, consideradas determinantes de doenças crônicas, o interesse pelos níveis e __padrões de mudança__ dessas características __ao longo do tempo__ foi inicialmente limitado.
 - Com avanços da pesquisa, investigadores começaram a fazer perguntas sobre o __comportamento__ desses __fatores de risco__.
     + No FHS os pesquisadores começaram a perguntar se os __níveis de pressão arterial__ na infância eram preditivos de hipertensão na vida adulta.
-    + No _Coronary Artery Risk Development in Young Adults_ (CARDIA) _Study_\footnote{Friedman, G. D \emph{et al}. CARDIA: study design, recruitment, and some characteristics of the examined subjects. \emph{Journal of Clinical Epidemiology}, 41:1105-1116, 1988.}, os investigadores procuraram identificar os determinantes da transição do estado normotenso\footnote{``pressão arterial normal''} ou normocolesterolêmico\footnote{``colesterol normal''} no início da vida adulta para hipertensão e hipercolesterolemia na meia-idade.
+    + No _Coronary Artery Risk Development in Young Adults_ (CARDIA) _Study_\footnote{Friedman, G.D. \emph{et al}. CARDIA: study design, recruitment, and some characteristics of the examined subjects. \emph{Journal of Clinical Epidemiology}, 41:1105-1116, 1988.}, os investigadores procuraram identificar os determinantes da transição do estado normotenso\footnote{``pressão arterial normal''} ou normocolesterolêmico\footnote{``colesterol normal''} no início da vida adulta para hipertensão e hipercolesterolemia na meia-idade.
 
 ## Introdução
 
@@ -47,16 +47,16 @@ A pesquisa estatística em métodos para o delineamento e análise de investiga�
 
 ## Introdução
 
-- Esse interesse nos padrões temporais de mudança nas características humanas ocorreu em um período em que os avanços no poder da computação tornaram novas e mais intensivas abordagens computacionais para a análise estatística disponíveis no desktop.
+- Esse interesse nos padrões temporais de mudança nas características humanas ocorreu em um período em que os avanços no poder da computação tornaram novas e mais intensivas abordagens computacionais para a análise estatística disponíveis no _desktop_.
 
 ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', paged.print=FALSE}
-knitr::include_graphics(here('images', 'dims.jpg'))
+knitr::include_graphics(here::here('images', 'dims.jpg'))
 ```
 
 ## Introdução
 
 - \textbf{\textcolor{darkpastelgreen}{Laird e Ware}} propuseram o uso do algoritmo EM para ajustar uma classe de __modelos lineares de efeitos mistos__ apropriados para a análise de medidas repetidas\footnote{Laird, N. M., Ware, J. H. Random-effects models for longitudinal data. \emph{Biometrics}, 38:963-974, 1982.};
-- Mais tarde na década, \textbf{\textcolor{darkpastelgreen}{Liang e Zeger}} introduziram as __equações de estimativas generalizadas__ na literatura bioestatística e propuseram uma família de modelos lineares generalizados para ajustar observações repetidas de dados binários e contados\footnote{Liang, K. Y., Zeger, S. L. Longitudinal Data Analysis Using Generalized Linear Models. \emph{Biometrika}, 73:13-22, 1986.}$^{,}$\footnote{Zeger, S. L., Liang, K. Y. Longitudinal Data Analysis for Discrete and Continuous Outcomes. \emph{Biometrics}, 42:121-130, 1986.}.
+- Mais tarde na década, \textbf{\textcolor{darkpastelgreen}{Liang e Zeger}} introduziram as __equações de estimativas generalizadas__ na literatura bioestatística e propuseram uma família de modelos lineares generalizados para ajustar observações repetidas de dados binários e contados\footnote{Liang, K.Y., Zeger, S.L. Longitudinal Data Analysis Using Generalized Linear Models. \emph{Biometrika}, 73:13-22, 1986.}$^{,}$\footnote{Zeger, S.L., Liang, K.Y. Longitudinal Data Analysis for Discrete and Continuous Outcomes. \emph{Biometrics}, 42:121-130, 1986.}.
 
 ## Introdução
 
@@ -71,7 +71,7 @@ knitr::include_graphics(here('images', 'dims.jpg'))
 - A característica definidora de estudos longitudinais é que medidas dos mesmos indivíduos são tomadas __repetidamente__ através do tempo, assim permitindo o estudo direto da __mudança com o tempo__.
 
 ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='90%', paged.print=FALSE}
-knitr::include_graphics(here('images', 'levels_explanation.png'))
+knitr::include_graphics(here::here('images', 'levels_explanation.png'))
 ```
 
 ## Estudos longitudinais vs. estudos transversais
@@ -83,16 +83,40 @@ knitr::include_graphics(here('images', 'levels_explanation.png'))
 ## Estudos longitudinais vs. estudos transversais
 
 ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE}
-knitr::include_graphics(here('images', 'CS_Vs_Longitudinal_Study.jpg'))
+knitr::include_graphics(here::here('images', 'CS_Vs_Longitudinal_Study.jpg'))
 ```
 
-## Um exemplo:
+## Um exemplo
+
+Para destacar essa importante distinção entre delineamentos de estudos transversais e longitudinais, considere o seguinte exemplo.
+
+- Acredita-se que a gordura corporal nas meninas aumenta pouco antes ou ao redor da menarca, estabilizando-se aproximadamente 4 anos após a menarca.
+- Suponha que os investigadores estejam interessados em determinar o aumento da gordura corporal nas meninas após a menarca.
+
+## Um exemplo: estudo transversal
+
+Em um delineamento de estudo transversal, os pesquisadores podem obter medidas de porcentagem de gordura corporal em dois grupos separados de meninas: um grupo de meninas de 10 anos (uma coorte pré-menarca) e um grupo de meninas de 15 anos de idade (uma coorte pós-menarca).
+
+- Neste delineamento de estudo transversal, a comparação direta da porcentagem de gordura corporal média nos dois grupos de meninas pode ser feita usando um teste $t$ de duas amostras (não pareado).
+
+## Um exemplo: estudo transversal
+
+- Essa comparação não fornece uma estimativa da mudança na gordura corporal quando as meninas têm entre 10 e 15 anos.
+- O __efeito do crescimento__ ou __envelhecimento__, um inerente efeito individual, simplesmente não pode ser estimado a partir de um estudo transversal que não obtenha medidas de como os indivíduos mudam com o tempo. 
+- Em um estudo transversal, o efeito do envelhecimento é potencialmente __confundido__ com possíveis efeitos de coorte. 
+    +  Há muitas características que diferenciam as meninas nestes dois grupos etários diferentes que poderiam distorcer a relação entre a idade e a gordura corporal.
+
+## Um exemplo: estudo longitudinal
+
+Por outro lado, um estudo longitudinal que mede uma única coorte de meninas nas idades (momentos) de 10 e 15 anos pode fornecer uma __estimativa__ válida __da mudança__ na gordura corporal à medida que as meninas envelhecem.
+- No estudo longitudinal, a análise é baseada em um teste $t$ pareado, usando a diferença ou mudança na porcentagem de gordura corporal dentro de cada menina como a variável de resultado. 
+- Esta comparação dentro do indivíduo fornece uma estimativa válida da mudança na gordura corporal quando as meninas envelhecem de 10 a 15 anos. 
 
 ## Dados longitudinais são dados agrupados
 
 - Uma característica distintiva de dados longitudinais é que eles são __agrupados__.
 
-```{r long_eh_agrupado, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, fig.align='center', out.width="80%", out.height="70%"}
+```{r long_eh_agrupado, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, fig.align='center', out.width="80%", out.height="60%"}
 # ----------------------------------------------------
 # Carregando pacotes do R
 
@@ -104,7 +128,7 @@ library(ggplot2)
 # ----------------------------------------------------
 # Carregando o arquivo de dados
 
-chol.df <- read_dta(file = here("data", "cholesterol.dta"))
+chol.df <- read_dta(file = here::here("data", "cholesterol.dta"))
 
 # ----------------------------------------------------
 # Reformando o objeto: de "largo" para "longo"
@@ -166,12 +190,149 @@ p
     + Os dados podem consistir em observações sobre crianças aninhadas dentro de salas de aula, aninhadas dentro das escolas.
 - Os dados multiníveis serão discutidos no final do curso.
 
-# Exemplos
+# Um exemplo
+
+## Tratamento em Crianças Expostas a Chumbo
+
+- O envenenamento por chumbo em crianças é tratável no sentido de que existem intervenções médicas, conhecidas como tratamentos de quelação, que podem ajudar a criança a excretar o chumbo ingerido.
+- Até recentemente, o tratamento de quelação de crianças com altos níveis de chumbo no sangue era administrado por injeção e requeria hospitalização.
+- Um novo agente quelante, o _succimer_, aumenta a excreção urinária de chumbo e tem a vantagem de poder ser administrado oralmente, em vez de ser administrado por injeção.
+- Na década de 1990, o __Grupo de Estudo de Tratamento de Crianças Expostas a Chumbo__ conduziu um __estudo aleatorizado__ e controlado por placebo de succimer em crianças com níveis de chumbo no sangue confirmados de 20 a 44 $\mu$g/dL (níveis altos)\footnote{Treatment of Lead-Exposed Children (TLC) Trial Group. Safety and
+efficacy of succimer in toddlers with blood leads of 20--44 $\mu$g/dL. \emph{Pediatric Research}, 48:593-599, 2000.}$^,$\footnote{Rogan, W.J. \emph{et al.} The effect of chelation therapy with succimer on neuropsychological development
+in children exposed to lead. \emph{New England Journal of Medicine}, 344:1421-1426, 2001.}.
+
+## Tratamento em Crianças Expostas a Chumbo
+
+- As crianças tinham entre 12 e 33 meses no momento da entrada no estudo e viviam em habitações em estado de deterioração interna.
+- A idade média das crianças na aleatorização foi de 2 anos e o nível médio de chumbo no sangue foi de 26 $\mu$g/dL.
+- As crianças receberam até três cursos de 26 dias de _succimer_ ou placebo e foram acompanhados por 3 anos.
+
+## Tratamento em Crianças Expostas a Chumbo
+
+```{r tlc_tb, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis'}
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+
+chumbo.df <- read_dta(file = here::here("data", "tlc.dta"))
+
+chumbo.df$trt <- factor(chumbo.df$trt, labels = c("Placebo", "Succimer"))
+
+# ----------------------------------------------------
+# Reformando o objeto: de "largo" para "longo"
+
+chumbo.df.longo <- gather(data = chumbo.df, key = "tempo", value = "chumbo", -id, -trt)
+
+# ----------------------------------------------------
+# Formata variáveis
+
+chumbo.df.longo$tempo <- factor(chumbo.df.longo$tempo, labels = c("0", "1", "4", "6"))
+# ----------------------------------------------------
+# Gráfico de perfis
+
+set.seed(10)
+
+knitr::kable(chumbo.df[sample(x = chumbo.df$id, size = 10, replace = F),], col.names = c("ID", "Grupo", "Linha de base", "Semana 1", "Semana 4", "Semana 6"))
+```
+
+## Tratamento em Crianças Expostas a Chumbo
+
+```{r tlc_p, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, fig.align='center', out.width="100%"}
+
+library(plyr)
+
+chumbo.resumo <- ddply(chumbo.df.longo, ~ trt + tempo, summarize, chumbo.m = mean(chumbo))
+
+p <- ggplot(data = chumbo.resumo,
+            mapping = aes(x = tempo, y = chumbo.m, group = trt, colour = trt)) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(palette = "Dark2") +
+  labs(x = "Semana", y = "Média nível de chumbo no sangue (mcg/dL)", colour = "Grupo de tratamento")
+p
+```
 
 # Modelos de regressão para respostas correlacionadas
 
-## Por hoje é só! Sejam todos bem-vindos!
+## Modelos de regressão para respostas correlacionadas
+
+- Nos últimos anos, vimos avanços notáveis nos métodos de análise de dados longitudinais e agrupados.
+- Em particular, agora temos uma classe __ampla__ e __flexível de modelos__ para dados correlacionados com base em um paradigma de __regressão__.
+- Todos os métodos descritos nos encontros seguintes podem ser considerados modelos de regressão para respostas correlacionadas.
+
+## Modelos de regressão para respostas correlacionadas
+
+- Modelos de regressão são amplamente utilizados e fornecem uma abordagem muito geral e versátil para a análise de dados.
+- Nosso uso do termo "modelo de regressão" aqui __não é estritamente limitado__ ao __modelo de regressão linear__ padrão para uma variável de __resposta contínua__.
+- Usamos esse termo mais amplamente para nos referir a qualquer modelo que descreva a __dependência da média de uma variável de resposta em um conjunto de covariáveis__ em termos de alguma forma de equação de regressão.
+
+## Modelos de regressão para dados correlacionadas
+
+- O caso mais simples é o familiar __modelo de regressão linear__ para uma variável resposta contínua
+- No entanto, existem muitas __generalizações__ possíveis.
+- Modelos de regressão foram desenvolvidos para outras variáveis resposta, como respostas binárias ou contagens.
+    + Para a variável resposta binária, a regressão logística tem sido amplamente utilizada para muitas aplicações.
+    + Para contagens, a regressão linear ou de Poisson é frequentemente apropriada.
+- Outra generalização importante é para observações que não podem ser consideradas estatisticamente independentes umas das outras, ou seja, modelos de regressão para respostas correlacionadas.
+- Nos próximos encontros, consideramos tipos de generalizações do modelo de regressão linear padrão.
+
+## O modelo linear
+
+- Note que o termo "linear" apareceu em todos os três exemplos de modelos de regressão considerados até agora.
+- A linearidade neste cenário tem um significado muito preciso e refere-se ao fato de que todos esses modelos para a média (ou alguma transformação da média) são __lineares nos parâmetros__ de regressão.
+
+## O modelo linear
+
+Deixe $Y$ denotar a variável de resposta e $X$ uma covariável (variável explicativa ou preditora), os três modelos a seguir para a resposta média
+
+$$
+\E(Y|X) = \beta_1 + \beta_2 X,
+$$
+$$
+\E(Y|X) = \beta_1 + \beta_2 \log(X),
+$$
+$$
+\E(Y|X) = \beta_1 + \beta_2 X + \beta_3 X^2,
+$$
+
+são todos casos em que a média é linear nos parâmetros de regressão.
+
+- $\E(Y|X)$ denota a média condicional de $Y$ dado $X$.
+
+## O modelo linear
+
+Os dois modelos a seguir
+
+$$
+\E(Y|X) = \beta_1 + e^{\beta_2 X},
+$$
+$$
+\E(Y|X) = \frac{\beta_1}{1 + \beta_2e^{-\beta_3 X}},
+$$
+
+são casos em que a média é não-linear nos parâmetros de regressão.
+
+- Estes casos não serão considerados em nosso curso.
+
+## O modelo linear
+
+- __Observação:__ isto não impede relações entre a resposta média e covariáveis que são curvilíneas ou não lineares.
+- Este tipo de não-linearidade pode ser acomodado tomando transformações apropriadas da resposta média (transformação logarítmica na regressão de Poisson) e as covariáveis ($\log(\mbox{dose})$) e/ou incluindo polinômios.
+    + Por exemplo, uma tendência quadrática na resposta média ao longo do tempo pode ser incorporada incluindo o $\mbox{tempo}$ e o $\mbox{tempo}^2$ no modelo de regressão.
+- A inclusão de covariáveis transformadas não viola a "linearidade" do modelo de regressão $\Rightarrow$ o modelo ainda é linear nos parâmetros de regressão.
+
+## O modelo linear
+
+- Em resumo, vemos o paradigma de regressão como uma abordagem muito flexível e versátil para analisar dados longitudinais e correlacionados que surgem de muitos tipos diferentes de estudos.
+- Modelos de regressão podem fornecer uma descrição parcimoniosa ou explicação de como a resposta média em um estudo longitudinal muda com o tempo, e como essas mudanças estão relacionadas a covariáveis de interesse. 
+- O nosso principal objetivo é fornecer uma descrição simples dos padrões discerníveis de mudança na resposta ao longo do tempo e sua relação com as covariáveis, através de coeficientes de regressão que se baseiam diretamente nas questões científicas de interesse principal.
+
+## Avisos
+
+- __Para casa:__ ler o Capítulo 1 do livro "__Applied Longitudinal Analysis__".
+- __Próxima aula:__ Revisão de vetores e propriedades do valor esperado e variância.
+
+## Bons estudos!
 
 ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE}
-knitr::include_graphics(here('images', 'long_study.jpg'))
+knitr::include_graphics(here::here('images', 'long_study.jpg'))
 ```
