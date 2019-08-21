@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.2.11)  20 AUG 2019 08:11
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.2.11)  21 AUG 2019 12:46
 entering extended mode
 **C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/aul
 as/MAT02035/output_pdf/01_dados_longitudinais_e_agrupados.tex
@@ -1612,10 +1612,10 @@ aulas/MAT02035/output_pdf/01_dados_longitudinais_e_agrupados_files/figure-beame
 r/long_eh_agrupado-1.pdf>
 Package pdftex.def Info: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/D
 adosCorrelacionados/aulas/MAT02035/output_pdf/01_dados_longitudinais_e_agrupado
-s_files/figure-beamer/long_eh_agrupado-1.pdf used on input line 470.
+s_files/figure-beamer/long_eh_agrupado-1.pdf used on input line 477.
 (pdftex.def)             Requested size: 245.83604pt x 149.1359pt.
 
-Overfull \vbox (2.33795pt too high) detected at line 470
+Overfull \vbox (2.33795pt too high) detected at line 477
  []
 
 [18
@@ -1633,7 +1633,7 @@ ong_eh_agrupado-1.pdf>] [19
 ] [23
 
 ]
-Overfull \vbox (23.51149pt too high) detected at line 622
+Overfull \vbox (23.51149pt too high) detected at line 629
  []
 
 [24
@@ -1655,7 +1655,7 @@ aulas/MAT02035/output_pdf/01_dados_longitudinais_e_agrupados_files/figure-beame
 r/tlc_p-1.pdf>
 Package pdftex.def Info: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/D
 adosCorrelacionados/aulas/MAT02035/output_pdf/01_dados_longitudinais_e_agrupado
-s_files/figure-beamer/tlc_p-1.pdf used on input line 671.
+s_files/figure-beamer/tlc_p-1.pdf used on input line 678.
 (pdftex.def)             Requested size: 307.28987pt x 215.1046pt.
 [27
 
@@ -1690,7 +1690,7 @@ File: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados
 <use C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/DadosCorrelacionados/
 aulas/MAT02035/images/long_study.jpg>
 Package pdftex.def Info: C:/Users/Rodrigo/Documents/UFRGS/Disciplinas/2019-02/D
-adosCorrelacionados/aulas/MAT02035/images/long_study.jpg used on input line 887
+adosCorrelacionados/aulas/MAT02035/images/long_study.jpg used on input line 894
 .
 (pdftex.def)             Requested size: 307.28987pt x 153.58536pt.
 [38
@@ -1700,19 +1700,19 @@ as/MAT02035/images/long_study.jpg>]
 \tf@nav=\write5
 \tf@toc=\write6
 \tf@snm=\write7
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 889.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 889.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 896.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 896.
 
 (C:\Users\Rodrigo\Documents\UFRGS\Disciplinas\2019-02\DadosCorrelacionados\aula
 s\MAT02035\Rmds\01_dados_longitudinais_e_agrupados.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 889.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 889.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 889.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 896.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 896.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 896.
  ) 
 Here is how much of TeX's memory you used:
  25829 strings out of 493921
  469442 string characters out of 3147276
- 539019 words of memory out of 3000000
+ 539020 words of memory out of 3000000
  28371 multiletter control sequences out of 15000+200000
  93851 words of font info for 110 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
@@ -1736,7 +1736,7 @@ nts/type1/public/lm/lmsso10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public
 iKTeX 2.9/fonts/type1/public/lm/lmsy7.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
 pe1/public/lm/lmsy9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmtt
 9.pfb>
-Output written on 01_dados_longitudinais_e_agrupados.pdf (38 pages, 930622 byte
+Output written on 01_dados_longitudinais_e_agrupados.pdf (38 pages, 930638 byte
 s).
 PDF statistics:
  393 PDF objects out of 1000 (max. 8388607)

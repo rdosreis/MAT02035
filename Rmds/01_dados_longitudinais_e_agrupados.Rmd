@@ -19,7 +19,7 @@ date: |
 
 A pesquisa estatística em métodos para o delineamento e análise de investigações humanas expandiu explosivamente na segunda metade do século 20.
 
-- Nos EUA (métada do século 20): mudança de suporte para pesquisa da área militar para a área biomédica.
+- Nos EUA (metade do século 20): mudança de suporte para pesquisa da área militar para a área biomédica.
 - Nos EUA (1944): aprovação da Lei do Serviço de Saúde Pública $\Rightarrow$ crescimento do _National Institutes of Health_ (NIH\footnote{{\bf Um pouco da história do NIH:} www.nih.gov/about-nih/who-we-are/history}).
     + Orçamento do NIH: 1947 - \$8 milhões $\Rightarrow$ 1966 - \$1 bilhão.
 
@@ -109,6 +109,7 @@ Em um delineamento de estudo transversal, os pesquisadores podem obter medidas d
 ## Um exemplo: estudo longitudinal
 
 Por outro lado, um estudo longitudinal que mede uma única coorte de meninas nas idades (momentos) de 10 e 15 anos pode fornecer uma __estimativa__ válida __da mudança__ na gordura corporal à medida que as meninas envelhecem.
+
 - No estudo longitudinal, a análise é baseada em um teste $t$ pareado, usando a diferença ou mudança na porcentagem de gordura corporal dentro de cada menina como a variável de resultado. 
 - Esta comparação dentro do indivíduo fornece uma estimativa válida da mudança na gordura corporal quando as meninas envelhecem de 10 a 15 anos. 
 
@@ -173,7 +174,7 @@ p
 - Nestes casos, esperamos que medidas em unidades dentro de um grupo são mais similares que as medidas em unidades de grupos diferentes.
 - O grau de agrupamento pode ser expresso em termos da __correlação__ entre as medidas em unidades do mesmo grupo.
 - Esta correlação __invalida a suposição crucial de independência__ que é o pilar de tantas técnicas estatísticas.
-    + Modelos estatísticos para dados correlacionados devem explicitamente descrever e lever em conta para esta correlação.
+    + Modelos estatísticos para dados correlacionados devem explicitamente descrever e levar em conta para esta correlação.
 
 ## Comentários
 
