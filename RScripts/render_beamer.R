@@ -2,7 +2,7 @@ library(here)
 library(rmarkdown)
 
 pasta <- "Rmds"
-arquivo <- "01_dados_longitudinais_e_agrupados"
+arquivo <- "02_revisao_vet_mat_esp_var"
 
 arquivo_rmd <- paste0(arquivo, ".Rmd")
 arquivo_pdf <- paste0(arquivo, ".pdf")
@@ -10,10 +10,10 @@ input <- here::here(pasta, arquivo_rmd)
 arquivo_r <- paste0(arquivo, ".R")
 
 rmarkdown::render(input = input, 
-                  output_format = beamer_presentation(theme = "metropolis", #"AnnArbor",
+                  output_format = beamer_presentation(theme = "AnnArbor",
                                                       highlight = "zenburn",
-                                                      # colortheme = "dolphin",
-                                                      # fonttheme = "structurebold",
+                                                      colortheme = "dolphin",
+                                                      fonttheme = "structurebold",
                                                       includes = list(in_header = here::here("styles", "mystyle.tex")),
                                                       slide_level = 2,
                                                       keep_tex = FALSE,
