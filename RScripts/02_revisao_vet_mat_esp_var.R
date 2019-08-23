@@ -110,6 +110,9 @@ A %*% B
 G %*% J
 J %*% G
 
+
+
+## ----multiplica_matriz3, error=TRUE--------------------------------------
 # CUIDADO!
 G * J
 

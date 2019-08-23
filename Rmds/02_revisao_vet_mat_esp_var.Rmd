@@ -34,7 +34,7 @@ A = \left(\begin{array}{cccc}
 \end{array}\right).
 $$
 
-- $A$ é uma matriz com três linhas e quatro colnas.
+- $A$ é uma matriz com três linhas e quatro colunas.
 
 ## Definições e conceitos básicos
 
@@ -118,7 +118,7 @@ length(V)
 __Uma matriz__
 
 - Podemos pensar em uma matriz como uma combinação de $p$ vetores, em que cada vetor tenha comprimento igual a $n$.
-- Por serem uma combinção de vetores, cada função terá um ou mais vetores como inputs e retornará uma matriz.
+- Por serem uma combinação de vetores, cada função terá um ou mais vetores como inputs e retornará uma matriz.
 
 \begin{table}
 \centering
@@ -260,7 +260,7 @@ t(A)
 ## Matrizes quadradas e simétricas
 
 - Uma matriz é dita __quadrada__ se esta tem o mesmo número de linhas e colunas.
-- Uma matriz quadrada é __simétrica__ se esta é iqual à sua matriz transposta.
+- Uma matriz quadrada é __simétrica__ se esta é igual à sua matriz transposta.
 
 $$
 S = \left(\begin{array}{cccc}
@@ -296,7 +296,7 @@ all.equal(S, t(S))
 
 ## Matrizes quadradas e simétricas
 
-- Exemplos de matrizes dimétricas que desempenham papel importante na análise de dados longitudinais são as matrizes de __covariância__ e __correlação__ para as correspondentes medidas repetidas nos mesmos indivíduos.
+- Exemplos de matrizes simétricas que desempenham papel importante na análise de dados longitudinais são as matrizes de __covariância__ e __correlação__ para as correspondentes medidas repetidas nos mesmos indivíduos.
 - Por fim, uma matriz __diagonal__ é um caso especial de uma matriz quadrada simétrica que tem entradas não nulas (diferentes de zero) somente para as posições da __diagonal principal__.
     + Os elementos da diagonal principal são aqueles na mesma linha e coluna ($a_{ii}$), da parte superior esquerda para a parte inferior direita da matriz.
 
@@ -488,6 +488,11 @@ A %*% B
 G %*% J
 J %*% G
 
+```
+
+## Multiplicação de matrizes
+
+```{r multiplica_matriz3, error=TRUE}
 # CUIDADO!
 G * J
 ```
