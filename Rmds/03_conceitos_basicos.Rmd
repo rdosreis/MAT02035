@@ -1,0 +1,72 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Dados longitudinais: conceitos básicos"
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2019
+---
+
+# Introdução
+
+# Objetivos da análise longitudinal
+
+# Características definidoras dos dados longitudinais
+
+## Terminologia
+
+## Notação
+
+## Dependência e Correlação
+## Propriedades de valores esperados e variâncias
+
+- Por fim, notamos que o valor esperado e a variância podem ser aplicados para um vetor aleatório. seja $Y$ um vetor $n\times 1$ (portanto, um vetor coluna) de resposta (medidas repetidas em $n$ ocasiões distintas),
+
+$$
+Y  = \left(\begin{array}{c}
+Y_1\\
+Y_2\\
+\vdots\\
+Y_n
+\end{array}\right).
+$$
+
+## Propriedades de valores esperados e variâncias
+
+Então,
+
+$$
+\E(Y)  = \left(\begin{array}{c}
+\E(Y_1)\\
+\E(Y_2)\\
+\vdots\\
+\E(Y_n)
+\end{array}\right),
+$$
+
+e
+
+$$
+\Cov(Y)  = \left(\begin{array}{cccc}
+\Var(Y_1) & \Cov(Y_1, Y_2) & \ldots & \Cov(Y_1, Y_n)\\
+\Cov(Y_2, Y_1) & \Var(Y_2) &  \ldots & \Cov(Y_2, Y_n)\\
+\vdots & \vdots & \ddots & \vdots\\
+\Cov(Y_n, Y_1) & \Cov(Y_n, Y_2) & \hdots & \Var(Y_n)
+\end{array}\right).
+$$
+
+## Avisos
+
+- __Para casa:__ ler o Capítulo 1 do livro "__Applied Longitudinal Analysis__". Caso já tenha lido o Cap. 1, leia o Capítulo 2.
+- __Próxima aula:__ Dados longitudinais - exemplo, fontes de variação e consequências de ignorar a correlação entre dados longitudinais.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE}
+knitr::include_graphics(here::here('images', 'conceitos-basicos-de-trade.jpg'))
+```
