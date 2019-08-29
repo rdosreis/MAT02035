@@ -1,0 +1,44 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Dados longitudinais: conceitos básicos"
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2019
+---
+
+# Exemplo: Tratamento em Crianças Expostas a Chumbo
+
+## Introdução
+
+## Objetivos da análise
+
+## Correlação e covariância
+
+# Fontes de correlação em estudos longitudinais
+
+## Consequências de ignorar a correlação entre dados longitudinais
+
+# Exercícios
+
+## Exercícios
+
+- Com o auxílio do computador, faça os exercícios do Capítulo 2 do livro "__Applied Longitudinal Analysis__" (páginas 44 e 45).
+
+## Avisos
+
+- __Para casa:__ ler o Capítulo 2 do livro "__Applied Longitudinal Analysis__". Caso já tenha lido o Cap. 1, leia o Capítulo 2.
+- __Próxima aula:__ Modelos lineares para dados longitudinais (resposta contínua) - visão geral, suposições distribucionais e análise descritiva.
+- __60 com café:__ A próxima palestra do __Ciclo 60 com Café__ terá como convidado o professor __Francisco Louzada Neto__, Professor Titular da Universidade de São Paulo, junto ao Instituto de Ciências Matemáticas e Computação (ICMC-USP), com a palestra __"Transformando Dados em Conhecimento"__.
+    + O evento será na sexta-feira, dia __30 de Agosto__, às __15:30__, na __sala A101__ do __Prédio 43111__. O café será servido a partir das 15:15.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE}
+knitr::include_graphics(here::here('images', 'cafe60.png'))
+```
