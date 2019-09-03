@@ -37,8 +37,8 @@ Normalidade $\rightsquigarrow$ Máxima verossimilhança  $\rightsquigarrow$ Esti
 
 ## Notação
 
-- Assumimos uma amostra de $N$ indivíduos são medidos repedidamente ao longo do tempo.
-- Denotamos $Y_{ij}$ a variável respota do $i$-ésimo indivíduo na $j$-ésima ocasião de medição.
+- Assumimos uma amostra de $N$ indivíduos são medidos repetidamente ao longo do tempo.
+- Denotamos $Y_{ij}$ a variável resposta do $i$-ésimo indivíduo na $j$-ésima ocasião de medição.
 - Como mencionado anteriormente, os indivíduos podem não ter o mesmo número de medidas e podem não ser medidos nas mesmas ocasiões.
     + Para tal, utilizamos $n_i$ para representar o número de medidas repetidas e $t_{ij}$ os tempos de medida do $i$-ésimo indivíduo.
         - Se $n$ é o número de __ocasiões planejadas__ do estudo, então $n_i \leq n$.
@@ -65,7 +65,7 @@ $$
 ## Notação
 
 - Quando o número de medidas repetidas é o mesmo para todos os indivíduos do estudo (e não há dados ausentes), não é necessário incluir o índice $i$ em $n_i$ (já que $n_i = n$ para $i = 1, \ldots, N$).
-- Da mesma forma, se as medidas repetidas forem observadas no mesmo conjunto de ocasiões, não é necessário incluir o índice $i$ em $t_{ij}$ (já que $t_{ij} = t_i$ para $i = 1, \ldots, N$).
+- Da mesma forma, se as medidas repetidas forem observadas no mesmo conjunto de ocasiões, não é necessário incluir o índice $i$ em $t_{ij}$ (já que $t_{ij} = t_j$ para $i = 1, \ldots, N$).
 
 ## Notação
 
@@ -86,8 +86,8 @@ $$
 ## Notação
 
 - Existe um vetor correspondente de covariáveis associado a cada uma das $n_i$ medidas repetidas no $i$-ésimo indivíduo.
-    + $X_{i1}$ é o vetor $p \times 1$ cujos elementos são os valores das covariáveis associadas à variável de resposta do $i$-ésimo indivíduo sujeito na 1ª ocasião de medição;
-    + $X_{i2}$ é o vetor $p \times 1$ cujos elementos são os valores das covariáveis associadas à variável de resposta do $i$-ésimo indivíduo sujeito na 1ª ocasião de medição e assim por diante.
+    + $X_{i1}$ é o vetor $p \times 1$ cujos elementos são os valores das covariáveis associadas à variável de resposta do $i$-ésimo indivíduo na 1ª ocasião de medição;
+    + $X_{i2}$ é o vetor $p \times 1$ cujos elementos são os valores das covariáveis associadas à variável de resposta do $i$-ésimo indivíduo na 1ª ocasião de medição e assim por diante.
 
 ## Notação
 
@@ -213,7 +213,7 @@ em que $X_{ij1} = 1$ para todo $i$ e $j$ ($\beta_1$ é um termo de intercepto).
 ## Ilustração: Tratamento de crianças expostas ao chumbo
 
 - A segunda covariável, $X_{ij2} = t_j$, representa a semana em que o nível de chumbo no sangue foi obtido.
-- Por fim, $X_{ij3} = t_1 \times\ \mbox{Grupo}$, em que $\mbox{Grupo}_i = 1$ se o $i$-ésimo indivíduo é designado ao grupo succimer e $\mbox{Grupo}_i = 0$ se o $i$-ésimo indivíduo é designado ao grupo placebo.
+- Por fim, $X_{ij3} = t_j \times\ \mbox{Grupo}$, em que $\mbox{Grupo}_i = 1$ se o $i$-ésimo indivíduo é designado ao grupo succimer e $\mbox{Grupo}_i = 0$ se o $i$-ésimo indivíduo é designado ao grupo placebo.
 
 ## Ilustração: Tratamento de crianças expostas ao chumbo
 
@@ -382,7 +382,7 @@ $$
 
 ## A distribuição normal multivariada
 
-- A base para grande parte da estatística é baseada na teoria das probabilidades.
+- A base para grande parte da estatística é a teoria das probabilidades.
 - De fato, a base formal para muitos métodos estatísticos é uma distribuição de probabilidade assumida para a variável resposta.
 - Em termos gerais, uma distribuição de probabilidade descreve a frequência relativa de ocorrência de valores particulares da variável resposta.
 - Em particular, a função de densidade de probabilidade para $Y$, descrita por $f(y)$, descreve a frequência relativa de ocorrência de valores particulares de $Y$.
@@ -641,7 +641,7 @@ Para instalação do `RStudio` acesse o site https://www.rstudio.com/products/rs
 ## Pacotes {.allowframebreaks}
 
 - Assim como a maioria dos softwares estatísticos, o `R` possui os seus "módulos", mais conhecidos como __pacotes__ do `R`.
-- __Pacote:__ é uma coleção de funções do `R`; os pacotes também são gratuitos e disponiblizados no __CRAN__.
+- __Pacote:__ é uma coleção de funções do `R`; os pacotes também são gratuitos e disponibilizados no __CRAN__.
 - Um pacote inclui: __funções__ do `R`, __conjuntos de dados__ (utilizados em exemplos das funções), arquivo com __ajuda__ __(_help_)__, e uma __descrição__ do pacote.
 - Atualmente, o repositório oficial do `R` possui mais de 12.000 pacotes disponíveis.
 - As funcionalidades do `R`, podem ser ampliadas carregando estes pacotes, tornando-o um software muito poderoso, capaz de realizar inúmeras tarefas.
