@@ -51,12 +51,12 @@ plot_grid(p1, p2)
     + \structure{Robert Gentleman} e \structure{Ross Ihaka} no Dep. de Estatística da Universidade de Auckland.
 - O nome \structure{{\ttfamily R}} se dá em parte por reconhecer a influência do \structure{\sffamily S} e por ser a inicial dos nomes \structure{Robert} e \structure{Ross}.
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='45%', paged.print=FALSE}
 
 library(cowplot)
 library(ggplot2)
 
-p1 <- ggdraw() + draw_image(here::here('images', 'University_of_Auckland_Coat_of_Arms.png'), scale = 0.9)
+p1 <- ggdraw() + draw_image(here::here('images', 'University_of_Auckland_Coat_of_Arms.png'), scale = 0.7)
 p2 <- ggdraw() + draw_image(here::here('images', 'Robert_e_Ross.png'), scale = 0.9)
 
 plot_grid(p1, p2)
@@ -67,7 +67,7 @@ plot_grid(p1, p2)
 
 ## Interface do `R`
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE}
 
 knitr::include_graphics(here::here('images', 'R_console.jpg'))
 
@@ -76,10 +76,10 @@ knitr::include_graphics(here::here('images', 'R_console.jpg'))
 ## Como trabalhar com o `R`?
 
 - Por ser uma linguagem de programação, o \structure{{\ttfamily R}} realiza suas tarefas através de \structure{funções} e \structure{operadores}.
-    + A criação de \structure{\emph{scripts}} (rotinas) é \structure{a melhor prática para se trabalhar} com o {\ttfamily R}.
-        - \structure{OBSERVAÇÃO:} sempre salve seus scripts (em um pen drive, dropbox ou e-mail); você pode querer utilizá-los novamente no futuro.
+    + A criação de \structure{\emph{scripts}} (rotinas) é \structure{a melhor prática para se trabalhar} com o `R`.
+        - \structure{OBSERVAÇÃO:} sempre salve seus scripts (em um _pen drive_, dropbox ou e-mail); você pode querer utilizá-los novamente no futuro.
     + Utilização de editores de texto: \structure{bloco de notas}, \structure{Notepad ++}, \structure{Tinn-R}, etc.
-    + Interfaces de {\ttfamily R} para usuários: \structure{RStudio}.
+    + Interfaces de `R` para usuários: \structure{RStudio}.
 
 ## Editores de texto
 
@@ -99,7 +99,7 @@ knitr::include_graphics(here::here('images', 'Hello_notepad.png'))
 
 ## Interface do RStudio
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE}
 
 knitr::include_graphics(here::here('images', 'RStudio.png'))
 
@@ -147,9 +147,11 @@ knitr::include_graphics(here::here('images', 'RStudio.png'))
 
 ## Gráficos do `R`
 
-\begin{center}
-\includegraphics[width=0.8\columnwidth]{Figuras/geom_scatter}
-\end{center}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE}
+
+knitr::include_graphics(here::here('images', 'geom_scatter.png'))
+
+```
 
 ## Comunicação de resultados através do `R`: `R Markdown`
 
@@ -171,25 +173,33 @@ knitr::include_graphics(here::here('images', 'RStudio.png'))
 ## Comunicação de resultados através do `R`: `CompareGroups`
 
 ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='90%', paged.print=FALSE}
-knitr::include_graphics('Figuras/compare_groups.png')
+
+knitr::include_graphics(here::here('images', 'compare_groups.png'))
+
 ```
 
 ## Comunicação de resultados através do `R`: `stargazer`
 
 ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE}
-knitr::include_graphics('Figuras/stargazer.png')
+
+knitr::include_graphics(here::here('images', 'stargazer.png'))
+
 ```
 
 ## Comunicação de resultados através do `R`
 
 ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='60%', paged.print=FALSE}
-knitr::include_graphics('Figuras/forest.jpg')
+
+knitr::include_graphics(here::here('images', 'forest.jpg'))
+
 ```
 
 ## Comunicação de resultados através do `R`
 
 ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE}
-knitr::include_graphics('Figuras/coef_variacao_modelo-1.png')
+
+knitr::include_graphics(here::here('images', 'coef_variacao_modelo-1.png'))
+
 ```
 
 ## Comunicação de resultados através do `R`: `Shiny`
@@ -232,7 +242,7 @@ Para instalação do `R` acesse o site https://www.r-project.org/:
 2. Escolha um repositório de sua preferência, por exemplo, Universidade Federal do Paraná (http://cran-r.c3sl.ufpr.br/).
 3. Em __Download and Install R__ clique no link adequado para o seu sistema operacional (no caso de Windows, clique no link __Download R for Windows__).
 4. Clique no link __base__ (no caso do sistema operacional ser Windows).
-5. Finalmente clique no link para baixar o arquivo executável (a versão mais atual __Download R 3.5.1 for Windows__).
+5. Finalmente clique no link para baixar o arquivo executável (a versão mais atual __Download R 3.6.1 for Windows__).
 
 Após baixar o arquivo executável, abra-o e siga as etapas de instalação conforme as configurações padrões.
 
@@ -240,79 +250,69 @@ Após baixar o arquivo executável, abra-o e siga as etapas de instalação conf
 
 Para instalação do `RStudio` acesse o site https://www.rstudio.com/products/rstudio/download/. 
 
-- Em __Installers for Supported Platforms__ baixe a versão mais recente do instalador do `RStudio` de acordo com o seu sistema operacional (no caso de Windows clique no link __RStudio 1.1.456 - Windows Vista/7/8/10__).
+- Em __Installers for Supported Platforms__ baixe a versão mais recente do instalador do `RStudio` de acordo com o seu sistema operacional (no caso de Windows clique no link __RStudio 1.2.1335 - Windows Vista/7/8/10__).
 
-## Pacotes {.allowframebreaks}
+## Pacotes
 
 - Assim como a maioria dos softwares estatísticos, o `R` possui os seus "módulos", mais conhecidos como __pacotes__ do `R`.
 - __Pacote:__ é uma coleção de funções do `R`; os pacotes também são gratuitos e disponibilizados no __CRAN__.
+    + Outros repositórios também são utilizados, como por exemplo: `Github`, `Bitbucket`, `Bioconductor`, entre outros.
+    + Você também pode fazer o seu pacote do `R` (com as funções utilizadas na disciplina, por exemplo).
 - Um pacote inclui: __funções__ do `R`, __conjuntos de dados__ (utilizados em exemplos das funções), arquivo com __ajuda__ __(_help_)__, e uma __descrição__ do pacote.
-- Atualmente, o repositório oficial do `R` possui mais de 12.000 pacotes disponíveis.
+- Atualmente, o repositório oficial do `R` possui mais de 14.900 pacotes disponíveis.
 - As funcionalidades do `R`, podem ser ampliadas carregando estes pacotes, tornando-o um software muito poderoso, capaz de realizar inúmeras tarefas.
 
-## Pacotes {.allowframebreaks}
+## Pacotes
 
 - Alguns exemplos destas tarefas e alguns destes pacotes são listados abaixo:
-    + __Importação e exportação de dados__
-        - `foreign`, `readr`, `haven`
-    + __Manipulação de dados__
-        - Transformação e recodificação de variáveis: `reshape2`, `stringr`
-    + __Visualização de dados__
-        - Diversos gráficos: `graphics`, `ggplot2`, `ggthemes`
-        - Mapas: `ggmap`
-        - Gráficos e mapas interativos: `plotly`
-    + __Análise de dados__
-        - Análise descritiva: `compareGroups`
-        - Ajuste de modelos: `stats`, `survival`
-        - Análise de amostras complexas: `survey`
-    + __Geração de relatórios__
-        - Relatórios nos formatos pdf, HTML, Word, Power Point: `knitr`, `rmarkdow`, `officer`
+    + __Importação e exportação de dados:__`readr`, `readxl`, `haven`, `foreign`
+    + __Manipulação de dados:__ `tidyr`, `dplyr`,`stringr`
+    + __Descrição e visualização de dados:__ `compareGroups`, `ggplot2`, `GGally`
+    + __Modelagem de dados:__ `lme4`, `nlme`, `geepack`, `geeglm`
+    + __Comunicação estatística:__ `stargazer`, `ggeffects`, `knitr`, `rmarkdow`, `officer`
 
-<!-- ## Exemplos de pacotes -->
-
-<!-- - `maptools`: Funções para leitura, exportação e manipulação de estruturas espaciais. -->
-<!-- - `epibasix`: Ferramentas elementares para análise de problemas epidemiológicos. -->
-<!-- - `survey`: Análise de pequisas com planos amostrais complexos. -->
-<!-- - `ggplot2`: Criação de gráficos elegantes. -->
-<!-- - `survival`: Análise de dados de sobrevivência . -->
-<!-- - O `R` possui mais de \alert{10.751} pacotes, e milhares de funções. -->
-<!-- - \structure{Resumindo:} para o `R` não existe o \alert{"SE É POSSÍVEL FAZER"}, mas sim, \alert{"COMO É POSSÍVEL FAZER"}! -->
-
-
-## Instalando pacotes {.allowframebreaks}
+## Instalando pacotes
 
 - Para \structure{instalação de um pacote}, basta um simples comando.
 
 ```{r, echo=TRUE, eval=FALSE}
-install.packages("survey")
+install.packages("tidyverse")
 ```
 
 - Além da opção de comando, também podemos instalar pacotes utilizando o menu \structure{Tools} do `RStudio`, opção \structure{Install packages ...} e preenchendo com o(s) nome(s) do(s) pacote(s):
 
-\begin{center}
-\includegraphics[width=0.4\columnwidth]{Figuras/install_packs}
-\end{center}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE}
+
+knitr::include_graphics(here::here('images', 'install_packs.png'))
+
+```
+
+## Instalando pacotes
 
 - Outra opção é instalar o pacote a partir de seu arquivos fonte (\structure{.zip} ou \structure{.tar.gz}):
     + Para isso, obtenha o arquivo fonte do pacote (geralmente através do \structure{CRAN}) e no menu \structure{Tools} do `RStudio`, opção \structure{Install packages ...} em \structure{Install from} escolha a seguinte opção:
 
-\begin{center}
-\includegraphics[width=0.4\columnwidth]{Figuras/install_packs2}
-\end{center}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE}
 
-Após a instalação do pacote, temos que \structure{carregar o pacote} para nossa área de trabalho para podermos usufruir de suas funções.
+knitr::include_graphics(here::here('images', 'install_packs2.png'))
 
-```{r, echo=TRUE, eval=FALSE}
-library("survey")
-require("survey")
 ```
 
-## Obtendo ajuda no R {.allowframebreaks}
+## Instalando pacotes
+
+- Após a instalação do pacote, temos que \structure{carregar o pacote} para nossa área de trabalho para podermos usufruir de suas funções.
+
+```{r, echo=TRUE, eval=FALSE}
+library("tidyverse")
+require("tidyverse")
+```
+
+## Obtendo ajuda no R
 
 - Para conhecer quais as funções disponíveis no pacote, faça:
 
 ```{r, echo=TRUE, eval=FALSE}
-help(package = "survey")
+help(package = "tidyverse")
 ```
 
 - Para pedir ajuda de uma determinada função:
@@ -328,7 +328,7 @@ help("glm")
 help.search("t.test")
 ```
 
-\framebreak
+## Obtendo ajuda no R
 
 - Procurando por alguma função, mas esqueci o nome:
 
@@ -347,18 +347,228 @@ demo(Hershey)
 demo(plotmath)
 ```
 
+# Métodos de análise descritiva
+
+## Carregando os dados
+
+```{r carrega_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+# ----------------------------------------------------
+# Carregando pacotes do R
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+here::here("data", "tlc.dta")
+chumbo <- read_dta(
+  file = here::here("data", "tlc.dta"))
+```
+
+## Carregando os dados
+
+```{r carrega_dados2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+chumbo
+```
+
+## Transformando os dados {.allowframebreaks}
+
+__De "largo" para "longo"__
+
+```{r transforma_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+chumbo.longo <- gather(data = chumbo,
+                        key = "tempo",
+                        value = "chumbo", -id, -trt)
+
+chumbo.longo
+```
+
+## Transformando os dados {.allowframebreaks}
+
+__Transforma variáveis__
+
+```{r transforma_dados2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+chumbo.longo$tempo <- as.numeric(
+  as.character(
+    factor(chumbo.longo$tempo,
+           labels = c(1, 2, 4, 6))))
+
+chumbo.longo$trt <- factor(chumbo.longo$trt,
+                           labels = c("Placebo",
+                                      "Succimer"))
+
+chumbo.longo
+```
+
+## Time plot (diagrama de dispersão) {.allowframebreaks}
+
+```{r time_plot, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+p <- ggplot(data = chumbo.longo,
+            mapping = aes(x = tempo, y = chumbo)) +
+  geom_point() +
+  labs(x = "Tempo (semanas)",
+       y = "Nível de chumbo no sangue (mcg/dL)")
+p
+```
+
+## Time plot (linhas) {.allowframebreaks}
+
+```{r time_plot2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+p <- ggplot(data = chumbo.longo,
+            mapping = aes(x = tempo, y = chumbo,
+                          group = id)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Tempo (semanas)",
+       y = "Nível de chumbo no sangue (mcg/dL)")
+p + theme_gray()
+```
+
+## Time plot (perfis médios) {.allowframebreaks}
+
+__"Pré-processamento"__
+
+```{r time_plot3a, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+library(dplyr)
+
+chumbo.resumo <- chumbo.longo %>% 
+  group_by(trt, tempo) %>% 
+  summarise(chumbo.m = mean(chumbo))
+
+chumbo.resumo
+```
+
+## Time plot (perfis médios) {.allowframebreaks}
+
+```{r time_plot3b, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+p <- ggplot(data = chumbo.resumo,
+            mapping = aes(x = tempo,
+                          y = chumbo.m,
+                          colour = trt)) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(direction = -1) +
+  labs(x = "Tempo (semanas)",
+       y = "Média do nível de chumbo no sangue (mcg/dL)",
+       colour = "Grupo de tratamento")
+p + theme_dark()
+```
+
+## Time plot (perfis médios com barras de erros) {.allowframebreaks}
+
+__"Pré-processamento"__
+
+```{r time_plot3c, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+chumbo.resumo <- chumbo.longo %>% 
+  group_by(trt, tempo) %>% 
+  summarise(chumbo.m = mean(chumbo),
+            dp = sd(chumbo), n = n()) %>% 
+  mutate(ep = dp/sqrt(n))
+
+chumbo.resumo
+```
+
+## Time plot (perfis médios com barras de erros) {.allowframebreaks}
+
+```{r time_plot3d, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+p <- ggplot(data = chumbo.resumo,
+            mapping = aes(x = tempo,
+                          y = chumbo.m,
+                          colour = trt)) +
+  geom_errorbar(aes(ymin = chumbo.m - ep,
+                    ymax = chumbo.m + ep),
+                width = .1,
+                position = position_dodge(0.1)) +
+  geom_point(position = position_dodge(0.1)) +
+  geom_line(position = position_dodge(0.1)) +
+  labs(x = "Tempo (semanas)",
+       y = "Média do nível de chumbo no sangue (mcg/dL)",
+       colour = "Grupo de tratamento")
+p + theme_bw() + theme(legend.position = "bottom")
+```
+
+## Dados desbalanceados {.allowframebreaks}
+
+```{r fev, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+fev <- read_dta(
+  file = here::here("data", "fev1.dta"))
+fev
+fev <- fev[- which(fev$logfev1/fev$ht < -0.5), ]
+```
+
+## Dados desbalanceados {.allowframebreaks}
+
+```{r fev2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+p <- ggplot(data = fev,
+            mapping = aes(x = age, y = logfev1/ht)) +
+  geom_point() +
+  labs(x = "Idade (anos)",
+       y = "Log(FEV1/Altura)")
+p + theme_gray()
+```
+
+## Dados desbalanceados {.allowframebreaks}
+
+```{r fev3, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+p <- ggplot(data = fev,
+            mapping = aes(x = age, y = logfev1/ht,
+                          group = id)) +
+  geom_point(alpha = 0.3) +
+  geom_line(alpha = 0.3) +
+  labs(x = "Idade (anos)",
+       y = "Log(FEV1/Altura)")
+p + theme_gray()
+```
+
+## Dados desbalanceados {.allowframebreaks}
+
+__Regressão local__
+
+```{r fev4, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+p <- ggplot(data = fev,
+            mapping = aes(x = age, y = logfev1/ht)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "loess", se = FALSE) +
+  labs(x = "Idade (anos)",
+       y = "Log(FEV1/Altura)")
+p + theme_gray()
+```
+
+## Estrutura de correlação {.allowframebreaks}
+
+```{r correlacao, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+chumbo.succimer <- chumbo %>% 
+  filter(trt == 1) %>% 
+  select(y0, y1, y4, y6)
+
+chumbo.succimer
+```
+
+## Estrutura de correlação {.allowframebreaks}
+
+```{r correlacao2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+# library(GGally)
+# 
+# p <- ggpairs(chumbo.succimer,
+#              columnLabels = paste("Semana", c(0, 1, 4, 6)))
+# p 
+
+pairs(chumbo.succimer, , pch = 19, upper.panel = NULL)
+```
+
 # Exercícios
 
 ## Exercícios
 
 - Com o auxílio do computador, faça os exercícios do Capítulo 2 do livro "__Applied Longitudinal Analysis__" (páginas 44 e 45).
-- Enviar soluções pelo Moodle através do fórum.
+- __Enviar soluções__ pelo Moodle através do fórum (será aberto hoje!).
 
 ## Avisos
 
 - __Para casa:__ ler o Capítulo 3 do livro "__Applied Longitudinal Analysis__". Caso ainda não tenha lido, leia também os Caps. 1 e 2.
     + Ver https://datathon-ufrgs.github.io/Pintando_e_Bordando_no_R/
-- __Próxima aula:__ Métodos de análise descritiva para dados longitudinais.
+- __Próxima aula:__ Considerações a respeito da modelagem da média e da covariância, e abordagem histórica dos métodos de análise de medidas repetidas.
 
 ## Bons estudos!
 
