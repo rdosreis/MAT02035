@@ -1,101 +1,8 @@
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='40%', paged.print=FALSE----
-knitr::include_graphics(here::here('images', 'Rlogo.png'))
-
-
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE----
-
-library(cowplot)
-library(ggplot2)
-
-p1 <- ggdraw() + draw_image(here::here('images', 'bell_labs.jpg'), scale = 0.9)
-p2 <- ggdraw() + draw_image(here::here('images', 'john_chambers.jpg'), scale = 0.9)
-
-plot_grid(p1, p2)
-
-
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='45%', paged.print=FALSE----
-
-library(cowplot)
-library(ggplot2)
-
-p1 <- ggdraw() + draw_image(here::here('images', 'University_of_Auckland_Coat_of_Arms.png'), scale = 0.7)
-p2 <- ggdraw() + draw_image(here::here('images', 'Robert_e_Ross.png'), scale = 0.9)
-
-plot_grid(p1, p2)
-
-
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE----
-
-knitr::include_graphics(here::here('images', 'R_console.jpg'))
-
-
-
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE----
-
-knitr::include_graphics(here::here('images', 'Hello_bloco.png'))
-
-
-
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE----
-
-knitr::include_graphics(here::here('images', 'Hello_notepad.png'))
-
-
-
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE----
-
-knitr::include_graphics(here::here('images', 'RStudio.png'))
-
-
-
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE----
-
-knitr::include_graphics(here::here('images', 'geom_scatter.png'))
-
-
-
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='90%', paged.print=FALSE----
-
-knitr::include_graphics(here::here('images', 'compare_groups.png'))
-
-
-
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE----
-
-knitr::include_graphics(here::here('images', 'stargazer.png'))
-
-
-
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='60%', paged.print=FALSE----
-
-knitr::include_graphics(here::here('images', 'forest.jpg'))
-
-
-
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE----
-
-knitr::include_graphics(here::here('images', 'coef_variacao_modelo-1.png'))
-
-
-
-## ---- echo=TRUE, eval=FALSE----------------------------------------------
-## # Run the application
-## shinyApp(ui = ui, server = server)
-
-
 ## ---- echo=TRUE, eval=FALSE----------------------------------------------
 ## install.packages("tidyverse")
 
 
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE----
 
-knitr::include_graphics(here::here('images', 'install_packs.png'))
-
-
-
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE----
-
-knitr::include_graphics(here::here('images', 'install_packs2.png'))
 
 
 
@@ -158,7 +65,7 @@ chumbo.longo
 chumbo.longo$tempo <- as.numeric(
   as.character(
     factor(chumbo.longo$tempo,
-           labels = c(1, 2, 4, 6))))
+           labels = c(0, 1, 4, 6))))
 
 chumbo.longo$trt <- factor(chumbo.longo$trt,
                            labels = c("Placebo",
@@ -279,21 +186,36 @@ p + theme_gray()
 ## ----correlacao, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------
 chumbo.succimer <- chumbo %>% 
   filter(trt == 1) %>% 
-  select(y0, y1, y4, y6)
+  select(y0, y1, y4, y6) %>% 
+  mutate(y0 = as.numeric(y0),
+         y1 = as.numeric(y1),
+         y4 = as.numeric(y4),
+         y6 = as.numeric(y6))
 
 chumbo.succimer
 
 
-## ----correlacao2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"----
-# library(GGally)
-# 
-# p <- ggpairs(chumbo.succimer,
-#              columnLabels = paste("Semana", c(0, 1, 4, 6)))
-# p 
+## ----correlacao2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="90%"----
+library(GGally)
 
-pairs(chumbo.succimer, , pch = 19, upper.panel = NULL)
+p <- ggpairs(chumbo.succimer,
+             columnLabels = paste("Semana", c(0, 1, 4, 6)))
+p + theme_gray()
+
+# pairs(chumbo.succimer, pch = 19, upper.panel = NULL)
 
 
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE----
-knitr::include_graphics(here::here('images', 'supeRRR.jpg'))
+## ----correlacao3, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="90%"----
+chumbo.placebo <- chumbo %>% 
+  filter(trt == 0) %>% 
+  select(y0, y1, y4, y6) %>% 
+  mutate(y0 = as.numeric(y0),
+         y1 = as.numeric(y1),
+         y4 = as.numeric(y4),
+         y6 = as.numeric(y6))
+
+p <- ggpairs(chumbo.placebo,
+             columnLabels = paste("Semana", c(0, 1, 4, 6)))
+p + theme_gray()
+
 
