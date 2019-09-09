@@ -1,0 +1,56 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Visão geral de modelos lineares para dados longitudinais"
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2019
+---
+
+# Modelando a média
+
+## Introdução
+
+- Distinguem-se duas abordagens principais: 
+    1. a análise de perfis de resposta;
+    2. curvas paramétricas ou semi-paramétricas.
+- A análise dos dados longitudinais enfoca as mudanças na resposta média ao longo do tempo e a relação dessas mudanças com as covariáveis.
+- O fato de as medidas obtidas no mesmo indivíduo não serem independentes, mas estarem correlacionadas positivamente é uma consideração importante em suas análises, mas para a maioria dos estudos longitudinais a correlação geralmente __não é de interesse científico__ em si.
+- Antes de discutir abordagens para modelar a resposta média ao longo do tempo, é importante esclarecer a distinção entre __parâmetros substantivos__ e __incômodos (de perturbação)__ no contexto de um estudo longitudinal.
+
+## Parâmetros substantivos e de perturbação para dados longitudinais
+
+## Modelando a resposta média ao longo do tempo
+
+# Modelando a covariância
+
+# Abordagens históricas
+
+## Análise de medidas repetidas por ANOVA
+
+## Análise de medidas repetidas por MANOVA
+
+## Análise de medidas resumo
+
+# Exercícios
+
+## Exercícios
+
+- Com o auxílio do computador, faça os exercícios do Capítulo 2 do livro "__Applied Longitudinal Analysis__" (páginas 44 e 45).
+- __Enviar soluções__ pelo Moodle através do fórum (será aberto hoje!).
+
+## Avisos
+
+- __Para casa:__ ler o Capítulo 3 do livro "__Applied Longitudinal Analysis__". Caso ainda não tenha lido, leia também os Caps. 1 e 2.
+- __Próxima aula:__ Estimação e inferência estatística.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'objectivesoverview.jpg'))
+```
