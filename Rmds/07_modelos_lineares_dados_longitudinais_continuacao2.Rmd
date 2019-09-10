@@ -23,30 +23,141 @@ date: |
 - O fato de as medidas obtidas no mesmo indivíduo não serem independentes, mas estarem correlacionadas positivamente é uma consideração importante em suas análises, mas para a maioria dos estudos longitudinais a correlação geralmente __não é de interesse científico__ em si.
 - Antes de discutir abordagens para modelar a resposta média ao longo do tempo, é importante esclarecer a distinção entre __parâmetros substantivos__ e __incômodos (de perturbação)__ no contexto de um estudo longitudinal.
 
-## Parâmetros substantivos e de perturbação para dados longitudinais
+## Parâmetros substantivos e de incômodo para dados longitudinais
 
+- Nos modelos de regressão para dados longitudinais, os parâmetros de regressão $\beta$ relacionam as mudanças na resposta média ao longo do tempo às covariáveis e são geralmente considerados de __interesse primário__ ou intrínseco.
+    + Podem ser definidos para resumir aspectos importantes das __questões de pesquisa__.
+    + Nos referimos a esses parâmetros como __parâmetros substantivos__.
+- Por outro lado, em muitas aplicações, parâmetros que resumem aspectos da covariância ou correlação entre as medidas repetidas são considerados de __interesse secundário__.
+    + Os parâmetros associados a esses aspectos secundários dos dados costumam ser chamados de parâmetros __incômodo__.
+    + Para a análise de dados longitudinais, os parâmetros de correlação ou covariância são frequentemente considerados parâmetros de incômodo, uma vez que não há interesse intrínseco neles.
+    
+## Parâmetros substantivos e de incômodo para dados longitudinais
+
+$$
+\mbox{SECUNDÁRIO}\ \neq\ \mbox{NEGLIGENCIÁVEL}
+$$
+
+- Em algumas configurações em que dados correlacionados surgem, pode haver uma reversão completa de funções.
+
+- Em estudos de família, o objetivo é determinar se a presença de doença em um membro da família aumenta o risco de doença para os parentes.
+    + As __correlações__ entre irmãos e entre pais e filhos são de __interesse principal__ (e os parâmetros de regressão $\beta$ são de incômodo) porque suas magnitudes relativas podem ser usadas para fornecer evidências indiretas de risco genético para a doença devido ao compartilhamento do mesmo conjunto de genes.
+- Um exemplo adicional surge quando os pesquisadores estão interessados na heterogeneidade de um efeito de tratamento em uma população.
+    + Nesse cenário, a __variância do efeito__ do tratamento é de __interesse primário__.
+    
 ## Modelando a resposta média ao longo do tempo
 
+<!-- - Existem duas abordagens principais:  -->
+<!--     1. a análise de perfis de resposta; -->
+<!--     2. curvas paramétricas ou semi-paramétricas. -->
+- __Análise de perfis:__ permite padrões arbitrários na resposta média ao longo do tempo.
+    + Nenhuma tendência de tempo específica é assumida. Em vez disso, os tempos de medição são considerados como níveis de um fator discreto.
+    + Só é aplicável quando todos os indivíduos são medidos no mesmo conjunto de ocasiões e o número de ocasiões geralmente é pequeno.
+- __Curva paramétrica:__ assume uma tendência linear ou quadrática, por exemplo, para a resposta média ao longo do tempo.
+    + Pode reduzir drasticamente o número de parâmetros do modelo.
+    + Descrevem a resposta média como uma função explícita do tempo.
+    + Não há necessidade de exigir que todos os indivíduos no estudo tenham o mesmo conjunto de tempos de medição, nem mesmo o mesmo número de medições repetidas.
+    
 # Modelando a covariância
 
-# Abordagens históricas
+##  Modelando a covariância
 
-## Análise de medidas repetidas por ANOVA
+- A contabilização da correlação entre medidas repetidas completa a especificação de qualquer modelo de regressão para dados longitudinais e geralmente aumenta a eficiência ou a precisão com a qual os parâmetros de regressão podem ser estimados.
+- Quando um modelo apropriado para a covariância é adotado, erros padrão corretos são obtidos e inferências válidas sobre os parâmetros de regressão podem ser feitas.
+- Além disso, quando há dados ausentes, a modelagem correta da covariância é frequentemente um requisito para obter estimativas válidas dos parâmetros de regressão.
 
-## Análise de medidas repetidas por MANOVA
+- Distinguem-se três abordagens principais: 
+    1. covariância não estruturada;
+    2. modelos de padrões de covariância;
+    3. estruturas de covariância de efeitos aleatórios.
 
-## Análise de medidas resumo
+## Covariância não estruturada
+
+- Permite qualquer padrão arbitrário de covariância entre as medidas repetidas.
+    + Isso resulta no que normalmente é chamado de covariância "não estruturada".
+    + Assim, quando existem $n$ medidas repetidas, as $n$ variâncias em cada ocasião e $n \times (n - 1) / 2$ covariâncias (ou correlações) aos pares são estimadas.
+- Historicamente, a matriz de covariância não estruturada tem sido o modelo de escolha para a covariância na análise de perfis de resposta (mas também pode ser usada na análise de curvas paramétricas).
+
+## Covariância não estruturada
+
+Existem duas __desvantagens__ em potencial com essa abordagem.
+
+1. O número de parâmetros de covariância pode ser bastante grande.
+    + Se houver $n$ ocasiões de medição, a matriz de covariância $n \times n$ terá $n \times (n + 1) / 2$ parâmetros únicos.
+    + Assim, em um estudo longitudinal com 10 ocasiões de medição, uma covariância não estruturada possui 55 parâmetros (10 variâncias e 45 covariâncias).
+    + Quando o número de parâmetros de covariância a ser estimado é grande em relação ao tamanho da amostra, é provável que as estimativas sejam __instáveis__.
+2. É aplicável apenas quando todos os indivíduos são medidos no mesmo conjunto de ocasiões.
+
+## Modelos de padrões de covariância
+
+- Esta abordagem toma emprestado ideias da literatura da análise de séries temporais.
+- Espera-se que medidas repetidas tomadas mais próximas no tempo sejam mais altamente correlacionadas do que medidas repetidas mais distantes no tempo.
+    + Um caso especial é o __modelo de decaimento exponencial__ 
+
+$$
+\rho(u) = \exp\{-\phi u\}, \phi > 0.
+$$
+
+## Modelos de padrões de covariância
+
+```{r exp_corr, echo=FALSE, eval=TRUE, fig.align='center', message=FALSE, warning=FALSE, out.width='95%', paged.print=FALSE}
+
+rho <- function(u, phi){exp(- phi * u)}
+u <- seq(0, 5, by = 0.1)
+par(mfrow = c(1, 3))
+plot(u, rho(u = u, phi = 0.5),
+     type = "l",
+     main = expression(phi == 0.5),
+     xlab = "u", ylab = expression(rho(u)),
+     col = "steelblue", lwd = 2, ylim = c(0, 1))
+plot(u, rho(u = u, phi = 1),
+     type = "l",
+     main = expression(phi == 1),
+     xlab = "u", ylab = expression(rho(u)),
+     col = "steelblue", lwd = 2, ylim = c(0, 1))
+plot(u, rho(u = u, phi = 2),
+     type = "l",
+     main = expression(phi == 2),
+     xlab = "u", ylab = expression(rho(u)),
+     col = "steelblue", lwd = 2, ylim = c(0, 1))
+```
+
+## Modelos de padrões de covariância
+
+- Isso implica que as correlações decaem à medida que a separação do tempo aumenta.
+- Muitas vezes, a correlação entre medidas repetidas é expressa como uma função explícita da separação do tempo.
+- Esses modelos podem ser usados com observações desigualmente espaçadas.
+- __(Parcimônia)__ Modelos paramétricos podem descrever adequadamente a estrutura de covariância entre as medidas repetidas com apenas alguns parâmetros.
+
+## Estruturas de covariância de efeitos aleatórios
+
+- Uma estratégia alternativa e um tanto indireta para impor estrutura à covariância é através da introdução de __efeitos aleatórios__.
+    + Uma das primeiras abordagens para analisar dados de medidas repetidas.
+- No chamado modelo __ANOVA univariada de medidas repetidas__, a correlação entre medidas repetidas é explicada pela inclusão de um único efeito aleatório específico individual.
+    + Esse efeito pode ser pensado como um intercepto variando aleatoriamente, representando uma agregação de todos os fatores não observados ou não medidos que tornam alguns indivíduos "altos respondedores" e outros "baixos respondedores".
+- A consequência de adicionar um único efeito aleatório específico do indivíduo a todas as medidas em qualquer indivíduo é que as medidas repetidas resultantes serão __correlacionadas positivamente__.
+    + Assim, a inclusão de efeitos aleatórios impõe estrutura à covariância.
+
+<!-- # Abordagens históricas -->
+
+<!-- ## Análise de medidas repetidas por ANOVA -->
+
+<!-- ## Análise de medidas repetidas por MANOVA -->
+
+<!-- ## Análise de medidas resumo -->
 
 # Exercícios
 
 ## Exercícios
 
 - Com o auxílio do computador, faça os exercícios do Capítulo 2 do livro "__Applied Longitudinal Analysis__" (páginas 44 e 45).
-- __Enviar soluções__ pelo Moodle através do fórum (será aberto hoje!).
+- __Enviar soluções__ pelo Moodle através do fórum.
 
 ## Avisos
 
-- __Para casa:__ ler o Capítulo 3 do livro "__Applied Longitudinal Analysis__". Caso ainda não tenha lido, leia também os Caps. 1 e 2.
+- __Para casa:__ ler o Capítulo 3 do livro "__Applied Longitudinal Analysis__".
+    + Resumir a Seção 3.6 (Abordagens históricas para análise de dados longitudinais)
+    + Caso ainda não tenha lido, leia também os Caps. 1 e 2.
 - __Próxima aula:__ Estimação e inferência estatística.
 
 ## Bons estudos!
