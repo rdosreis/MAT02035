@@ -138,13 +138,118 @@ plot(u, rho(u = u, phi = 2),
 - A consequência de adicionar um único efeito aleatório específico do indivíduo a todas as medidas em qualquer indivíduo é que as medidas repetidas resultantes serão __correlacionadas positivamente__.
     + Assim, a inclusão de efeitos aleatórios impõe estrutura à covariância.
 
-<!-- # Abordagens históricas -->
+# Abordagens históricas
 
-<!-- ## Análise de medidas repetidas por ANOVA -->
+## Abordagens históricas
 
-<!-- ## Análise de medidas repetidas por MANOVA -->
+- De uma perspectiva histórica, três métodos para a análise de dados de medidas repetidas podem ser destacados:
+    (1) análise de variância univariada de medidas repetidas (ANOVA)
+    (2) análise multivariada de variância de medidas repetidas (MANOVA)
+    (3) métodos baseados em medidas sumárias.
+- Todas essas três abordagens tiveram graus variados de popularidade e algumas ainda são amplamente utilizadas em diferentes áreas de aplicação.
 
-<!-- ## Análise de medidas resumo -->
+## Abordagens históricas
+
+- Muitas dessas abordagens são desnecessariamente restritivas em suas suposições e objetivos analíticos.
+    + Por exemplo, ANOVA e MANOVA se concentram na comparação de grupos em termos de sua tendência de resposta média ao longo do tempo, mas fornecem poucas informações sobre como os indivíduos mudam ao longo do tempo.
+    + Além disso, como veremos mais adiante, a ANOVA e a MANOVA têm inúmeras características que limitam sua utilidade para a análise de dados longitudinais.
+
+## Análise de medidas repetidas por ANOVA
+
+- Uma das primeiras propostas para analisar respostas correlacionadas foi a __análise de variância__ de medidas repetidas __(ANOVA)__, às vezes referida como análise de variância "univariada" ou "modelo misto".
+- O paradigma da análise de variância foi desenvolvido no início do século XX por __Ronald A. Fisher__.
+- Embora muitas das primeiras aplicações da ANOVA fossem para experimentos delineados na agricultura, desde então, ela foi amplamente difundida em muitas outras disciplinas.
+
+## Análise de medidas repetidas por ANOVA
+
+- No modelo ANOVA de medidas repetidas, presume-se que a correlação entre medições repetidas decorra da contribuição aditiva de um __efeito aleatório__ específico __do indivíduo__ para cada medição em qualquer indivíduo.
+- Assim, o modelo assume que a correlação entre medições repetidas ocorre porque cada sujeito possui um __nível de resposta subjacente__ (ou latente) que __persiste__ ao longo do tempo e __influencia__ todas as medições repetidas nesse assunto.
+- Esse efeito específico do indivíduo é considerado uma __variável aleatória__.
+
+## Análise de medidas repetidas por ANOVA
+
+- Uma característica notável dos modelos ANOVA é que a resposta está relacionada a um conjunto de covariáveis discretas ou fatores. 
+- No paradigma da ANOVA, as ocasiões de medição são tratadas como um fator adicional intra-individual.
+- Assim, se permitirmos que $X_{ij}$ denote o vetor de variáveis indicadoras para os fatores de estudo (por exemplo, grupo de tratamento, tempo e interação), o modelo ANOVA de medidas repetidas pode ser expresso como 
+
+$$
+Y_{ij} = X_{ij}'\beta + b_i + \epsilon_{ij},
+$$
+
+em que $b_i$ é um efeito específico do indivíduo aleatório e $\epsilon_{ij}$ é um erro de medição dentro do indivíduo (é implicitamente assumido que $X_{ij1} = 1$ para todo $i$ e $j$).
+
+## Análise de medidas repetidas por ANOVA
+
+- Embora ambos os $b_i$ e $\epsilon_{ij}$ são aleatórios, eles são assumidos como __independentes__ um do outro.
+- Especificamente, o $b_i$ presume-se que tenha uma __distribuição normal__, com média zero e variância, $\Var(b_i) = \sigma^2_b$.
+- Presume-se que os erros $\epsilon_{ij}$ também tenham uma __distribuição normal__ com média zero, mas com variância, $\Var(\epsilon_{ij}) = \sigma^2_{\epsilon}$.
+
+- Como $b_i$ e $\epsilon_{ij}$ têm média zero, o modelo para a resposta média, calculado sobre as duas fontes de variabilidade, é dado por
+
+$$
+\E(Y_{ij}|X_{ij}) = X_{ij}'\beta.
+$$
+
+## Análise de medidas repetidas por ANOVA
+
+- Assim, no modelo ANOVA de medidas repetidas, presume-se que a resposta para o $i$-ésimo indivíduo seja diferente da média da população, $\mu_{ij}$, por um efeito aleatório específico do indivíduo, $b_i$, que persiste em todas as ocasiões de medição e por um erro de medição intra-indivíduo, $\epsilon_{ij}$.
+- Ou seja, o modelo ANOVA de medidas repetidas distingue __duas fontes principais de variação__ nos dados: 
+    + __variação entre indivíduos__, $\sigma^2_b$; 
+    + e variação intra-indivíduo, $\sigma^2_{\epsilon}$.
+- A variação entre indivíduos reconhece o simples fato de os indivíduos responderem de maneira diferente; alguns são respondedores "altos", outros são respondedores "baixos" e outros são respondedores "médios".
+- A variação intra-indivíduo reconhece que existem flutuações aleatórias que surgem do processo de medição, por exemplo, devido a erro de medição e/ou variabilidade da amostra.
+
+## Análise de medidas repetidas por ANOVA
+
+- Dadas essas suposições sobre as duas principais fontes de variação, a __matriz de covariância__ das medidas repetidas tem a seguinte estrutura:
+
+$$
+\Cov(Y_i) = \left(\begin{array}{ccccc}
+\sigma^2_b + \sigma^2_{\epsilon} & \sigma^2_b & \sigma^2_b & \cdots & \sigma^2_b \\
+\sigma^2_b & \sigma^2_b + \sigma^2_{\epsilon} & \sigma^2_b & \cdots & \sigma^2_b \\
+\sigma^2_b & \sigma^2_b & \sigma^2_b + \sigma^2_{\epsilon} & \cdots & \sigma^2_b \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+\sigma^2_b & \sigma^2_b & \sigma^2_b & \cdots& \sigma^2_b + \sigma^2_{\epsilon}
+\end{array}
+\right).
+$$
+
+## Análise de medidas repetidas por ANOVA
+
+- É importante notar que as variância em todas as ocasiões são iguais, ($\sigma^2_b + \sigma^2_{\epsilon}$), assim como as covariâncias, $\sigma^2_b$.
+- Consequentemente, a correlação entre qualquer par de medidas repetidas,
+
+$$
+\Corr(Y_{ij}, Y_{ik}) = \frac{\sigma^2_b}{\sigma^2_b+\sigma^2_{\epsilon}}
+$$
+
+é positiva (em virtude do fato de que as variâncias,$\sigma^2_b$ e $\sigma^2_{\epsilon}$ devem ser positivas) e constante, independentemente do tempo decorrido entre as ocasiões de medição.
+
+## Análise de medidas repetidas por ANOVA
+
+- Essa estrutura de covariância específica também é conhecida como __simetria composta__ e tem uma justificativa de aleatorização em certos delineamentos de medidas repetidas (por exemplo, delineamentos de parcelas subdivididas).
+    + Em um experimento em que o fator dentro do indivíduo é alocado aleatoriamente para os indivíudos, argumentos de aleatorização podem ser feitos para mostrar que a variância constante e as condições de correlação constantes são válidas.
+- Historicamente, isso forneceu uma justificativa atraente para o uso da análise de medidas repetidas por ANOVA em experimentos aleatorizados.
+- O argumento de aleatorização simplesmente não é justificável na configuração de dados longitudinal; __ocasiões de medição__ não podem ser alocadas aleatoriamente aos indivíduos.
+
+## Análise de medidas repetidas por ANOVA
+
+- Como resultado, a suposição de simetria composta para a covariância é frequentemente inadequada para dados longitudinais.
+    <!-- + Ou seja, a restrição na correlação entre medições repetidas é pouco atraente para dados longitudinais, onde se espera que as correlações decaiam com o aumento da separação no tempo. -->
+- Além disso, a suposição de variância constante ao longo do tempo muitas vezes não é realista.
+    <!-- + A experiência prática com muitos estudos longitudinais levou à observação empírica de que as variâncias raramente são constantes ao longo do tempo. -->
+- Finalmente, como originalmente concebido, o modelo ANOVA de medidas repetidas foi desenvolvido para a análise de dados de experimentos delineados, onde as medidas repetidas são obtidas em um conjunto de ocasiões comuns a todos os indivíduos, as covariáveis são fatores discretos (por exemplo, grupo de tratamento e tempo) e os dados são completos.
+- Assim, a ANOVA de medidas repetidas não pôde ser prontamente aplicada a dados longitudinais com espaçamento irregular, incompletos ou quando era interessante incluir covariáveis quantitativas na análise.
+
+## Análise de medidas repetidas por ANOVA
+
+- Talvez uma das principais razões para seu uso generalizado tenha sido porque a formulação ANOVA levou a fórmulas computacionais relativamente simples que podiam ser executadas com uma calculadora de mesa ou de bolso (ou, de fato, com caneta, papel e muita perseverança).
+- Historicamente, a ANOVA de medidas repetidas foi provavelmente um dos poucos modelos que poderiam ser ajustados realisticamente a dados longitudinais em um momento em que a computação estava em sua infância.
+- No entanto, com a moderna computação e a ampla disponibilidade de _software_ estatístico para ajustar uma classe mais ampla de modelos para dados correlacionados, há poucas razões para analisar dados longitudinais sob as limitações e restrições inerentes impostas pelo modelo ANOVA de medidas repetidas.
+
+## Análise de medidas repetidas por MANOVA
+
+## Análise de medidas resumo
 
 # Exercícios
 
