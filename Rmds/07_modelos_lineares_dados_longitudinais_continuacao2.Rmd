@@ -247,9 +247,9 @@ $$
 - Historicamente, a ANOVA de medidas repetidas foi provavelmente um dos poucos modelos que poderiam ser ajustados realisticamente a dados longitudinais em um momento em que a computação estava em sua infância.
 - No entanto, com a moderna computação e a ampla disponibilidade de _software_ estatístico para ajustar uma classe mais ampla de modelos para dados correlacionados, há poucas razões para analisar dados longitudinais sob as limitações e restrições inerentes impostas pelo modelo ANOVA de medidas repetidas.
 
-## Análise de medidas repetidas por MANOVA
+<!-- ## Análise de medidas repetidas por MANOVA -->
 
-## Análise de medidas resumo
+<!-- ## Análise de medidas resumo -->
 
 # Exercícios
 
@@ -261,7 +261,7 @@ $$
 ## Avisos
 
 - __Para casa:__ ler o Capítulo 3 do livro "__Applied Longitudinal Analysis__".
-    + Resumir a Seção 3.6 (Abordagens históricas para análise de dados longitudinais)
+    + Resumir a Seção 3.6 (Abordagens históricas para análise de dados longitudinais).
     + Caso ainda não tenha lido, leia também os Caps. 1 e 2.
 - __Próxima aula:__ Estimação e inferência estatística.
 
