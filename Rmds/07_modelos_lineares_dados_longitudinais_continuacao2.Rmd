@@ -163,7 +163,7 @@ plot(u, rho(u = u, phi = 2),
 ## Análise de medidas repetidas por ANOVA
 
 - No modelo ANOVA de medidas repetidas, presume-se que a correlação entre medições repetidas decorra da contribuição aditiva de um __efeito aleatório__ específico __do indivíduo__ para cada medição em qualquer indivíduo.
-- Assim, o modelo assume que a correlação entre medições repetidas ocorre porque cada sujeito possui um __nível de resposta subjacente__ (ou latente) que __persiste__ ao longo do tempo e __influencia__ todas as medições repetidas nesse assunto.
+- Assim, o modelo assume que a correlação entre medições repetidas ocorre porque cada sujeito possui um __nível de resposta subjacente__ (ou latente) que __persiste__ ao longo do tempo e __influencia__ todas as medições repetidas nesse indivíduo.
 - Esse efeito específico do indivíduo é considerado uma __variável aleatória__.
 
 ## Análise de medidas repetidas por ANOVA
