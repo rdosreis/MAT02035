@@ -1,0 +1,48 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Estimação e inferência estatística"
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2019
+---
+
+# Introdução
+
+## Introdução
+
+# Estimação: máxima verossimilhança
+
+## Observações independentes
+
+## Observações correlacionadas
+
+# Questões de dados ausentes
+
+# Inferência estatística
+
+# Estimação por máxima verossimilhança restrita (REML)
+
+# Exercícios
+
+## Exercícios
+
+- (Re)fazer as provas dos resultados discutidos na aula de hoje.
+
+## Avisos
+
+- __Para casa:__ ler o Capítulo 4 do livro "__Applied Longitudinal Analysis__".
+    + Caso ainda não tenha lido, leia também os Caps. 1, 2 e 3.
+    + Ver também as referências com respeito à derivadas de vetores, matrizes, etc.
+- __Próxima aula:__ Estimação e inferência estatística.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'objectivesoverview.jpg'))
+```

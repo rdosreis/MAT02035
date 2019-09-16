@@ -2,7 +2,7 @@ library(here)
 library(rmarkdown)
 
 pasta <- "Rmds"
-arquivo <- "07_modelos_lineares_dados_longitudinais_continuacao2"
+arquivo <- "08_estimacao_inferencia_estatistica"
 
 arquivo_rmd <- paste0(arquivo, ".Rmd")
 arquivo_pdf <- paste0(arquivo, ".pdf")
