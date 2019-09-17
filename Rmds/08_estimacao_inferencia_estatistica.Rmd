@@ -16,23 +16,226 @@ date: |
 
 ## Introdução
 
+- Até agora, nossa discussão de modelos para dados longitudinais tem sido muito geral, sem menção de métodos para estimar os coeficientes de regressão ou a covariância entre as medidas repetidas.
+- __Relembrando:__ o modelo de regressão linear geral para o vetor de resposta média
+
+$$
+\E(Y_i|X_i) = X_i\beta.
+$$
+
+- Assumimos que o vetor de respostas, $Y_i$, tem uma distribuição condicional que é __normal multivariada__ com matriz de covariância
+
+$$
+\Cov(Y_i|X_i) = \Sigma_i = \Sigma_i(\theta).
+$$
+
+- Note que $\theta$ é um vetor $q \times 1$ de __parâmetros de covariância__.
+
+## Introdução
+
+- Dados balanceados ($n_i = n$), em que covariância "não-estruturada" é assumida, temos $n$ variâncias e $\frac{n(n - 1)}{2}$ covariâncias como elementos do vetor $\theta$.
+- Se a covariância é assumida ter um padrão de "simetria composta", então $q = 2$ e $\theta$ tem dois elementos.
+- Nesta aula, consideramos uma estrutura para estimativa dos parâmetros desconhecidos, $\beta$ e $\theta$ (ou equivalentemente, $\Sigma_i$).
+    
 # Estimação: máxima verossimilhança
+
+## Estimação: máxima verossimilhança
+
+- Dado que foram feitas suposições completas sobre a distribuição do vetor de respostas, $Y_i$, uma abordagem muito geral de estimativa é o __método da máxima verossimilhança__ (MV).
+    + A ideia fundamental por trás da estimativa de MV é realmente bastante simples e é transmitida por seu nome: use como estimativas de $\beta$ e $\theta$ os valores que são mais prováveis (ou mais "verossímeis") para os dados que foram realmente observados.
+    + As estimativas de verossimilhança máxima de $\beta$ e $\theta$ são aqueles valores de $\beta$ e $\theta$ que maximizam a probabilidade conjunta das variáveis resposta __avaliadas em seus valores observados__.
+
+## Estimação: máxima verossimilhança
+
+- A probabilidade das variáveis de resposta avaliadas no conjunto fixo de valores observados e consideradas como funções de $\beta$ e $\Sigma_i(\theta)$ é conhecida como __função de verossimilhança__.
+    + Assim, a estimativa de $\beta$ e $\theta$ prossegue __maximizando__ a função de probabilidade.
+- Os valores de $\beta$ e $\theta$ que maximizam a função de verossimilhança são chamados de __estimativas de máxima verossimilhança__ de $\beta$ e $\theta$, e geralmente são indicados $\hat{\beta}$ e $\hat{\theta}$ (ou $\widehat{\Sigma}_i$, $\Sigma_i(\hat{\theta})$ ).
 
 ## Observações independentes
 
+- Suponha que os dados surjam de uma série de estudos transversais que são repetidos em $n$ ocasiões diferentes.
+- Em cada ocasião, os dados são obtidos em uma amostra de $N$ indivíduos.
+    + Aqui é razoável supor que as observações sejam __independentes__ umas das outras, uma vez que cada indivíduo é medido em apenas uma ocasião.
+- Além disso, para facilitar a exposição, assumimos que a variância é constante, digamos a $\sigma^2$.
+- A resposta média está relacionada às covariáveis através do seguinte modelo de regressão linear:
+
+$$
+\E(Y_{ij}|X_{ij}) = X_{ij}'\beta.
+$$
+
+## Observações independentes
+
+- Para obter estimativas de máxima verossimilhança de $\beta$, devemos encontrar os valores dos parâmetros de regressão que maximizem a função de densidade de probabilidade normal conjunta de todas as observações, avaliados nos valores observados da resposta e considerados como uma função de $\beta$ (e $\sigma^2$).
+- __Lembrando__ que a função de densidade de probabilidade normal (ou gaussiana) univariada para $Y_{ij}$, dado $X_{ij}$, pode ser expressa como
+
+$$
+f(y_{ij}) = (2\pi\sigma^2)^{-1/2}\exp\left\{-\frac{1}{2}(y_{ij} - \mu_{ij})^2/\sigma^2\right\},\ -\infty < y_{ij} < \infty.
+$$
+
+## Observações independentes
+
+- Quando todas as respostas são independentes umas das outras, a função de verossimilhança é simplesmente o produto das funções individuais de densidade de probabilidade normal univariada para $Y_{ij}$ dado $X_{ij}$,
+
+$$
+\prod_{i=1}^N{\prod_{j=1}^n{f(y_{ij})}}.
+$$
+
+## Observações independentes
+
+- É mais comum trabalhar com a função __log-verossimilhança__, que envolverá somas, em vez de produtos, das funções individuais de densidade de probabilidade normal univariada para $Y_{ij}$.
+    + Observe que maximizar a verossimilhança é equivalente a maximizar o logaritmo da verossimilhança; o último é indicado por $l$.
+- Portanto, o objetivo é maximizar
+
+$$
+l = \log\left\{\prod_{i=1}^N{\prod_{j=1}^n{f(y_{ij})}}\right\} = -\frac{K}{2} \log(2\pi\sigma^2) - \frac{1}{2}\sum_{i=1}^N{\sum_{j=1}^n{(y_{ij} - X_{ij}'\beta)^2/\sigma^2}},
+$$
+
+avaliado nos valores numéricos observados dos dados, em relação aos parâmetros de regressão, $\beta$.
+- Aqui $K = n \times N$, o __número total de observações__.
+
+## Observações independentes
+
+- Observe que $\beta$ não aparece no primeiro termo da log-verossimilhança.
+    + Como resultado, esse termo pode ser ignorado ao maximizar a log-verossimilhança em relação a $\beta$.
+- Além disso, como o segundo termo tem um sinal negativo, maximizar a log-verossimilhança em relação a $\beta$ é equivalente a minimizar a seguinte função:
+
+$$
+\sum_{i=1}^N{\sum_{j=1}^n{(y_{ij} - X_{ij}'\beta)^2}}.
+$$
+
+## Observações independentes
+
+- Maximizar ou minimizar uma função é um problema matemático comum que pode ser resolvido usando o cálculo.
+- Especificamente, a estimativa de máxima verossimilhança de $\beta$ pode ser obtida igualando a derivada da log-verossimilhança, frequentemente chamada de __função escore__, a zero e encontrando a solução para a equação resultante.
+- No entanto, no exemplo considerado aqui, não há necessidade real de recorrer ao cálculo.
+- A obtenção da estimativa de máxima verossimilhança de $\beta$ é equivalente a encontrar a estimativa de __mínimos quadrados ordinários__ (MQO) de $\beta$, ou seja, o valor de $\beta$ que minimiza a soma dos quadrados dos resíduos.
+
+## Observações independentes
+
+- Usando a notação vetorial, a solução dos mínimos quadrados pode ser escrita como
+
+$$
+\hat{\beta} = \left\{\sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}X_{ij}')}}\right\}^{-1}\sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}y_{ij})}}.
+$$
+
+- Essa estimativa de mínimos quadrados é o valor produzido por qualquer _software_ estatístico padrão para regressão linear (por exemplo, `PROC GLM` ou `PROC REG` no `SAS`, a função `lm` no `R` e  o comando `regress` no `Stata`).
+    + __Exercício:__ considere o modelo dos dados de nível de chumbo no sangue; compare as estimativas através de uma implementação sua de $\hat{\beta}$ com a função `lm`.
+- Além disso, note que até agora apenas focamos na estimativa de $\beta$, ignorando a estimativa de $\sigma^2$; a seguir, também consideramos a estimativa da matriz de covariância.
+
 ## Observações correlacionadas
+
+- Quando há $n_i$ medidas repetidas no mesmo indivíduo, __não se pode assumir que essas medidas repetidas são independentes__.
+    + Como resultado, precisamos considerar a função de densidade de probabilidade conjunta para o __vetor de medidas repetidas__.
+- Observe, no entanto, que os vetores de medidas repetidas são assumidos como __independentes__ uns dos outros.
+    + Assim, a função log-verossimilhança, $l$, pode ser expressa como uma __soma das funções multivariadas individuais__ da densidade de probabilidade normal para $Y_i$ dado $X_i$.
+
+## Observações correlacionadas
+
+<!-- - Para encontrar a estimativa de máxima verossimilhança de $\beta$ na configuração de medidas repetidas,  -->
+- Primeiro assumimos que $\Sigma_i$ (ou $\theta$) é conhecido (e, portanto, não precisa ser estimado); depois, relaxaremos essa suposição muito irrealista.
+<!-- - Para obter a estimativa de máxima verossimilhança de $\beta$, precisamos encontrar o valor de $\beta$ que maximize a função de log-verossimilhança. -->
+- Dado que $Y_i = (Y_{i1}, Y_{i2}, \ldots, Y_{in_i})'$ é assumido como tendo uma distribuição condicional que é normal multivariada, devemos maximizar a seguinte função de log-verossimilhança:
+    
+$$
+l =  -\frac{K}{2} \log(2\pi) - \frac{1}{2}\sum_{i=1}^N{\log|\Sigma_i|} - \frac{1}{2}\left\{\sum_{i=1}^N{(y_i - X_i\beta)'\Sigma_i^{-1}(y_i - X_i\beta)}\right\},
+$$
+
+- $K = \sum_{i=1}^N{n_i}$ é o __número total de observações__.
+
+## Observações correlacionadas
+
+- Note que $\beta$ não aparece nos dois primeiros termos na log-verossimilhança.
+    + Esses dois termos podem ser ignorados ao maximizar a log-verossimilhança em relação a $\beta$.
+- Além disso, como o terceiro termo tem um sinal negativo, maximizar a log-verossimilhança em relação a $\beta$ é equivalente a minimizar
+
+$$
+\sum_{i=1}^N{(y_i - X_i\beta)'\Sigma_i^{-1}(y_i - X_i\beta)}.
+$$
+
+## Observações correlacionadas
+
+- O estimador de $\beta$ que minimiza essa expressão é conhecido como estimador de __mínimos quadrados generalizados__ (MQG) de $\beta$ e pode ser expresso como
+
+$$
+\hat{\beta} = \left\{\sum_{i=1}^N{\sum_{j=1}^n{(X_i'\Sigma_i^{-1}X_i)}}\right\}^{-1}\sum_{i=1}^N{\sum_{j=1}^n{(X_i'\Sigma_i^{-1}y_i)}}.
+$$
+
+- Veja a função `gls` do pacote `nlme` do `R`.
+
+## Propriedades do estimador MQG ($\Sigma_i$ conhecida)
+
+- A primeira propriedade muito notável é que, para __qualquer escolha__ de $\Sigma_i$, a estimativa MQG de $\beta$ é __não viesada__. Ou seja,
+
+$$
+\E[\hat{\beta}] = \beta.
+$$
+
+- Além disso, __em amostras grandes__ (ou assintoticamente), pode se mostrar que a distribuição amostral de $\hat{\beta}$ é uma distribuição normal multivariada com média $\beta$ e covariância
+
+$$
+\Cov(\hat{\beta}) = \left\{\sum_{i=1}^N{\sum_{j=1}^n{(X_i'\Sigma_i^{-1}X_i)}}\right\}^{-1}.
+$$
+
+## Propriedades do estimador MQG ($\Sigma_i$ conhecida)
+
+- Isso é verdade exatamente quando $Y_i$ tem uma distribuição condicional que é multivariada normal e verdadeira em __amostras grandes__, mesmo quando a distribuição condicional de $Y_i$ não é normal multivariada.
+    + Por "grandes amostras", entendemos que o tamanho da amostra, $N$, aumenta quando o número de medidas repetidas e parâmetros do modelo permanece fixo.
+- Observe também que se $\Sigma_i$ for assumido como uma matriz diagonal, com variância constante $\sigma^2$ ao longo da diagonal, o estimador MQG reduz para o estimador de mínimos quadrados ordinários considerado mais cedo.
+    + __Exercício:__ demonstre este resultado.
+- Finalmente, embora o estimador MQG de $\beta$ seja não viesado para qualquer escolha de $\Sigma_i$, pode ser mostrado que o estimador MQG mais eficiente de $\beta$ (ou seja, o estimador com menor variância ou maior precisão) é aquele que usa o valor verdadeiro de $\Sigma_i$.
+    + __Pergunta:__ o que isto quer dizer?
+
+## MQG ($\Sigma_i$ desconhecida)
+
+- Vamos abordar o caso que geralmente ocorre na prática: não conhecemos $\Sigma_i$ (ou $\theta$).
+    + Neste caso precisamos estimar $\Sigma_i$ ($\theta$) a partir dos dados disponíveis.
+- A estimativa da máxima verossimilhança de $\theta$ prossegue da mesma maneira que a estimativa de $\beta$, maximizando a log-verossimilhança em relação a $\theta$.
+<!-- - Como mencionado anteriormente, o problema de maximizar uma função é um problema matemático comum que pode ser resolvido usando o cálculo. -->
+-  Especificamente, a estimativa de probabilidade máxima de $\theta$ pode ser obtida igualando a derivada da log-verossimilhança em relação a $\theta$ (função escore) a zero e encontrando a solução para a equação resultante.
+- Entretanto, em geral, essa __equação é não linear__ e não é possível escrever expressões simples e de forma fechada para o estimador de MV de $\theta$.
+    + A estimativa de MV deve ser encontrada resolvendo-se essa equação usando uma técnica __iterativa__.
+
+## MQG ($\Sigma_i$ desconhecida)
+
+- Felizmente, algoritmos de computador foram desenvolvidos para encontrar a solução.
+- Uma vez obtida a estimativa de MV de $\theta$, simplesmente substituímos a estimativa de $\Sigma_i(\theta)$, digamos $\widehat{\Sigma}_i = \Sigma_i(\hat{\theta})$, no estimador de mínimos quadrados generalizados de $\beta$ para obter a estimativa de MV de $\beta$:
+
+
+$$
+\hat{\beta} = \left\{\sum_{i=1}^N{\sum_{j=1}^n{(X_i'\widehat{\Sigma}_i^{-1}X_i)}}\right\}^{-1}\sum_{i=1}^N{\sum_{j=1}^n{(X_i'\widehat{\Sigma}_i^{-1}y_i)}}.
+$$
+
+## Propriedades do estimador MQG ($\Sigma_i$ conhecida)
+
+- Curiosamente, __em amostras grandes__ (ou assintoticamente), o estimador resultante de $\beta$ que substitui a estimativa de MV de $\Sigma_i$ tem todas as __mesmas propriedades__ de quando $\Sigma_i$ é realmente conhecido.
+
+- Assim, em termos de propriedades da distribuição amostral de $\hat{\beta}$, não há penalidade por realmente ter que estimar $\Sigma_i$ a partir dos dados longitudinais em questão.
+- No entanto, por mais reconfortante que esse resultado possa parecer, deve-se ter em mente que esta é uma propriedade de grande amostra (ou seja, quando $N$ se aproxima do infinito) de $\hat{\beta}$.
+    + Com tamanhos de amostra da magnitude frequentemente encontrados em muitas áreas de aplicação, pode-se esperar que as propriedades da distribuição amostral de $\hat{\beta}$ sejam adversamente influenciadas pela estimativa de um número muito grande de parâmetros de covariância.
 
 # Questões de dados ausentes
 
-# Inferência estatística
+## Questões de dados ausentes
 
-# Estimação por máxima verossimilhança restrita (REML)
+## Mecanismo de perda de dados
+
+## MCAR
+
+## MAR
+
+## Comentários
+
+
+<!-- # Inferência estatística -->
+
+<!-- # Estimação por máxima verossimilhança restrita (REML) -->
 
 # Exercícios
 
 ## Exercícios
 
-- (Re)fazer as provas dos resultados discutidos na aula de hoje.
+1. (Re)fazer as provas dos resultados discutidos na aula de hoje.
+2. 
 
 ## Avisos
 
@@ -43,6 +246,6 @@ date: |
 
 ## Bons estudos!
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
-knitr::include_graphics(here::here('images', 'objectivesoverview.jpg'))
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'estimation_icon.jpg'))
 ```
