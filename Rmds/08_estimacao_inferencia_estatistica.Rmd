@@ -217,25 +217,76 @@ $$
 
 ## Questões de dados ausentes
 
+Embora a maioria dos estudos longitudinais seja projetada para coletar dados de cada indivíduo da amostra a cada momento do acompanhamento, muitos estudos têm algumas observações ausentes.
+
+Dados ausentes têm três implicações importantes para a análise longitudinal:
+
+1. O conjunto de dados é necessariamente desbalanceado ao longo do tempo, pois nem todos os indivíduos têm o mesmo número de medições repetidas em um conjunto comum de ocasiões.
+    + Como resultado, os métodos de análise precisam ser capazes de lidar com os dados desequilibrados sem precisar descartar dados de indivíduos com dados ausentes.
+
+## Questões de dados ausentes
+
+2. Haverá perda de informações e redução na precisão com que mudanças na resposta média ao longo do tempo pode ser estimado.
+    + Essa redução na precisão está diretamente relacionada à quantidade de dados ausentes e também será influenciada em certa medida pela maneira como a análise lida com os dados ausentes.
+    + Por exemplo, usar apenas os casos completos (ou seja, aqueles indivíduos sem dados ausentes) geralmente será o método menos eficiente.
+3. A validade de qualquer método de análise exigirá que certas suposições sobre os motivos de qualquer falta, geralmente chamadas de __mecanismo de perda de dados__, são sustentáveis.
+    + Consequentemente, quando faltam dados, devemos considerar cuidadosamente os motivos da falta.
+
 ## Mecanismo de perda de dados
+
+- O mecanismo de perda de dados pode ser pensado como __um modelo__ que descreve a probabilidade de uma resposta ser observada ou ausente em qualquer ocasião.
+- Fazemos uma distinção importante entre mecanismos de dados ausentes que são referidos como __ausentes completamente ao acaso__ (_missing completely at random_ - MCAR) e __ausentes ao acaso__ (_missing at random_ - MAR).
+- A distinção entre esses dois mecanismos determina a adequação da estimativa de máxima verossimilhança sob o pressuposto de uma distribuição normal multivariada para as respostas e o MQG sem exigir suposições sobre o formato da distribuição.
 
 ## MCAR
 
+- Diz-se que os dados são MCAR quando a probabilidade de falta de respostas não está relacionada aos valores específicos que, em princípio, deveriam ter sido obtidos (as respostas ausentes) ou ao conjunto de respostas observadas.
+- Ou seja, dados longitudinais são MCAR quando falta em $Y_i$  é simplesmente o resultado de um mecanismo de chance que não depende de componentes observados ou não observados de $Y_i$.
+- A característica essencial do MCAR é que os dados observados podem ser considerados uma amostra aleatória dos dados completos.
+    + Como resultado, os momentos (por exemplo, médias, variâncias e covariâncias) e, de fato, a distribuição dos dados observados não diferem dos momentos correspondentes ou da distribuição dos dados completos.
+    
+## MCAR
+
+<!-- - Um mecanismo MCAR tem consequências importantes para a análise de dados longitudinais. -->
+- Qualquer método de análise que produza inferências válidas na ausência de dados ausentes também produzirá inferências válidas quando os dados ausentes forem MCAR e a análise for baseada em todos os dados disponíveis, ou mesmo quando estiver restrito aos "completadores" (ou seja, aqueles sem dados ausentes).
+- Dado que estimativas válidas das médias, variâncias e covariâncias podem ser obtidas, o MQG fornece estimativas válidas de $\beta$ sem exigir nenhuma premissa de distribuição para $Y_i$.
+- O estimador MQG de $\beta$ é válido, desde que o modelo para a resposta média tenha sido especificado corretamente; não requer nenhuma suposição sobre a distribuição conjunta das respostas longitudinais.
+
+## MCAR
+
+- O estimador de MV de $\beta$, pressupondo que as respostas tenham uma distribuição normal multivariada, também é o estimador MQG (com a estimativa MV de $\Sigma_i(\theta)$, por exemplo, $\widehat{\Sigma}_i = \Sigma_i(\hat{\theta})$, substituída).
+- Assim, nessa configuração, os estimadores MV e MQG têm exatamente as mesmas propriedades, independentemente da verdadeira distribuição de $Y_i$.
+
 ## MAR
 
-## Comentários
+- Ao contrário do MCAR, diz-se que os dados são MAR quando a probabilidade de falta de respostas depende do conjunto de respostas observadas, mas não está relacionada aos valores ausentes específicos que, em princípio, deveriam ter sido obtidos.
+- Em outras palavras, se os indivíduos são estratificados com base em valores semelhantes para as respostas observadas, a falta é simplesmente o resultado de um mecanismo de chance que não depende dos valores das respostas não observadas.
+- No entanto, como o mecanismo de falta agora depende das respostas observadas, a distribuição de $Y_i$ em cada um dos estratos distintos definidos pelos padrões de falta não é o mesmo que a distribuição de $Y_i$ na população alvo.
+- Isso tem consequências importantes para a análise.
 
+## MAR
 
-<!-- # Inferência estatística -->
+- Uma é que uma análise restrita aos "completadores" não é válida.
+    + Em outras palavras, os "completadores" são uma amostra tendenciosa da população-alvo.
+- Além disso, a distribuição dos componentes observados de $Y_i$, em cada um dos estratos distintos definidos pelos padrões de falta, não coincide com a distribuição dos mesmos componentes de $Y_i$ na população alvo.
+    + Portanto, as médias amostrais, variâncias e covariâncias com base nos "completadores" ou nos dados disponíveis são estimativas tendenciosas dos parâmetros correspondentes na população-alvo.
 
-<!-- # Estimação por máxima verossimilhança restrita (REML) -->
+## MAR
+
+- Como resultado, o MQG não fornece mais estimativas válidas de $\beta$ sem fazer suposições corretas sobre a distribuição conjunta das respostas longitudinais.
+- Por outro lado, a estimativa de MV de $\beta$ é válida quando os dados são MAR, desde que a distribuição normal multivariada foi especificada corretamente.
+    + Isso requer a especificação correta não apenas do modelo para a resposta média, mas também do modelo para a covariância entre as respostas.
+- Em certo sentido, a estimativa de MV permite que os valores ausentes sejam validamente "previstos" ou "imputados" usando os dados observados e um modelo correto para a distribuição conjunta das respostas.
 
 # Exercícios
 
 ## Exercícios
 
 1. (Re)fazer as provas dos resultados discutidos na aula de hoje.
-2. 
+2. Utilize os dados do estudo dos níveis de chumbo no sangue (TLC).
+    + Proponha um modelo de regressão linear para a média com base nas questões de pesquisa.
+    + Encontre as estimativas para os coeficientes de regressão do modelo proposto (use a função `gls` do pacote `nlme` do `R`; explore diferentes especificações da covariância - veja a documentação de `corClasses`).
+    + __Com base nas estimativas__, faça a exposição das suas conclusões.
 
 ## Avisos
 
