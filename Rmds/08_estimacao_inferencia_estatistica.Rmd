@@ -48,7 +48,7 @@ $$
 ## Estimação: máxima verossimilhança
 
 - A probabilidade das variáveis de resposta avaliadas no conjunto fixo de valores observados e consideradas como funções de $\beta$ e $\Sigma_i(\theta)$ é conhecida como __função de verossimilhança__.
-    + Assim, a estimativa de $\beta$ e $\theta$ prossegue __maximizando__ a função de probabilidade.
+    + Assim, a estimativa de $\beta$ e $\theta$ prossegue __maximizando__ a função de verossimilhança.
 - Os valores de $\beta$ e $\theta$ que maximizam a função de verossimilhança são chamados de __estimativas de máxima verossimilhança__ de $\beta$ e $\theta$, e geralmente são indicados $\hat{\beta}$ e $\hat{\theta}$ (ou $\widehat{\Sigma}_i$, $\Sigma_i(\hat{\theta})$ ).
 
 ## Observações independentes
@@ -157,7 +157,7 @@ $$
 - O estimador de $\beta$ que minimiza essa expressão é conhecido como estimador de __mínimos quadrados generalizados__ (MQG) de $\beta$ e pode ser expresso como
 
 $$
-\hat{\beta} = \left\{\sum_{i=1}^N{\sum_{j=1}^n{(X_i'\Sigma_i^{-1}X_i)}}\right\}^{-1}\sum_{i=1}^N{\sum_{j=1}^n{(X_i'\Sigma_i^{-1}y_i)}}.
+\hat{\beta} = \left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{(X_i'\Sigma_i^{-1}y_i)}.
 $$
 
 - Veja a função `gls` do pacote `nlme` do `R`.
@@ -173,7 +173,7 @@ $$
 - Além disso, __em amostras grandes__ (ou assintoticamente), pode se mostrar que a distribuição amostral de $\hat{\beta}$ é uma distribuição normal multivariada com média $\beta$ e covariância
 
 $$
-\Cov(\hat{\beta}) = \left\{\sum_{i=1}^N{\sum_{j=1}^n{(X_i'\Sigma_i^{-1}X_i)}}\right\}^{-1}.
+\Cov(\hat{\beta}) = \left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}.
 $$
 
 ## Propriedades do estimador MQG ($\Sigma_i$ conhecida)
@@ -191,7 +191,7 @@ $$
     + Neste caso precisamos estimar $\Sigma_i$ ($\theta$) a partir dos dados disponíveis.
 - A estimativa da máxima verossimilhança de $\theta$ prossegue da mesma maneira que a estimativa de $\beta$, maximizando a log-verossimilhança em relação a $\theta$.
 <!-- - Como mencionado anteriormente, o problema de maximizar uma função é um problema matemático comum que pode ser resolvido usando o cálculo. -->
--  Especificamente, a estimativa de probabilidade máxima de $\theta$ pode ser obtida igualando a derivada da log-verossimilhança em relação a $\theta$ (função escore) a zero e encontrando a solução para a equação resultante.
+-  Especificamente, a estimativa de máxima verossimilhança de $\theta$ pode ser obtida igualando a derivada da log-verossimilhança em relação a $\theta$ (função escore) a zero e encontrando a solução para a equação resultante.
 - Entretanto, em geral, essa __equação é não linear__ e não é possível escrever expressões simples e de forma fechada para o estimador de MV de $\theta$.
     + A estimativa de MV deve ser encontrada resolvendo-se essa equação usando uma técnica __iterativa__.
 
@@ -202,7 +202,7 @@ $$
 
 
 $$
-\hat{\beta} = \left\{\sum_{i=1}^N{\sum_{j=1}^n{(X_i'\widehat{\Sigma}_i^{-1}X_i)}}\right\}^{-1}\sum_{i=1}^N{\sum_{j=1}^n{(X_i'\widehat{\Sigma}_i^{-1}y_i)}}.
+\hat{\beta} = \left\{\sum_{i=1}^N{(X_i'\widehat{\Sigma}_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{(X_i'\widehat{\Sigma}_i^{-1}y_i)}.
 $$
 
 ## Propriedades do estimador MQG ($\Sigma_i$ conhecida)
@@ -229,7 +229,7 @@ Dados ausentes têm três implicações importantes para a análise longitudinal
 2. Haverá perda de informações e redução na precisão com que mudanças na resposta média ao longo do tempo pode ser estimado.
     + Essa redução na precisão está diretamente relacionada à quantidade de dados ausentes e também será influenciada em certa medida pela maneira como a análise lida com os dados ausentes.
     + Por exemplo, usar apenas os casos completos (ou seja, aqueles indivíduos sem dados ausentes) geralmente será o método menos eficiente.
-3. A validade de qualquer método de análise exigirá que certas suposições sobre os motivos de qualquer falta, geralmente chamadas de __mecanismo de perda de dados__, são sustentáveis.
+3. A validade de qualquer método de análise exigirá que certas suposições sobre os motivos de qualquer falta, geralmente chamadas de __mecanismo de perda de dados__, sejam sustentáveis.
     + Consequentemente, quando faltam dados, devemos considerar cuidadosamente os motivos da falta.
 
 ## Mecanismo de perda de dados
@@ -240,8 +240,8 @@ Dados ausentes têm três implicações importantes para a análise longitudinal
 
 ## MCAR
 
-- Diz-se que os dados são MCAR quando a probabilidade de falta de respostas não está relacionada aos valores específicos que, em princípio, deveriam ter sido obtidos (as respostas ausentes) ou ao conjunto de respostas observadas.
-- Ou seja, dados longitudinais são MCAR quando falta em $Y_i$  é simplesmente o resultado de um mecanismo de chance que não depende de componentes observados ou não observados de $Y_i$.
+- Diz-se que os dados são MCAR quando a probabilidade de perda de respostas não está relacionada aos valores específicos que, em princípio, deveriam ter sido obtidos (as respostas ausentes) ou ao conjunto de respostas observadas.
+- Ou seja, dados longitudinais são MCAR quando a falta em $Y_i$ é simplesmente o resultado de um mecanismo de chance que não depende de componentes observados ou não observados de $Y_i$.
 - A característica essencial do MCAR é que os dados observados podem ser considerados uma amostra aleatória dos dados completos.
     + Como resultado, os momentos (por exemplo, médias, variâncias e covariâncias) e, de fato, a distribuição dos dados observados não diferem dos momentos correspondentes ou da distribuição dos dados completos.
     
@@ -259,7 +259,7 @@ Dados ausentes têm três implicações importantes para a análise longitudinal
 
 ## MAR
 
-- Ao contrário do MCAR, diz-se que os dados são MAR quando a probabilidade de falta de respostas depende do conjunto de respostas observadas, mas não está relacionada aos valores ausentes específicos que, em princípio, deveriam ter sido obtidos.
+- Ao contrário do MCAR, diz-se que os dados são MAR quando a probabilidade de perda de respostas depende do conjunto de respostas observadas, mas não está relacionada aos valores ausentes específicos que, em princípio, deveriam ter sido obtidos.
 - Em outras palavras, se os indivíduos são estratificados com base em valores semelhantes para as respostas observadas, a falta é simplesmente o resultado de um mecanismo de chance que não depende dos valores das respostas não observadas.
 - No entanto, como o mecanismo de falta agora depende das respostas observadas, a distribuição de $Y_i$ em cada um dos estratos distintos definidos pelos padrões de falta não é o mesmo que a distribuição de $Y_i$ na população alvo.
 - Isso tem consequências importantes para a análise.
@@ -278,6 +278,183 @@ Dados ausentes têm três implicações importantes para a análise longitudinal
     + Isso requer a especificação correta não apenas do modelo para a resposta média, mas também do modelo para a covariância entre as respostas.
 - Em certo sentido, a estimativa de MV permite que os valores ausentes sejam validamente "previstos" ou "imputados" usando os dados observados e um modelo correto para a distribuição conjunta das respostas.
 
+# Inferência estatística
+
+## Inferência estatística
+
+- Para construir __intervalos de confiança__ e __testes de hipóteses__ sobre $\beta$, podemos fazer uso direto das estimativas de MV $\hat{\beta}$ e da sua matriz de covariância estimada 
+
+$$
+\widehat{\Cov}(\hat{\beta}) = \left\{\sum_{i=1}^N{(X_i'\widehat{\Sigma}_i^{-1}X_i)}\right\}^{-1}.
+$$
+
+## Inferência estatística
+
+- Para um único componente de $\beta$, digamos $\beta_k$, um método natural de construção de __limites de confiança__ de 95% é tomar o $\hat{\beta}_k$ mais ou menos $1,96$ vezes o erro padrão de $\hat{\beta}_k$.
+    + Diferentes limites de confiança podem ser obtidos escolhendo os quantis apropriados da distribuição normal padrão.
+- O erro padrão de $\hat{\beta}_k$ é simplesmente a raiz quadrada do elemento da diagonal principal de $\widehat{\Cov}(\hat{\beta})$ correspondente a $\hat{\beta}_k$,
+
+$$
+\sqrt{\widehat{\Var}(\hat{\beta}_k)}.
+$$
+
+## Inferência estatística
+
+- De maneira similar, um __teste da hipótese__ nula, $H_0: \beta_k = 0$ versus $H_A: \beta_k \neq 0$, pode ser baseado na seguinte estatística de Wald:
+
+$$
+Z = \frac{\hat{\beta}_k}{\sqrt{\widehat{\Var}(\hat{\beta}_k)}},
+$$
+
+em que $\widehat{\Var}(\hat{\beta}_k)$ denota o elemento da diagonal principal de $\widehat{\Cov}(\hat{\beta})$ correspondente a $\hat{\beta}_k$.
+
+- Esta estatística de teste pode ser comparada com uma distribuição normal padrão.
+
+## Inferência estatística
+
+- De maneira mais geral, pode ser de interesse construir intervalos de confiança e testes de hipóteses com respeito a certas __combinações lineares__ dos componentes de $\beta$.
+- Seja $L$ um vetor ou uma matriz de pesos __conhecidos__ e suponha que é de interesse testar $H_0: L\beta = 0$.
+- A combinação linear dos componentes de $\beta$, $L\beta$, representa um __contraste__ de interesse científico.
+    + Exemplo: suponha que $\beta = (\beta_1, \beta_2, \beta_3)'$ e $L = (0, 0, 1)$, então $H_0:L\beta = 0$ é equivalente a $H_0: \beta_3 = 0$.
+        - Agora, se considerarmos $L = (0, 1, -1)$, então $H_0:L\beta = 0$ é equivalente a $H_0: \beta_2 - \beta_3 = 0$ ou $H_0: \beta_2 = \beta_3$.
+
+## Inferência estatística
+
+- Uma estimativa natural de $L\beta$ é $L\hat{\beta}$, e pode ser mostrado que $L\hat{\beta}$ tem distribuição normal multivariada com média $L\beta$ e matriz de covariância $L\Cov(\hat{\beta})L'$.
+
+- Nos dois exemplos anteriores, $L$ é um único vetor linha $1 \times 3$, $L = (0, 0, 1)$ ou $L = (0, 1, -1)$.
+- Se $L$ é um único vetor linha, então $L\Cov(\hat{\beta})L'$ é um único valor (escalar) e a sua raiz quadrada fornece uma estimativa do erro padrão para $L\hat{\beta}$.
+- Assim um intervalo de confiança de aproximadamente 95% para $L\beta$ é dado por
+
+$$
+L\hat{\beta} \pm 1,96\sqrt{L\widehat{\Cov}(\hat{\beta})L'}.
+$$
+
+## Inferência estatística
+
+- De forma similar, para testar $H_0: L\beta = 0$ versus $H_A: L\beta \neq 0$, podemos usar a estatística de Wald
+
+$$
+Z = \frac{L\hat{\beta}}{\sqrt{L\widehat{\Cov}(\hat{\beta})L'}},
+$$
+
+e comparar esta estatística de teste com a distribuição normal padrão.
+
+- Um teste idêntico para $H_0: L\beta = 0$ versus $H_A: L\beta \neq 0$ usa a estatística
+
+$$
+W^2 = (L\hat{\beta})\{L\widehat{\Cov}(\hat{\beta})L'\}^{-1}(L\hat{\beta}),
+$$
+
+e comparar $W^2$ com a distribuição $\chi^2$ com $1$ grau de liberdade (__por que?__).
+
+## Inferência estatística
+
+- Esta última observação nos ajuda a motivar como o teste de Wald prontamente generaliza quando $L$ tem mais que uma linha, permitindo o teste simultâneo de uma hipótese multivariada.
+- Por exemplo, suponha que $\beta = (\beta_1, \beta_2, \beta_3)'$ e é de interesse testar a igualdade dos três parâmetros de regressão.
+    + A hipótese nula pode ser expressa como $H_0: \beta_1 = \beta_2 = \beta_3$. Fazendo
+
+$$
+L = \left(\begin{array}{ccc}
+1 & -1 & 0 \\
+1 & 0 & -1
+\end{array}\right).
+$$
+
+## Inferência estatística
+
+- $H_0: \beta_1 = \beta_2 = \beta_3$ pode ser expressa como $H_0: L\beta = 0$, pois se
+
+\begin{eqnarray*}
+L\beta &=& \left(\begin{array}{ccc}
+1 & -1 & 0 \\
+1 & 0 & -1
+\end{array}\right) \left(\begin{array}{c}
+\beta_1 \\
+\beta_2 \\
+\beta_3
+\end{array}\right)\\
+ &=& \left(\begin{array}{c}
+\beta_1 - \beta_2 \\
+\beta_1 - \beta_3
+\end{array}\right) = 0,
+\end{eqnarray*}
+
+e então
+
+$$
+\left(\begin{array}{c}
+\beta_1 \\
+\beta_1
+\end{array}\right) = \left(\begin{array}{c}
+\beta_2 \\
+\beta_3
+\end{array}\right).
+$$
+
+## Inferência estatística
+
+- Em geral, suponha que $L$ tem $r$ linhas (representando $r$ contrastes de interesse científico), então um teste simultâneo de $H_0: L\beta = 0$ versus $H_A: L\beta \neq 0$ é dado por
+
+$$
+W^2 = (L\hat{\beta})'\{L\widehat{\Cov}(\hat{\beta})L'\}^{-1}(L\hat{\beta}),
+$$
+
+que tem uma distribuição $\chi^2$ com $r$ gl.
+
+- Este é o teste de Wald multivariado.
+
+## Inferência estatística
+
+- Uma alternativa para o teste de Wald é o __teste da razão de verossimilhanças__.
+- O teste da razão de verossimilhanças de $H_0: L\beta = 0$ versus $H_A: L\beta \neq 0$ é obtido comparando as log-verossimilhanças maximizada para dois modelos:
+    + um modelo incorpora a restrição que $L\beta = 0$ (por exemplo, $\beta_3 = 0$ ou $\beta_2 = \beta_3$); este será chamado de __modelo reduzido__;
+    + e outro modelo sem restrição; este será chamado de __modelo completo__.
+
+## Inferência estatística
+
+- Uma estatística de teste é obtida por
+
+$$
+G^2 = 2(\hat{l}_{\mbox{comp}} - \hat{l}_{\mbox{red}}),
+$$
+
+e comparamos esta estatística com uma distribuição qui-quadrado com graus de liberdade igual a diferença entre o número de parâmetros nos modelos completo e reduzido.
+
+- __Observação:__ o teste da razão de verossimilhança só pode ser usado quando o número de observações para os modelos completo e reduzido for o mesmo; __atenção com dados ausentes nas covariáveis__.
+
+## Inferência estatística
+
+- O uso da verossimilhança também pode fornecer limites de confiança para $\beta$ ou $L\beta$.
+- Para um único componente de $\beta$, digamos $\beta_k$, podemos definir uma função __log-verossimilhança perfilada__, $l_p(\beta_k)$, obtida maximizando a log-verossimilhança sobre os parâmetros restantes, mantendo $\beta_k$ em algum valor fixo.
+
+## Inferência estatística
+
+- Um intervalo de confiança baseado na verossimilhança para $\beta_k$ é obtido considerando-se valores de $\beta_k$ que são razoavelmente consistentes com os dados.
+    + Especificamente, um intervalo de confiança aproximado de 95% baseado na verossimilhança é dado pelo conjunto de todos os valores de $\beta_k$ que satisfazem
+    
+$$
+2 \times \{l_p(\hat{\beta}_k) - l_p(\beta_k)\} \leq 3,84,
+$$
+em que o valor crítico $3,84$ é obtido da distribuição qui-quadrado com $1$ grau de liberdade.
+
+- De maneira mais geral, os intervalos de confiança para $L\beta$ podem ser obtidos invertendo o teste correspondente de $H_0: L\beta = 0$ de maneira semelhante.
+
+## Comentários
+
+- Embora a construção de testes de razão de verossimilhança e intervalos de confiança com base em verossimilhança seja mais enredada (por exemplo, exigindo um ajuste adicional do modelo sob a hipótese nula) do que os correspondentes testes e intervalos de confiança com base na estatística de Wald, os testes e intervalos de confiança baseados em verossimilhança geralmente têm __propriedades superiores__.
+- Este é especialmente o caso quando a variável de resposta é discreta.
+    + Por exemplo, na regressão logística com dados binários, os testes de razão de verossimilhança têm melhores propriedades que os testes de Wald correspondentes.
+- Portanto, em caso de dúvida, recomenda-se o uso de testes e intervalos de confiança baseados em verossimilhança. 
+
+## Comentários
+
+- Notamos que testes de razão de verossimilhança também podem ser usados para hipóteses sobre os __parâmetros de covariância__.
+- No entanto, existem alguns problemas em potencial com o uso padrão do teste da razão de verossimilhança para comparar modelos aninhados para a covariância; retornaremos a este tópico quando discutirmos a modelagem da estrutura de covariância.
+- Em geral, não é recomendado testar hipóteses sobre os parâmetros de covariância usando testes de Wald.
+    + Em particular, a distribuição amostral da estatística do teste Wald para um parâmetro de variância não possui uma distribuição normal aproximada quando o tamanho da amostra é relativamente pequeno e a variância populacional é próxima de zero.
+    + Como a variância tem um limite inferior igual a zero, são necessárias amostras muito grandes para justificar a aproximação normal para a distribuição amostral da estatística do teste de Wald quando a variância está próxima de zero.
+
 # Exercícios
 
 ## Exercícios
@@ -290,10 +467,13 @@ Dados ausentes têm três implicações importantes para a análise longitudinal
 
 ## Avisos
 
+- __Próxima semana:__ lista de exercícios nº 1.
+    + O momento da aula será utilizado para a resolução dos exercícios da lista.
 - __Para casa:__ ler o Capítulo 4 do livro "__Applied Longitudinal Analysis__".
+    + Fazer um resumo da Seção 4.5.
     + Caso ainda não tenha lido, leia também os Caps. 1, 2 e 3.
     + Ver também as referências com respeito à derivadas de vetores, matrizes, etc.
-- __Próxima aula:__ Estimação e inferência estatística.
+- __Próxima aula (1º/10):__ Modelando a média através da análise de perfis de respostas.
 
 ## Bons estudos!
 
