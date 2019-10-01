@@ -1,0 +1,545 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Modelando a média: análise de perfis de respostas"
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2019
+---
+
+# Introdução
+
+## Introdução
+
+- Nesta aula apresentamos um método para analisar dados longitudinais que impõe uma estrutura mínima ou restrições na resposta média através do tempo e na covariância entre as medidas repetidas.
+- O método foca na __análise de perfis de respostas__ e pode ser aplicado para dados longitudinais quando o __delineamento é balanceado__, com um conjunto de ocasiões de medidas comum para todos os indivíduos no estudo.
+    + A análise de perfis de respostas também pode contemplar dados incompletos devido à perda (ou seja, estudos longitudinais incompletos com delineamentos balanceados).
+
+## Introdução
+
+- Métodos para analisar perfis de respostas são atraentes quando existe uma única covariável categórica (grupo de tratamento ou exposição) e quando nenhum padrão específico a priori para diferenças em perfis de respostas entre grupos pode ser especificado.
+- Os dados podem ser resumidos pela resposta média em cada ocasião de tempo, estratificado por níveis do fator de grupo.
+- Em qualquer nível do fator de grupo, a sequência de médias no tempo é referida como o __perfil de resposta__ médio.
+
+## Introdução
+
+```{r perfis_medios, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+# ----------------------------------------------------
+# Carregando pacotes do R
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+library(dplyr)
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+chumbo <- read_dta(
+  file = here::here("data", "tlc.dta"))
+
+chumbo.longo <- gather(data = chumbo,
+                        key = "tempo",
+                        value = "chumbo", -id, -trt)
+
+chumbo.longo$tempo <- as.numeric(
+  as.character(
+    factor(chumbo.longo$tempo,
+           labels = c(0, 1, 4, 6))))
+
+chumbo.longo$trt <- factor(chumbo.longo$trt,
+                           labels = c("Placebo",
+                                      "Succimer"))
+
+chumbo.resumo <- chumbo.longo %>% 
+  group_by(trt, tempo) %>% 
+  summarise(chumbo.m = mean(chumbo))
+
+p <- ggplot(data = chumbo.resumo,
+            mapping = aes(x = tempo,
+                          y = chumbo.m,
+                          colour = trt)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Tempo (semanas)",
+       y = "Média do nível de chumbo no sangue (mcg/dL)",
+       colour = "Grupo de tratamento")
+p
+```
+
+## Introdução
+
+- O principal objetivo da análise de perfis de respostas é caracterizar os padrões de __mudança__ na resposta média através do tempo nos grupos e para determinar quanto as formas dos perfis de respostas médias diferem entre os grupos.
+- O método de perfis de respostas pode ser generalizado para estudos com mais de um único fator de grupo de tratamento (exposição) e quando existem covariáveis medidas na linha de base que precisam ser ajustadas.
+    - Em estudos observacionais, os grupos são definidos por características dos indivíduos do estudo, tais como idade, sexo, ou nível de exposição.
+    - Em estudos aleatorizados, os grupos são definidos por um mecanismo aleatório.
+
+# Hipóteses sobre perfis de resposta
+
+## Hipóteses sobre perfis de resposta
+
+- Em nossa discussão sobre a análise dos perfis de resposta, focamos inicialmente no delineamento de dois grupos, mas as generalizações para mais de dois grupos são diretas.
+- Dada uma sequência de $n$ medidas repetidas em vários grupos distintos de indivíduos, três questões principais relacionadas aos perfis de resposta podem ser colocadas:
+
+## Hipóteses sobre perfis de resposta
+
+1. Os perfis de resposta média são semelhantes nos grupos, no sentido de que os perfis de resposta média são paralelos?
+    + Essa é uma pergunta que diz respeito ao __efeito de interação__ $grupo \times tempo$. 
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'fig5_2_a.png'))
+```
+
+## Hipóteses sobre perfis de resposta
+
+2. Supondo que os perfis médios de resposta da população sejam paralelos, as médias são constantes ao longo do tempo?
+    + Esta é uma pergunta que diz respeito ao __efeito do tempo__. 
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'fig5_2_b.png'))
+```
+
+## Hipóteses sobre perfis de resposta
+
+3. Supondo que os perfis médios de resposta da população sejam paralelos, eles também estão no mesmo nível, no sentido de que os perfis médios de resposta para os grupos coincidem?
+    + Esta é uma pergunta que diz respeito ao __efeito do grupo__. 
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'fig5_2_c.png'))
+```
+
+## Hipóteses sobre perfis de resposta
+
+- Exceto em circunstâncias muito raras, não faz sentido fazer a segunda e a terceira perguntas se os perfis médios de resposta não são paralelos.
+- Isso é consistente com o princípio geral de que os efeitos principais (por exemplo, efeitos de grupo ou tempo) normalmente não são de interesse quando há uma interação entre eles.
+- Ou seja, quando há uma interação $grupo \times tempo$, os perfis médios de resposta nos grupos são diferentes (perfis não paralelos); consequentemente, sua forma pode ser descrita apenas com referência a um grupo específico, e seu nível pode ser descrito apenas com referência a um tempo específico.
+
+# Formulação do modelo linear geral
+
+## Perfis de respostas e o modelo linear geral
+
+- Antes de ilustrarmos as principais ideias com um exemplo numérico, consideramos como a análise de perfis de respostas pode ser implementada no modelo linear geral
+
+$$
+\E(Y_i|X_i) = \mu_i = X_i\beta,
+$$
+
+para uma escolha apropriada de $X_i$.
+
+- Também descreveremos como as principais hipóteses de nenhum efeito de interação $grupo \times tempo$ em termos de $\beta$.
+- Considere $n$ o número de medidas repetidas e $N$ o número de indivíduos.
+- Para expressar o modelo para o delineamento longitudinal com $G$ grupos e $n$ ocasiões de medições, precisaremos de $G \times n$ parâmetros para $G$ perfis de respostas médias.
+
+## Perfis de respostas e o modelo linear geral
+
+- Considere __dois grupos__ medidos em __três ocasiões__, há $2 \times 3 = 6$ parâmetros de média.
+- Para o __primeiro grupo__, a matriz de delineamento $3 \times 6$, $X_i$, fica
+
+$$
+X_i = \left(\begin{array}{cccccc}
+1 & 0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 & 0
+\end{array}
+\right).
+$$
+
+- Para o __segundo grupo__, a matriz de delineamento fica
+
+$$
+X_i = \left(\begin{array}{cccccc}
+0 & 0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 0 & 0 & 1
+\end{array}
+\right).
+$$
+
+## Perfis de respostas e o modelo linear geral: interpretação
+
+- Em termos do modelo
+
+$$
+\E(Y_i|X_i) = \mu_i = X_i\beta,
+$$
+
+em que $\beta = (\beta_1, \ldots, \beta_6)'$ é um vetor $6 \times 1$ de coeficientes de regressão,
+
+$$
+\mu(1) = \left(\begin{array}{c}
+\mu_1(1)\\
+\mu_2(1)\\
+\mu_3(1)
+\end{array}\right) = \left(\begin{array}{c}
+\beta_1\\
+\beta_2\\
+\beta_3
+\end{array}\right);
+$$
+
+similarmente
+
+$$
+\mu(2) = \left(\begin{array}{c}
+\mu_1(2)\\
+\mu_2(2)\\
+\mu_3(2)
+\end{array}\right) = \left(\begin{array}{c}
+\beta_4\\
+\beta_5\\
+\beta_6
+\end{array}\right).
+$$
+
+## Perfis de respostas e o modelo linear geral: hipóteses
+
+- Como resultado, hipóteses sobre os perfis médios de resposta nos dois grupos podem ser facilmente expressas em termos de hipóteses sobre os componentes de $\beta$.
+- Especificamente, a hipótese de nenhum efeito de interação $grupo \times tempo$ pode ser expressa como
+
+$$
+H_{01}: (\beta_1 - \beta_4) = (\beta_2 - \beta_5) = (\beta_3 - \beta_6).
+$$
+
+- Nesta parametrização, hipóteses sobre a interação $grupo \times tempo$ não podem ser expressas em termos de certos componentes de $\beta$ serem zero
+- Em vez disso, essas hipóteses podem ser expressas em termos de $L\beta = 0$, para escolhas particulares de vetores ou matrizes $L$.
+
+## Perfis de respostas e o modelo linear geral: hipóteses
+
+- Por exemplo, a hipótese nula de nenhum efeito de interação $grupo \times tempo$,
+
+$$
+H_{01}: (\beta_1 - \beta_4) = (\beta_2 - \beta_5) = (\beta_3 - \beta_6),
+$$
+
+pode ser expressa como
+
+$$
+H_{01}: L\beta = 0,
+$$
+
+em que 
+
+$$
+L = \left(\begin{array}{cccccc}
+1 & - 1 & 0 & -1 & 1 & 0 \\
+1 & 0 & - 1 & -1 & 0 & 1 
+\end{array}\right).
+$$
+
+## Perfis de respostas e o modelo linear geral: dados ausentes
+
+- Uma característica atraente da formulação geral do modelo linear
+
+$$
+\E(Y_i|X_i) = \mu_i = X_i\beta,
+$$
+
+é que ele pode lidar com configurações em que os dados de alguns indivíduos estão ausentes.
+
+- Por exemplo, suponha que o $i$-ésimo sujeito pertença ao primeiro grupo e esteja faltando a resposta na terceira ocasião.
+- A matriz de delineamento apropriada para esse sujeito é a seguinte matriz $2 \times 6$, obtida pela remoção da última linha da matriz de delineamento de dados completa para os sujeitos do primeiro grupo:
+
+$$
+X_i = \left(\begin{array}{cccccc}
+1 & 0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 & 0 
+\end{array}
+\right).
+$$
+
+## Perfis de respostas e o modelo linear geral: dados ausentes
+
+- Para padrões mais gerais de perda de dados, a matriz de delineamento apropriada para o $i$-ésimo indivíduo é simplesmente obtida removendo linhas da matriz de delineamento de dados completa correspondentes às respostas ausentes.
+- Isso permite que a análise dos perfis de resposta seja baseada em todas as observações disponíveis dos sujeitos.
+
+## Perfis de respostas e o modelo linear geral: categoria de referência
+
+- Note que o modelo linear geral para dois grupos medidos em duas ocasiões,
+
+$$
+\E(Y_i|X_i) = \mu_i = X_i\beta,
+$$
+
+poderia também ser expressado em termo das seguintes duas matrizes de delineamento:
+
+## Perfis de respostas e o modelo linear geral: categoria de referência
+
+$$
+X_i = \left(\begin{array}{cccccc}
+1 & 0 & 0 & 1 & 0 & 0 \\
+1 & 1 & 0 & 1 & 1 & 0 \\
+1 & 0 & 1 & 1 & 0 & 1
+\end{array}
+\right),
+$$
+
+para o primeiro grupo e
+
+$$
+X_i = \left(\begin{array}{cccccc}
+1 & 0 & 0 & 1 & 0 & 0 \\
+1 & 1 & 0 & 0 & 1 & 0 \\
+1 & 0 & 1 & 0 & 0 & 1
+\end{array}
+\right),
+$$
+
+para o segundo grupo.
+
+## Perfis de respostas e o modelo linear geral: categoria de referência
+
+- Neste caso
+
+$$
+\mu(2) = \left(\begin{array}{c}
+\mu_1(2)\\
+\mu_2(2)\\
+\mu_3(2)
+\end{array}\right) = \left(\begin{array}{c}
+\beta_1\\
+\beta_1 + \beta_2\\
+\beta_1 + \beta_3
+\end{array}\right),
+$$
+e
+
+$$
+\mu(1) = \left(\begin{array}{c}
+\mu_1(1)\\
+\mu_2(1)\\
+\mu_3(1)
+\end{array}\right) = \left(\begin{array}{c}
+\beta_1 + \beta_4\\
+(\beta_1 + \beta_4) + (\beta_2 + \beta_5)\\
+(\beta_1 + \beta_4) + (\beta_3 + \beta_6)
+\end{array}\right).
+$$
+
+## Perfis de respostas e o modelo linear geral: categoria de referência
+
+- Esta parametrização é a mais utilizada pelos softwares estatísticos.
+- A escolha desta parametrização, e a categoria de referência, é uma escolha do usuário do software (no `R` veja a formulação `~ -1` e a função `relevel()`).
+- Com esta parametrização as hipóteses de interesse de pesquisa podem ser reescritas:
+
+$$
+H_{01}: \beta_5 = \beta_6 = 0.
+$$
+
+$$
+H_{02}: \beta_2 = \beta_3 = 0.
+$$
+
+$$
+H_{03}: \beta_4 = 0.
+$$
+
+## Perfis de respostas e o modelo linear geral: estrutura de covariância
+
+- Finalmente, dado que a análise de perfis de respostas pode ser expressa em termos do modelo de regressão linear,
+
+$$
+\E(Y_i|X_i) = \mu_i = X_i\beta,
+$$
+
+em que $\beta = (\beta_1,\ldots, \beta_p)'$ é um vetor $p\times 1$ de coeficientes de regressão (com $p = G\times n$), __estimação__ de máxima verossimilhança de $\beta$, e a construção de testes de hipóteses para a interação $grupo \times tempo$ (e efeitos principais de tempo e grupo), __são possíveis uma vez que a covariância de__ $Y_i$ __foi especificada__.
+
+- Na análise de perfis, a covariância de $Y_i$ é usualmente assumida ser __não estruturada__ com nenhuma restrição nos $n(n+1)/2$ parâmetros de covariância.
+
+# Estudo de caso
+
+## Estudo de tratamento de crianças expostas ao chumbo
+
+- Lembre-se de que o estudo TLC foi um estudo aleatorizado, controlado por placebo, de um agente quelante administrado por via oral, _succimer_, em crianças com níveis confirmados de chumbo no sangue de 20 a 44 $\mu$g/dL.
+- As crianças do estudo tinham idades entre 12 e 33 meses e viviam em moradias deterioradas no centro da cidade.
+- A análise a seguir é baseada em dados sobre os níveis de chumbo no sangue na linha de base (ou semana 0), semana 1, semana 4 e semana 6 durante o primeiro período de tratamento.
+
+## Carregando os dados
+
+```{r carrega_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+# ----------------------------------------------------
+# Carregando pacotes do R
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+here::here("data", "tlc.dta")
+chumbo <- read_dta(
+  file = here::here("data", "tlc.dta"))
+```
+
+## Carregando os dados
+
+```{r carrega_dados2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+chumbo
+```
+
+## Transformando os dados {.allowframebreaks}
+
+__De "largo" para "longo"__
+
+```{r transforma_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+chumbo.longo <- gather(data = chumbo,
+                        key = "tempo",
+                        value = "chumbo", -id, -trt)
+
+chumbo.longo
+```
+
+## Transformando os dados {.allowframebreaks}
+
+__Transforma variáveis__
+
+```{r transforma_dados2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+chumbo.longo$tempo <- as.numeric(
+  as.character(
+    factor(chumbo.longo$tempo,
+           labels = c(0, 1, 4, 6))))
+
+chumbo.longo$trt <- factor(chumbo.longo$trt,
+                           labels = c("Placebo",
+                                      "Succimer"))
+
+chumbo.longo
+```
+
+## Time plot (perfis médios) {.allowframebreaks}
+
+__"Pré-processamento"__
+
+```{r time_plot3a, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+library(dplyr)
+
+chumbo.resumo <- chumbo.longo %>% 
+  group_by(trt, tempo) %>% 
+  summarise(chumbo.m = mean(chumbo))
+
+chumbo.resumo
+```
+
+## Time plot (perfis médios) {.allowframebreaks}
+
+```{r time_plot3b, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+p <- ggplot(data = chumbo.resumo,
+            mapping = aes(x = tempo,
+                          y = chumbo.m,
+                          colour = trt)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Tempo (semanas)",
+       y = "Média do nível de chumbo no sangue (mcg/dL)",
+       colour = "Grupo de tratamento")
+p
+```
+
+## Um modelo {.allowframebreaks}
+
+```{r gls, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+chumbo.longo$tempo <- factor(chumbo.longo$tempo)
+
+library(nlme)
+
+# matriz de covariância não estruturada
+mod.unst <- gls(chumbo ~ trt * tempo,
+                corr = corSymm(form = ~ 1 | id),
+                weights = varIdent(form = ~ 1 | tempo),
+                method = "REML",
+                data = chumbo.longo)
+
+summary(mod.unst)
+```
+
+## Matriz de covariância estimada {.allowframebreaks}
+
+```{r cov_est, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+library(lavaSearch2)
+
+knitr::kable(
+  getVarCov2(mod.unst)$Omega,
+  digits = 1)
+```
+
+## Testando hipóteses (teste de Wald) {.allowframebreaks}
+
+```{r wald, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+library(car)
+
+knitr::kable(
+  Anova(mod.unst),
+  digits = c(0, 2, 4))
+```
+
+## Coeficientes estimados {.allowframebreaks}
+
+```{r coef, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+knitr::kable(
+  summary(mod.unst)$tTable[,-4],
+  digits = c(3, 3, 2),
+  col.names = c("Estimativa", "EP", "Z"))
+```
+
+## Matriz de delineamento {.allowframebreaks}
+
+```{r mat.del, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+chumbo.longo <- arrange(chumbo.longo, id)
+chumbo.longo
+
+model.matrix(chumbo ~ trt * tempo,
+             data = chumbo.longo[chumbo.longo$id == 1,])
+
+model.matrix(chumbo ~ trt * tempo,
+             data = chumbo.longo[chumbo.longo$id == 2,])
+```
+
+## Matriz de delineamento (modelo sem intercepto) {.allowframebreaks}
+
+```{r mat.del2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+model.matrix(chumbo ~ -1 + trt * tempo,
+             data = chumbo.longo[chumbo.longo$id == 1,])
+
+model.matrix(chumbo ~ -1 + trt * tempo,
+             data = chumbo.longo[chumbo.longo$id == 2,])
+```
+
+## Matriz de delineamento (mudança grupo de referência) {.allowframebreaks}
+
+```{r mat.del3, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+chumbo.longo$trt <- relevel(chumbo.longo$trt,
+                            ref = "Succimer")
+
+chumbo.longo$tempo <- relevel(chumbo.longo$tempo,
+                              ref = "6")
+model.matrix(chumbo ~ trt * tempo,
+             data = chumbo.longo[chumbo.longo$id == 1,])
+
+model.matrix(chumbo ~ trt * tempo,
+             data = chumbo.longo[chumbo.longo$id == 2,])
+```
+
+<!-- # Pontos fortes e fracos da análise de perfis de resposta -->
+
+# Exercícios
+
+## Exercícios
+
+- Realize os exercícios do Capítulo 5 do livro "__Applied Longitudinal Analysis__" (páginas 140 e 141).
+- Construa intervalos de confiança de 95% para as estimativas do modelo do exemplo da aula.
+- Com base na leitura da Seção 5.8 (Applied Longitudinal Analysis), faça uma discussão dos pontos fortes e fracos da análise de perfis de resposta.
+
+# Avisos
+
+## Avisos
+
+- __Próxima aula:__ Modelando a média através de curvas paramétricas.
+- __Para casa:__ ler o Capítulo 5 do livro "__Applied Longitudinal Analysis__".
+    + Caso ainda não tenha lido, leia também os Caps. 1, 2, 3, 4 e 5.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'georgeepboxmodels.jpg'))
+```
