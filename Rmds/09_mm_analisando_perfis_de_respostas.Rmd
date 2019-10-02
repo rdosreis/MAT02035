@@ -16,7 +16,7 @@ date: |
 
 ## Introdução
 
-- Nesta aula apresentamos um método para analisar dados longitudinais que impõe uma estrutura mínima ou restrições na resposta média através do tempo e na covariância entre as medidas repetidas.
+- Nesta aula apresentamos um método para analisar dados longitudinais que impõe uma estrutura mínima ou restrições na resposta média ao longo do tempo e na covariância entre as medidas repetidas.
 - O método foca na __análise de perfis de respostas__ e pode ser aplicado para dados longitudinais quando o __delineamento é balanceado__, com um conjunto de ocasiões de medidas comum para todos os indivíduos no estudo.
     + A análise de perfis de respostas também pode contemplar dados incompletos devido à perda (ou seja, estudos longitudinais incompletos com delineamentos balanceados).
 
@@ -72,7 +72,7 @@ p
 
 ## Introdução
 
-- O principal objetivo da análise de perfis de respostas é caracterizar os padrões de __mudança__ na resposta média através do tempo nos grupos e para determinar quanto as formas dos perfis de respostas médias diferem entre os grupos.
+- O principal objetivo da análise de perfis de respostas é caracterizar os padrões de __mudança__ na resposta média ao longo do tempo nos grupos e para determinar quanto as formas dos perfis de respostas médias diferem entre os grupos.
 - O método de perfis de respostas pode ser generalizado para estudos com mais de um único fator de grupo de tratamento (exposição) e quando existem covariáveis medidas na linha de base que precisam ser ajustadas.
     - Em estudos observacionais, os grupos são definidos por características dos indivíduos do estudo, tais como idade, sexo, ou nível de exposição.
     - Em estudos aleatorizados, os grupos são definidos por um mecanismo aleatório.
@@ -280,9 +280,9 @@ para o primeiro grupo e
 
 $$
 X_i = \left(\begin{array}{cccccc}
-1 & 0 & 0 & 1 & 0 & 0 \\
-1 & 1 & 0 & 0 & 1 & 0 \\
-1 & 0 & 1 & 0 & 0 & 1
+1 & 0 & 0 & 0 & 0 & 0 \\
+1 & 1 & 0 & 0 & 0 & 0 \\
+1 & 0 & 1 & 0 & 0 & 0
 \end{array}
 \right),
 $$
@@ -536,7 +536,7 @@ model.matrix(chumbo ~ trt * tempo,
 
 - __Próxima aula:__ Modelando a média através de curvas paramétricas.
 - __Para casa:__ ler o Capítulo 5 do livro "__Applied Longitudinal Analysis__".
-    + Caso ainda não tenha lido, leia também os Caps. 1, 2, 3, 4 e 5.
+    + Caso ainda não tenha lido, leia também os Caps. 1, 2, 3 e 4.
 
 ## Bons estudos!
 
