@@ -18,7 +18,7 @@ date: |
 - Embora esses dois aspectos dos dados possam ser modelados separadamente, eles estão __inter-relacionados__.
 - As escolhas de modelos para resposta média e covariância são __interdependentes__.
 - Um modelo para a covariância deve ser escolhido com base em algum modelo assumido para a resposta média.
-- __Lembre-se:__ a covariância entre qualquer par de resíduos, digamos $[Y_{ij} -  \mu_{ij}(\beta)]$ e $[Y_{ik} -  \mu_{ik}(\beta)]$], depende do modelo para a média, ou seja, depende de $\beta$.
+- __Lembre-se:__ a covariância entre qualquer par de resíduos, digamos $[Y_{ij} -  \mu_{ij}(\beta)]$ e $[Y_{ik} -  \mu_{ik}(\beta)]$, depende do modelo para a média, ou seja, depende de $\beta$.
 
 ## Modelando a covariância
 
@@ -31,7 +31,7 @@ Três abordagens gerais podem ser distinguidas:
 ## Covariância não estruturada
 
 - Apropriado quando o delineamento é "balanceado" e o número de ocasiões de medições é relativamente pequena.
-- Nenhuma estrutura explícita é assumida além da homogeneidade de covariância entre diferentes indivíduos, $\Cov(Yi) = \Sigma_i = \Sigma$.
+- Nenhuma estrutura explícita é assumida além da homogeneidade de covariância entre diferentes indivíduos, $\Cov(Y_i) = \Sigma_i = \Sigma$.
 - __Principal vantagem:__ nenhuma suposição sobre os padrões de variância e covariâncias.
 
 ## Covariância não estruturada
@@ -67,6 +67,18 @@ $$
 - Com __muita estrutura__, risco potencial de __erros de especificação do modelo__ e inferências enganosas a respeito de $\beta$.
 - Clássico __tradeoff__ entre __viés__ e __variância__.
 - Os modelos de padrões de covariância têm como base modelos de correlação serial originalmente desenvolvidos para dados de __séries temporais__.
+
+## (Relação entre a covariância e a correlação)
+
+- Lembre que $\rho_{jk} = \Corr(Y_{ij}, Y_{ik})$ pode ser expresso como
+
+\begin{eqnarray*}
+\rho_{jk} &=& \frac{\Cov(Y_{ij}, Y_{ik})}{ \sqrt{\Var(Y_{ij})} \sqrt{\Var(Y_{ik})} }\\
+ &=& \frac{\sigma_{jk}}{\sigma_{j}\sigma_{k}}\\
+ &\Rightarrow& \sigma_{jk} = \rho_{jk}\sigma_{j}\sigma_{k}.
+\end{eqnarray*}
+
+- Se assumirmos que $\Var(Y_{i1}) = \Var(Y_{i2}) = \ldots \Var(Y_{in}) = \sigma^2$, então $\sigma_j = \sigma_k$ e $\sigma_j\sigma_k = \sigma^2$, e assim $\sigma_{jk} = \rho_{jk}\sigma^2$.
 
 ## Simetria composta
 
