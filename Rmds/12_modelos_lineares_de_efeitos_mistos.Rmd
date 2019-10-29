@@ -1,0 +1,507 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Modelos lineares de efeitos mistos"
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2019
+---
+
+## Introdução
+
+- Nas aulas anteriores introduzimos modelos para dados longitudinais em que __mudanças na resposta média__, e as suas relações com covariáveis, podem ser expressas como
+
+$$
+\E(Y_i|X_i) = X_i\beta.
+$$
+
+- Nosso objetivo principal tem sido a inferência sobre os __parâmetros populacionais__ de regressão $\beta$.
+- Ainda, discutimos como a especificação deste modelo de regressão para dados longitudinais podem ser completada através de suposições adicionais a respeito da __estrutura__ de $\Cov(Y_i|X_i) = \Cov(e_i) = \Sigma_i$.
+- Nesta aula nós vamos considerar uma abordagem __alternativa__, mas proximamente relacionada, para analisar dados longitudinais utilizando __modelos lineares de efeitos mistos__.
+
+## Introdução
+
+- __Ideia básica:__ algum subconjunto dos parâmetros de regressão __varia aleatoriamente__ de um indivíduo para outro, respondendo assim por __fontes de heterogeneidade__ natural __na população__.
+- __Característica distintiva:__ a resposta média é modelada como uma combinação de __características da população__ $\beta$ \textcolor{blue}{(efeitos fixos)}, que se supõe serem compartilhadas por todos os indivíduos, e __efeitos indivíduo-específicos__ \textcolor{blue}{(efeitos aleatórios)} que são exclusivos para um indivíduo em particular.
+    + O termo \textcolor{blue}{misto} é usado neste contexto para denotar que o modelo contém efeitos fixos e aleatórios.
+
+## Introdução
+
+- Apesar de ser uma combinação de efeitos populacionais e individuais, o modelo linear de efeitos mistos nos conduz a um modelo para a resposta média marginal (média sobre a distribuição dos efeitos aleatórios) que pode ser expresso na forma familiar
+
+$$
+\E(Y_i|X_i) = X_i\beta.
+$$
+
+- No entanto, a introdução de efeitos aleatórios induz covariância entre as respostas e $\Cov(Y_i|X_i) = \Sigma_i$ possui uma estrutura de efeitos aleatórios distinta.
+    + Os modelos lineares de efeitos mistos distinguem explicitamente as fontes de variação __entre indivíduos__ e __intra-indivíduo__.
+- Além disso, a estrutura de covariância de efeitos aleatórios induzida pode frequentemente ser descrita com relativamente __poucos parâmetros__, independentemente do número e do momento das ocasiões de medição.
+
+## Introdução
+
+### Comentários
+
+1. Permitem a análise de __fontes de variação__ entre indivíduos e intra-indivíduo nas respostas longitudinais.
+2. Também é possível __prever__ como as __trajetórias__ de resposta __individuais__ mudam ao longo do tempo.
+    + Ex: trajetórias de crescimentos individuais.
+3. __Flexibilidade__ em acomodar qualquer grau de __desbalanceamento__ nos dados longitudinais, juntamente com sua capacidade de __explicar a covariância__ entre as medidas repetidas __de maneira__ relativamente __parcimoniosa__.
+
+## Exemplo: o modelo de intercepto aleatório
+
+- Neste modelo, presume-se que cada indivíduo tenha um nível de resposta subjacente que persista ao longo do tempo
+    
+\begin{equation}
+Y_{ij} = X_{ij}'\beta + b_i + \epsilon_{ij},
+\label{interc_aleat}
+\end{equation}
+
+em que $b_i$ é o __efeito individual aleatório__ e $\epsilon_{ij}$ é o erro amostral (ou de medição).
+
+- $b_i$ e $\epsilon_{ij}$ são ambos assumidos serem aleatórios, independentes um do outro, com média zero, e com variâncias, $\Var(b_i) =\sigma^2_b$ e $\Var(\epsilon_{ij}) = \sigma^2$, respectivamente.
+
+- Observe que este modelo descreve a trajetória média da resposta ao longo do tempo para qualquer indivíduo \textcolor{blue}{(média condicional)}, $\E(Y_{ij}| b_i) = X_{ij}'\beta + b_i$, além do perfil médio de resposta na população \textcolor{blue}{(média marginal)}, $\E(Y_{ij}) = X_{ij}'\beta$, em que a média é com respeito a todos os indivíduos da população.
+
+## Exemplo: o modelo de intercepto aleatório
+
+- Os erros de medição ou amostragem em \eqref{interc_aleat} são indicados por $\epsilon_{ij}$ (epsilon) e não $e_{ij}$.
+    + Essa alteração na notação é intencional e reflete diferenças nas interpretações de $\epsilon_{ij}$ e $e_{ij}$.
+- Nas aulas anteriores, o erro $e_{ij}$ __representa__ o desvio de $Y_{ij}$ da resposta média na população, $X_{ij}'\beta$.
+- Nesta aula, o erro intra-indivíduo $\epsilon_{ij}$ representa o desvio de $Y_{ij}$ da resposta média específica do sujeito, $X_{ij}'\beta + b_i$.
+    + Os erros aleatórios, $e_{ij}$, foram __decompostos__ em dois componentes aleatórios, $e_{ij} = b_i + \epsilon_{ij}$, um componente entre indivíduos e um componente intra-indivíduo.
+    
+## Exemplo: o modelo de intercepto aleatório
+
+__Interpretação dos parâmetros no modelo__ \eqref{interc_aleat}
+
+- Os parâmetros de regressão $\beta$ descreve padrões de mudança na resposta média ao longo do tempo (e suas relações com covariáveis) na população de interesse;
+- Os $b_i$ descreve como a tendência ao longo do tempo para $i$-ésimo indivíduo desvia da média da população.
+    + $b_i$ representa o desvio de um indivíduo do intercepto da média da população, depois que os efeitos das covariáveis foram contabilizados.
+    + Quando combinado com os efeitos fixos, $b_i$ descreve a trajetória média da resposta ao longo do tempo para qualquer indivíduo.
+
+## Exemplo: o modelo de intercepto aleatório
+
+- Essa interpretação é aparente se expressarmos o modelo dado por (8.1) como
+
+\begin{eqnarray*}
+Y_{ij} &=& X_{ij}'\beta + b_i + \epsilon_{ij}\\
+&=& \beta_1 X_{ij1} + \beta_2 X_{ij2} + \ldots + \beta_p X_{ijp} + b_i + \epsilon_{ij}\\
+&=& \beta_1 + \beta_2 X_{ij2} + \ldots + \beta_p X_{ijp} + b_i + \epsilon_{ij}\\
+&=& (\beta_1+ b_i) + \beta_2 X_{ij2} + \ldots + \beta_p X_{ijp} + \epsilon_{ij},
+\end{eqnarray*}
+
+em que $X_{ij1} = 1$ para todo $i$ e $j$, e $\beta_1$ é um termo de intercepto fixo no modelo.
+
+<!-- - Quando expresso dessa maneira, pode-se ver que o intercepto para o $i$-ésimo indivíduo é $\beta_1 + b_i$ e varia aleatoriamente de um indivíduo para outro. -->
+- Como a média do efeito aleatório $b_i$ é assumida como zero, $b_i$ representa o desvio do $i$-ésimo intercepto do indivíduo $(\beta_1 + b_i)$ do intercepto da população, $\beta_1$.
+
+## Exemplo: o modelo de intercepto aleatório
+
+\begin{columns}
+\begin{column}{.5\linewidth}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='60%', paged.print=FALSE}
+knitr::include_graphics(here::here('images', 'fig_8_1.png'))
+```
+\end{column}
+\begin{column}{.5\linewidth}
+\begin{itemize}
+\item O indivíduo A responde "mais alto" que a média da população e, portanto, possui um $b_i$ positivo.
+\item O indivíduo B responde "mais baixo" que a média da população e tem um $b_i$ negativo.
+\end{itemize}
+\end{column}
+\end{columns}
+
+## Exemplo: o modelo de intercepto aleatório
+
+\begin{columns}
+\begin{column}{.5\linewidth}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='60%', paged.print=FALSE}
+knitr::include_graphics(here::here('images', 'fig_8_2.png'))
+```
+\end{column}
+\begin{column}{.5\linewidth}
+\begin{itemize}
+\item A inclusão dos erros de medição, $\epsilon_{ij}$, permite a resposta em qualquer ocasião variar aleatoriamente acima e abaixo das trajetórias indivíduo-específicas.
+\end{itemize}
+\end{column}
+\end{columns}
+
+## Exemplo: o modelo de intercepto aleatório
+
+- Considere a covariância marginal entre as medidas repetidas no mesmo indivíduo.
+- Quando calculada a média dos efeitos específicos do indivíduo, a média marginal de $Y_{ij}$ é dada por
+
+$$
+\E(Y_{ij}) = \mu_{ij} = X_{ij}'\beta.
+$$
+
+- A __covariância marginal__ entre $Y_{ij}$ é definida em termos de desvios de $Y_{ij}$ da média marginal $\mu_{ij}$.
+    + Por exemplo, na última Figura,  esses desvios são positivos em todas as ocasiões de medição para o indivíduo A e negativos em todas as ocasiões de medição para o indivíduo B, indicando uma forte correlação positiva (marginalmente) entre as respostas ao longo do tempo.
+    
+## Exemplo: o modelo de intercepto aleatório
+
+- Para o modelo com interceptos aleatórios, a variância marginal de cada resposta é dada por
+
+\begin{eqnarray*}
+\Var(Y_{ij}) &=& \Var(X_{ij}'\beta + b_i + \epsilon_{ij})\\
+ &=& \Var(b_i + \epsilon_{ij})\\
+ &=& \Var(b_i) + \Var(\epsilon_{ij})\\
+ &=& \sigma^2_b + \sigma^2.
+\end{eqnarray*}
+
+## Exemplo: o modelo de intercepto aleatório
+
+- Similarmente, a covariância marginal entre qualquer par de respostas $Y_{ij}$ e $Y_{ik}$ é dada por
+
+\begin{eqnarray*}
+\Cov(Y_{ij}, Y_{ik}) &=& \Cov(X_{ij}'\beta + b_i + \epsilon_{ij}, X_{ik}'\beta + b_i + \epsilon_{ik})\\
+ &=& \Cov(b_i + \epsilon_{ij}, b_i + \epsilon_{ik})\\
+ &=& \Cov(b_i, b_i) + \Cov(b_i, \epsilon_{ik}) + \Cov(\epsilon_{ij}, b_i) + \Cov(\epsilon_{ij}, \epsilon_{ik})\\
+ &=& \Var(b_i)\\
+ &=& \sigma^2_b.
+\end{eqnarray*}
+
+## Exemplo: o modelo de intercepto aleatório
+
+Assim, a matriz de covariância marginal das medidas repetidas tem o seguinte padrão de __simetria composta__:
+
+$$
+\Cov(Y_i) = \left(\begin{array}{ccccc}
+\sigma^2_b + \sigma^2 & \sigma^2_b & \sigma^2_b & \cdots & \sigma^2_b \\
+\sigma^2_b & \sigma^2_b + \sigma^2 & \sigma^2_b & \cdots & \sigma^2_b \\
+\sigma^2_b & \sigma^2_b & \sigma^2_b + \sigma^2 & \cdots & \sigma^2_b \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+\sigma^2_b & \sigma^2_b & \sigma^2_b & \cdots& \sigma^2_b + \sigma^2
+\end{array}
+\right).
+$$
+
+## Exemplo: o modelo de intercepto aleatório
+
+<!-- - Este é o único modelo de covariância que surge nos modelos de padrões (consulte a última aula) e de efeitos aleatórios. -->
+- Dado que a covariância entre qualquer par de medidas repetidas é $\sigma^2_b$, a correlação é
+
+$$
+\Corr(Y_{ij}, Y_{ik}) = \frac{\sigma^2_b}{\sigma^2_b + \sigma^2}.
+$$
+
+- Essa expressão simples para a correlação enfatiza um aspecto importante dos modelos de efeitos mistos: a introdução de um efeito individual aleatório, $b_i$, pode ser visto como induzir correlação entre as medidas repetidas.
+- Embora o modelo de interceptos aleatórios seja o exemplo mais simples de um modelo linear de efeitos mistos, e a estrutura de covariância resultante geralmente não é apropriada para dados longitudinais, as ideias básicas podem ser generalizadas para fornecer um modelo muito versátil para a análise de dados longitudinais.
+
+## Extensão: Modelo de intercepto e inclinação aleatórios
+
+- Considere um modelo com interceptos e inclinações que variam aleatoriamente entre indivíduos,
+
+$$
+Y_{ij} = \beta_1 + \beta_2t_{ij} + b_{1i} + b_{2i}t_{ij} + \epsilon_{ij},\ j = 1, \ldots, n_i,
+$$
+
+em que $t_{ij}$ indica o tempo da $j$-ésima resposta no $i$-ésimo indivíduo.
+
+- Este modelo postula que os indivíduos variam não apenas no nível de resposta da linha de base (quando $t_{i1} = 0$), mas também em termos de alterações na resposta ao longo do tempo.
+- Os efeitos das covariáveis (por exemplo, devido a tratamentos, exposições) podem ser incorporados permitindo que a média de interceptos e inclinações dependa das covariáveis.
+
+## Modelo de intercepto e inclinação aleatórios
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.height='70%',  out.width='60%', paged.print=FALSE}
+knitr::include_graphics(here::here('images', 'fig_8_3.png'))
+```
+
+## Modelo de intercepto e inclinação aleatórios
+
+Por exemplo, considere o estudo de dois grupos comparando um tratamento e um grupo controle:
+
+$$
+Y_{ij} = \beta_1 + \beta_2t_{ij} + \beta_3{\rm trt}_i + \beta_4t_{ij} \times {\rm trt}_i + b_{1i} + b_{2i}t_{ij} + \epsilon_{ij},
+$$
+
+em que ${\rm trt}_i = 1$ se o $i$-ésimo indivíduo é atribuído ao grupo de tratamento e ${\rm trt}_i = 0$ caso contrário.
+
+- O modelo pode ser reexpresso da seguinte maneira para o grupo controle e o grupo de tratamento, respectivamente:
+    + $\mathbf{trt = 0}$: $Y_{ij} = (\beta_1 + b_{1i}) + (\beta_2 + b_{2i})t_{ij} + \epsilon_{ij}$,
+    + $\mathbf{trt = 1}$: $Yij = Y_{ij} = (\beta_1 + \beta_3 + b_{1i}) + (\beta_2 + \beta_4 + b_{2i})t_{ij} + \epsilon_{ij}$.
+
+## Modelo de intercepto e inclinação aleatórios
+
+- considere a covariância induzida pela introdução de interceptos e inclinações aleatórios.
+    + Assumindo $b_{1i} \sim N(0, \sigma^2_{b_1})$, $b_{2i} \sim N(0, \sigma^2_{b_2})$ (com $\Cov(b_{1i}, b_{2i}) = \sigma_{b_1,b_2}$) e $\epsilon_{ij}\sim N(0, \sigma^2)$, então
+
+\begin{eqnarray*}
+\Var(Y_{ij}) &=& \Var(b_{1i} + b_{2i}t_{ij} + \epsilon_{ij})\\
+&=& \Var(b_{1i}) + 2t_{ij}\Cov(b_{1i}, b_{2i}) + t^2_{ij}\Var(b_{2i}) + \Var(\epsilon_{ij})\\
+&=& \sigma^2_{b_1} + 2t_{ij}\sigma_{b_1, b_2} + t^2_{ij}\sigma^2_{b_2} + \sigma^2.
+\end{eqnarray*}
+
+- Da mesma forma, pode ser demonstrado __(para casa!)__ que
+
+$$
+\Cov (Y_{ij}, Y_{ik}) = \sigma^2_{b_1} + (t_{ij} + t_{ik})\sigma_{b_1, b_2} + t_{ij}t_{ik}\sigma^2_{b_2}.
+$$
+
+- Neste modelo, as variâncias e correlações (covariância) são expressas como uma __função explícita do tempo__, $t_{ij}$.
+
+## Modelo linear de efeitos mistos
+
+- Pode permitir que qualquer subconjunto dos parâmetros de regressão varie aleatoriamente.
+- Usando a notação vetorial, o modelo linear de efeitos mistos pode ser expresso como
+
+$$
+Y_{ij} = X_{ij}'\beta + Z_{ij}'b_i + \epsilon_{ij},
+$$
+
+em que $b_i$ é um vetor $(q \times 1)$ de efeitos aleatórios e $Z_{ij}$ é o vetor de covariáveis que ligam os efeitos aleatórios a $Y_{ij}$.
+
+## Modelo linear de efeitos mistos
+
+- __Nota:__ os componentes de $Z_{ij}$ são um __subconjunto das covariáveis__ em $X_{ij}$ (ou seja, $q \leq p$).
+- Por exemplo, considere o modelo de interceptos e inclinações aleatórios apresentado anteriormente,
+
+$$
+Y_{ij} = \beta_1 + \beta_2t_{ij} + \beta_3{\rm trt}_i + \beta_4t_{ij} \times {\rm trt}_i + b_{1i} + b_{2i}t_{ij} + \epsilon_{ij}.
+$$
+
+- Neste modelo, $X_{ij}' = [1\quad t_{ij}\quad {\rm trt}_i\quad t_{ij}*{\rm trt}_{ij}]$ e $Z_{ij}' = [1\quad t_{ij}]$.
+
+## Modelo linear de efeitos mistos
+
+- Em geral, qualquer componente pode variar aleatoriamente simplesmente incluindo a covariável correspondente em $Z_{ij}$.
+- Supõe-se que os efeitos aleatórios, $b_i$, tenham uma distribuição normal multivariada com média zero e matriz de covariância denotada por $G$,
+
+$$
+b_i\sim N (0, G).
+$$
+
+- Por exemplo, no modelo de intercepto e inclinação aleatórios,
+
+$$
+Y_{ij} = \beta_1 + \beta_2t_{ij} + \beta_3{\rm trt}_i + \beta_4t_{ij} \times {\rm trt}_i + b_{1i} + b_{2i}t_{ij} + \epsilon_{ij}.
+$$
+
+$G$ é uma matriz $2\times 2$ com componentes únicos $g_{11} = \Var(b_{1i})$, $g_{12} = \Cov (b_{1i}, b_{2i})$ e $g_{22} = \Var(b_{2i})$.
+
+## Modelo linear de efeitos mistos
+
+- Supõe-se que os erros intra-individual, $\epsilon_{ij}$, tenham uma distribuição normal multivariada com média zero e matriz de covariância denotada por $R_i$,
+
+$$
+\epsilon_{ij}\sim N (0, R_i).
+$$
+
+- __Nota:__ geralmente, assume-se que $R_i = \sigma^2I$, em que $I$ é uma matriz identidade $(n_i\times n_i)$.
+
+- Ou seja, quando $R_i = \sigma^2I$, os erros $\epsilon_{ij}$ dentro de um indivíduo __não são correlacionados__, com variância homogênea.
+    + "suposição de __independência condicional__".
+- Em princípio, um modelo __estruturado__ para $R_i$ pode ser assumido, por exemplo, AR(1).
+
+## Médias condicionais e marginais
+
+- No modelo linear de efeitos mistos,
+
+$$
+Y_{ij} = X_{ij}'\beta + Z_{ij}'b_i + \epsilon_{ij},
+$$
+
+existe uma distinção importante entre a __média condicional__,
+
+$$
+\E(Y_{ij}|X_{ij}, b_i) = X_{ij}'\beta + Z_{ij}'b_i,
+$$
+
+e a __média marginal__,
+
+$$
+E (Y_{ij}|X_{ij}) = X_{ij}'\beta.
+$$
+
+- A primeira descreve a resposta média para um indivíduo, o último descreve a resposta média calculada sobre os indivíduos.
+
+## Médias condicionais e marginais
+
+A distinção entre as médias condicional e marginal é melhor compreendida com um exemplo simples.
+
+- Considere o modelo simples de intercepto e inclinação aleatórios,
+
+$$
+Y_{ij} = \beta_1 + \beta_2t_{ij} + b_{1i} + b_{2i}t_{ij} + \epsilon_{ij}.
+$$
+
+- Nesse modelo, podemos distinguir a média condicional de um indivíduo,
+
+$$
+\E(Y_{ij}|b_{1i}, b_{2i}) = \beta_1 + \beta_2t_{ij} + b_{1i} + b_{2i}t_{ij},
+$$
+
+e a média marginal média dos indivíduos,
+
+$$
+\E(Y_{ij}) = \beta_1 + \beta_2t_{ij}.
+$$
+
+## Médias condicionais e marginais
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.height='70%',  out.width='60%', paged.print=FALSE}
+knitr::include_graphics(here::here('images', 'fig_8_3.png'))
+```
+
+## Covariância condicional e marginal
+
+- A variância e covariância também podem ser definidas em relação às médias condicionais e marginais.
+- No modelo de efeitos lineares mistos,
+
+$$
+Y_{ij} = X_{ij}'\beta + Z_{ij}'b_i + \epsilon_{ij},
+$$
+
+a variância condicional, $\Var(Y_{ij}|X_{ij}, b_i) = \Var(\epsilon_{ij}) = \sigma^2$ (quando $R_i = \sigma^2I$).
+
+- Em contraste, a covariância marginal do vetor de respostas $Y_i$ é 
+
+$$
+\Cov(Y_i|X_i) = Z_iGZ_i' + R_i = Z_iGZ_i' + \sigma^2I:
+$$
+
+- __Nota:__ Essa matriz possui elementos fora da diagonal diferentes de zero (isto é, a introdução de efeitos aleatórios, $b_i$, induz correlação marginalmente entre os $Y_i$).
+
+## Covariância condicional e marginal
+
+- A distinção entre (co)variâncias condicional e marginal é melhor compreendida considerando o modelo simples de intercepto e inclinação aleatórios,
+
+$$
+Y_{ij} = \beta_1 + \beta_2t_{ij} + b_{1i} + b_{2i}t_{ij} + \epsilon_{ij}.
+$$
+
+- A variância condicional, $\Var(Y_{ij}|b_{1i}, b_{2i}) = \Var(\epsilon_{ij}) = \sigma^2$, descreve a variância nas observações de um indivíduo em torno de sua média indivíduo-específica.
+- A covariância marginal descreve a (co)variância das observações em relação à média marginal:
+
+\begin{eqnarray*}
+\Var(Y_{ij}) &=& \sigma^2_{b_1} + 2t_{ij}\sigma_{b_1, b_2} + t^2_{ij}\sigma^2_{b_2} + \sigma^2,\\
+\Cov(Y_{ij}, Y_{ik}) &=& \sigma^2_{b_1} + (t_{ij} + t_{ik})\sigma_{b_1, b_2} + t_{ij}t_{ik}\sigma^2_{b_2}.
+\end{eqnarray*}
+
+## Covariância condicional e marginal
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.height='70%',  out.width='60%', paged.print=FALSE}
+knitr::include_graphics(here::here('images', 'fig_8_3.png'))
+```
+
+## Estimação: máxima verossimilhança
+
+- Estimador de máxima verossimilhança de $\beta_1, \beta_2, \ldots, \beta_p$ é o estimador de __mínimos quadrados generalizados__ (MQG) e depende da covariância marginal entre as medidas repetidas.
+- Em geral, não há expressão simples para o estimador de máxima verossimilhança dos componentes de covariância -- $G$ e $\sigma^2$ (ou $R$) -- requer técnicas iterativas.
+- Porque a estimativa de covariância de máxima verossimilhança é enviesada em amostras pequenas, usa-se a estimação de máxima verossimilhança restrita (REML).
+
+## Exemplo: Ensaio de Terapia por Exercício
+
+- Indivíduos foram designados para um dos dois programas de levantamento de peso para aumentar a força muscular.
+- Tratamento 1: o número de repetições dos exercícios foi aumentado à medida que os indivíduos se tornaram mais fortes.
+- Tratamento 2: o número de repetições foi mantido constante, mas a quantidade de peso foi aumentada à medida que os indivíduos se tornaram mais fortes.
+- As medidas de força corporal foram realizadas na linha de base e nos dias 2, 4, 6, 8, 10 e 12.
+- Concentramo-nos apenas nas medidas de força obtidas na linha de base (ou no dia 0) e nos dias 4, 6, 8 e 12.
+
+## Exemplo: Ensaio de Terapia por Exercício {.allowframebreaks}
+
+```{r carrega_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+# ----------------------------------------------------
+# Carregando pacotes do R
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+library(dplyr)
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+af <- read_dta(
+  file = here::here("data", "exercise.dta"))
+af
+```
+
+## Exemplo: Ensaio de Terapia por Exercício {.allowframebreaks}
+
+```{r transforma_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+names(af)[which(names(af) == "group")] <- "trt"
+af.longo <- gather(data = af,
+                        key = "tempo",
+                        value = "fc", -id, -trt)
+af.longo
+af.longo <- subset(af.longo, tempo != "y2" & tempo != "y10")
+
+af.longo$dia <- factor(af.longo$tempo,
+                       labels = c(0, 12, 4, 6, 8))
+af.longo$dia <- factor(af.longo$dia,
+                       levels = c("0", "4", "6", "8", "12"))
+af.longo$tempo <- as.numeric(
+  as.character(af.longo$dia))
+af.longo$trt <- factor(af.longo$trt)
+af.longo
+```
+
+## Exemplo: Ensaio de Terapia por Exercício {.allowframebreaks}
+
+```{r time_plot2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+p <- ggplot(data = af.longo,
+            mapping = aes(x = dia, y = fc,
+                          group = id, colour = trt)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Tempo (dias)",
+       y = "Força corporal",
+       colour = "Tratamento")
+p + theme_gray()
+```
+
+## Exemplo: Ensaio de Terapia por Exercício {.allowframebreaks}
+
+```{r time_plot3b, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+library(dplyr)
+
+af.resumo <- af.longo %>% 
+  group_by(trt, dia) %>% 
+  summarise(fc.m = mean(fc, na.rm = T)) %>% 
+  mutate(dia = as.numeric(as.character(dia)))
+
+p <- ggplot(data = af.resumo,
+            mapping = aes(x = dia,
+                          y = fc.m,
+                          colour = trt)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Tempo (dias)",
+       y = "Força corporal",
+       colour = "Tratamento")
+p
+```
+
+## Exemplo: Ensaio de Terapia por Exercício {.allowframebreaks}
+
+- Considere um modelo com intercepto e inclinação que variam aleatoriamente entre os indivíduos, e que permita que os valores médios do intercepto e da inclinação sejam diferentes nos dois grupos de tratamento.
+- Para esse modelo, use o seguinte código:
+
+```{r mlem, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+af.longo <- as.data.frame(af.longo)
+library(nlme)
+mod1 <- lme(fc ~ trt*tempo,
+            random = ~ 1 + tempo | id,
+            na.action = na.omit,
+            data = af.longo)
+```
+
+## Exemplo: Ensaio de Terapia por Exercício
+
+- Com base nas estimativas dos efeitos fixos:
+    + a taxa constante de aumento de força no grupo 1 é de 0,135 por dia
+    + a taxa constante de aumento de força no grupo 2 é de 0,173
+(0,35 $+$ 0,038) por dia a diferença entre essas duas taxas, 0,038 (EP = 0,064) não é
+estatisticamente significante.
+- Não parece haver diferenças entre os dois grupos em seu padrão de aumento de força.
+
+- __Exercício:__ ajuste o modelo de intercepto aleatório para os mesmos dados.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'cropped-logo-60-tranparente.png'))
+```
