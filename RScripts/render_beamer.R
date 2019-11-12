@@ -2,7 +2,7 @@ library(here)
 library(rmarkdown)
 
 pasta <- "Rmds"
-arquivo <- "12_modelos_lineares_de_efeitos_mistos"
+arquivo <- "13_modelos_lineares_de_efeitos_mistos_continuacao"
 
 arquivo_rmd <- paste0(arquivo, ".Rmd")
 arquivo_pdf <- paste0(arquivo, ".pdf")
