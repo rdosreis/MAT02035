@@ -56,7 +56,7 @@ Y_{in_i}\\
 1 & t_{in_i}\\
 \end{array}\right) \left(\begin{array}{c}
 \beta_{1i}\\
-\beta_{i2i}\\
+\beta_{2i}\\
 \end{array}\right) + \left(\begin{array}{c}
 \epsilon_{i1}\\
 \epsilon_{i2}\\
@@ -84,6 +84,7 @@ em que $A_i$ é uma matriz $q\times p$ de um conjunto de covariáveis tempo-inva
 $$
 \Cov(\beta_i) = G.
 $$
+\footnotesize
 
 - A especificação de um modelo para a média e a covariância de $\beta_i$ completa o segundo estágio da formulação do modelo.
 
@@ -104,7 +105,7 @@ Y_{in_i}\\
 1 & t_{in_i}\\
 \end{array}\right) \left(\begin{array}{c}
 \beta_{1i}\\
-\beta_{i2i}\\
+\beta_{2i}\\
 \end{array}\right) + \left(\begin{array}{c}
 \epsilon_{i1}\\
 \epsilon_{i2}\\
@@ -310,6 +311,7 @@ RV \sim 0.5\chi_q + 0.5\chi_{q+1}.
 $$
 
 __Exemplo:__
+
 - Modelo completo: $q = 2$ (intercepto e inclinação aleatórios)
 - Modelo restrito: $q = 1$ (somente intercepto aleatório)
     + Teste usual __(errado)__: nível de significância: 5,99
@@ -351,10 +353,10 @@ o BLUP de $b_i$.
 ## Predição de efeitos aleatórios
 
 $$
-\hat{Y}_i = X_i\hat{\beta} + Z_i\hat{b}_i = (\hat{R}_i\hat{\Sigma}_i^{-1})X_i\hat{\beta} + (I_{n_i} + \hat{R}_i\hat{\Sigma}_i^{-1})Y_i,
+\hat{Y}_i = X_i\hat{\beta} + Z_i\hat{b}_i = (\hat{R}_i\hat{\Sigma}_i^{-1})X_i\hat{\beta} + (I_{n_i} - \hat{R}_i\hat{\Sigma}_i^{-1})Y_i,
 $$
 
-em que $\Var(\epsilon_i) = R_i$.
+em que $\Var(\epsilon_i) = R_i$, e $\hat{\Sigma}_i\hat{\Sigma}_i^{-1} = I_{n_i} = (Z_i\hat{G}Z_i' + \hat{R}_i)\hat{\Sigma}_i^{-1} = Z_i\hat{G}Z_i'\hat{\Sigma}_i^{-1} + \hat{R}_i\hat{\Sigma}_i^{-1}$.
 
 - __Interpretação:__ média ponderada entre a média populacional $X_i\hat{\beta}$ e o $i$-ésimo perfil observado. Isto significa que o perfil predito é "encolhido" na direção
 da média populacional.
