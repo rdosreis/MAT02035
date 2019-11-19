@@ -1,0 +1,360 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Análise de resíduos e diagnóstico"
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2019
+---
+
+# Introdução
+
+## Introdução
+
+- A análise de dados longitudinais não fica completa sem uma  examinação dos __resíduos__.
+    + Ou seja, a verificação das suposições impostas ao modelo e ao processo de inferência.
+- As ferramentas usuais de análise de resíduos para a regressão convencional (com observações independentes) podem ser estendidas para a estrutura longitudinal.
+
+# Resíduos
+
+## Resíduos
+
+- Defina o __vetor de resíduos__ para cada indivíduo
+
+$$
+r_i = Y_i - X_i\hat{\beta}.
+$$
+
+- O vetor de resíduos tem média zero e fornece uma estimativa para o vetor de erros
+
+$$
+e_i = Y_i - X_i\beta.
+$$
+
+## Resíduos
+
+- Os resíduos $r_i$ podem ser usados para __verificar__ se há __desvios sistemáticos__ do modelo quanto à __resposta média__;
+    + eles também podem formar a base de uma __avaliação da adequação do modelo para a covariância__.
+- Por exemplo, um gráfico de dispersão dos resíduos $r_{ij} = Y_{ij} - X_{ij}'\hat{\beta}$ _versus_ a resposta média predita $\hat{\mu}_{ij} = X_{ij}'\hat{\beta}$ pode examinar a presença de qualquer tendência sistemática.
+    + Em um __modelo especificado corretamente__, o gráfico de dispersão não deve exibir um padrão sistemático, com uma __dispersão__ mais ou menos __aleatória__ em torno de uma média constante zero.
+
+## Resíduos
+
+Para propósitos mais práticos,os gráficos de resíduos podem ser usados para detectar discrepâncias no modelo para a resposta média ou a presença de observações distantes ("outliers") que requerem investigação adicional.
+
+No entanto, existem duas propriedades dos resíduos de uma análise de dados longitudinais que devem ser lembradas.
+
+1. Os componentes do vetor de resíduos $r_i$ e não tem necessariamente variância constante. 
+    - Como resultado, diagnósticos de resíduos padrão para examinar a homogeneidade da variância residual ou a autocorrelação entre os resíduos __devem ser totalmente evitados__.
+2. Embora os resíduos de uma regressão linear univariada não estejam correlacionados com as covariáveis, os resíduos de uma análise de regressão de dados longitudinais podem estar correlacionados com as covariáveis. 
+    - Como resultado, pode haver uma tendência sistemática aparente no gráfico de dispersão dos resíduos contra uma covariável selecionada.
+
+# Resíduos transformados
+
+## Resíduos transformados
+
+- Para contornar alguns dos problemas mencionados com o uso de resíduos a partir de dados longitudinais com base em $r_i$, podemos __transformar os resíduos__.
+- Há muitas possibilidades para transformar os resíduos.
+- A tranformação deve ser realizada de forma que os resíduos "imitem" aqueles da regressão linear padrão.
+- Os res´ıduos $r^{*}_i$ definidos a seguir são não-correlacionados e têm variância unitária:
+
+$$
+r^{*}_i = L^{-1}_ir_i = L^{-1}_i(Y_i - X_i\hat{\beta}),
+$$
+
+em que Li é a matriz triangular superior resultante da __decomposição de Cholesky__ da matriz de covariâncias estimada $\hat{\Sigma}_i$, ou seja, $\hat{\Sigma}_i = L_iL_i'$.
+
+## Resíduos transformados: gráficos
+
+- Dado o conjunto de resíduos transformados, $r^{*}_i$, todos os diagnósticos de resíduos usuais para regressão linear padrão podem ser aplicados.
+- Por exemplo, podemos construir um gráfico de dispersão dos resíduos transformados, $r^{*}_{ij}$, _versus_ os valores preditos transformados, $\mu^{*}_{ij}$, em que
+
+$$
+\mu^{*}_i = L^{-1}_i\hat{\mu}_i = L^{-1}_iX_i\hat{\beta}.
+$$
+
+- Em um modelo especificado corretamente, esse gráfico de dispersão não deve exibir um padrão sistemático, com uma dispersão aleatória em torno de uma média constante zero e com um intervalo constante para variados $\mu^{*}_{ij}$.
+
+## Resíduos transformados: gráficos
+
+- Da mesma forma, podemos construir um gráfico de dispersão dos resíduos transformados _versus_ covariáveis transformadas selecionadas.
+- Com dados longitudinais, um gráfico de dispersão dos resíduos transformados _versus_ o tempo transformado (ou idade) pode ser particularmente útil para avaliar a adequação das premissas do modelo sobre padrões de mudança na resposta média ao longo do tempo.
+- Por fim, os resíduos transformados também tornam um pouco mais fácil identificar assimetria e possíveis observações atípica que requerem maior investigação.
+
+## Resíduos transformados: gráficos
+
+- Um __gráfico de quantil normal__ (ou o chamado quantil-quantil ou gráfico de Q-Q) dos resíduos transformados pode ser usado para avaliar a suposição de distribuição normal e identificar valores extremos.
+    + Ou seja, com base nas posições (_ranks_) dos resíduos transformados, podemos gerar um gráfico dos quantis amostrais dos resíduos contra os quantis esperados se eles tiverem uma distribuição normal.
+    + Se os resíduos se afastam discernivelmente de uma linha reta, a suposição de normalidade pode não ser sustentável.
+    + A assimetria é geralmente indicada por um padrão em forma de arco no gráfico quantil normal; os outliers aparecerão como "retardatários", longe dos fins da linha reta.
+
+# Semi-variograma
+
+## Semi-variograma
+
+- Historicamente, o __semi-variograma__ tem sido amplamente utilizado em __estatística espacial__ para representar a estrutura de covariância em dados geoestatísticos.
+- Ao contrário dos dados espaciais bidimensionais, as coordenadas dos dados longitudinais são ao longo de uma única dimensão, a saber, o tempo.
+- Para dados longitudinais, o semi-variograma é definido como __metade do quadrado da diferença esperada__ entre os resíduos obtidos no mesmo indivíduo.
+
+## Semi-variograma
+
+- O semi-variograma, denotado por $\gamma(h_{ijk})$, é dado por
+
+$$
+\gamma(h_{ijk}) = \frac{1}{2}\E(r_{ij} - r_{ik})^2,
+$$
+
+em que $h_{ijk}$ é tempo decorrido entre a $j$-ésima e a $k$-ésima medidas repetidas do $i$-ésimo indivíduo.
+
+- Como os resíduos tem média zero, o semi-variograma pode ser expresso como
+
+\begin{eqnarray*}
+\gamma(h_{ijk}) &=& \frac{1}{2}\E(r_{ij} - r_{ik})^2\\
+&=& \frac{1}{2}\E(r_{ij}^2 + r_{ik}^2 - 2r_{ij}r_{ik})\\
+&=& \frac{1}{2}\Var(r_{ij}) + \frac{1}{2}\Var(r_{ik}) - \Cov(r_{ij},r_{ik}).
+\end{eqnarray*}
+
+## Semi-variograma
+
+- Embora o semi-variograma possa ser usado para sugerir modelos apropriados para a covariância, aqui simplesmente o usamos como uma ferramenta de diagnóstico para avaliar a adequação de um modelo selecionado para a covariância.
+- Quando o semi-variograma é aplicado aos resíduos transformados, $r^{*}_{ij}$, ele simplifica a
+
+$$
+\gamma(h_{ijk}) = \frac{1}{2}\Var(r^{*}_{ij}) + \frac{1}{2}\Var(r^{*}_{ik}) - \Cov(r^{*}_{ij},r^{*}_{ik}) = \frac{1}{2}(1) + \frac{1}{2}(1) - 0 = 1.
+$$
+
+## Semi-variograma
+
+- Assim, em um modelo especificado corretamente para a covariância, o gráfico do semi-variograma para os resíduos transformados _versus_ o tempo decorrido entre as observações correspondentes deve flutuar aleatoriamente em torno de uma linha horizontal centralizada em $1$.
+
+# Exemplo
+
+## Exemplo: Influência da menarca nas mudanças do percentual de gordura corporal
+
+- Estudo prospectivo do aumento de gordura corporal em uma coorte de 162 garotas.
+- Sabe-se que o percentual de gordura nas garotas tem um aumento considerável no período em torno da menarca (primeira menstruação).
+- Parece que este aumento continua significativo por aproximadamente quatro anos depois da menarca, mas este comportamento ainda não foi devidamente estudado.
+- As meninas foram acompanhadas até quatro anos depois da menarca.
+
+## Exemplo
+
+- Há um total de 1049 medidas, com uma média de 6,4 medidas por menina.
+- Variáveis do estudo:
+    + Resposta: Percentual de gordura corporal;
+    + Covariáveis: Tempo em relação à menarca (idade da menina no instante observado menos idade quando teve a menarca) - pode ser positivo ou negativo.
+
+## Exemplo {.allowframebreaks}
+
+```{r carrega_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+# ----------------------------------------------------
+# Carregando pacotes do R
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+library(dplyr)
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+fat <- read_dta(
+  file = here::here("data", "fat.dta"))
+fat
+```
+
+## Exemplo {.allowframebreaks}
+
+```{r time_plot2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+p <- ggplot(data = fat,
+            mapping = aes(x = time, y = pbf,
+                          group = id)) +
+  geom_line(alpha = 0.3) +
+  geom_vline(xintercept = 0,
+             colour = "lightsalmon",
+             linetype = "longdash") +
+  labs(x = "Tempo (anos)",
+       y = "Percentual de gordura corporal")
+p +   geom_smooth(data = fat,
+              mapping = aes(x = time, y = pbf,
+                            group = NULL),
+              method = "loess", se = FALSE)
+```
+
+## Exemplo
+
+- O modelo inicialmente proposto considera que cada garota tem uma curva de crescimento _spline_ linear com um _knot_ no tempo da menarca.
+- Ajustou-se o seguinte modelo linear de efeitos mistos:
+
+$$
+\E(Y_{ij}|b_i) = \beta_1 + \beta_2t_{ij} + \beta_3(t_{ij})_{+} + b_{1i} + b_{2i}t_{ij} + b_{3i}(t_{ij})_{+},
+$$
+
+em que 
+
+$$
+(t_{ij})_{+} = \left\{\begin{array}{lll}
+t_{ij} & \mbox{se} & t_{ij} > 0,\\
+0 & \mbox{se} & t_{ij} \leq 0.\\
+\end{array}\right.
+$$
+
+## Exemplo
+
+```{r mlem, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+fat <- as.data.frame(fat)
+library(nlme)
+library(lspline)
+mod1 <- lme(pbf ~ lspline(x = time,
+                          knots = 0,
+                          marginal = TRUE),
+            random = ~ lspline(x = time,
+                          knots = 0,
+                          marginal = TRUE) | id,
+            data = fat)
+```
+
+## Exemplo
+
+```{r coefm1, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, results='asis'}
+coef.tab <- summary(mod1)$tTable[,-c(3,5)]
+row.names(coef.tab) <- c("(Intercepto)", "tempo", "(tempo)$_{+}$")
+knitr::kable(
+  coef.tab,
+  digits = c(4, 4, 2),
+  col.names = c("Estimativa", "EP", "Z"),
+  caption = "Coeficientes de regressão estimados
+  (efeitos fixos) e erros padrões para os o 
+  modelo linear por partes para dos dados de 
+  percentual de gordura.")
+```
+
+## Exemplo
+
+Matriz $G$ de covariância de $b_i$
+
+```{r Gm1, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+G <- getVarCov(mod1, type = "random.effects")
+matrix(G, ncol = 3, byrow = T)
+
+mod1$sigma^2 # sigma^2 ("R_i")
+```
+
+## Exemplo
+
+Calculando e transformando os resíduos e valores preditos
+
+```{r resm1, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+library(mgcv)
+# Calculate the residuals
+res <- residuals(mod1, level = 0)
+res2 <- residuals(mod1, level = 0, type = "normalized")
+pred <- fitted(mod1, level = 0)
+# Cholesky residuals
+est.cov <- extract.lme.cov(mod1, fat) # We extract the blocked covariance function of the residuals
+Li <- t(chol(est.cov)) # We find the Cholesky transformation of the residuals. (The transform is to get the lower trangular matrix.)
+rest <- solve(Li) %*% res # We then calculate the transformed residuals.
+predt <- solve(Li) %*% pred
+```
+
+## Exemplo
+
+```{r histres, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, out.height="90%", fig.align='center'}
+par(mfrow = c(1,2))
+hist(x = res, prob = T,
+     col = "lightgrey",
+     border = "white",
+     main = "",
+     xlab = "Resíduos",
+     ylab = "Densidade")
+lines(x = sort(res),
+      y = dnorm(x = sort(res),
+                mean = mean(res),
+                sd = sd(res)),
+      col  = "steelblue")
+
+hist(x = rest, prob = T,
+     col = "lightgrey",
+     border = "white",
+     main = "",
+     xlab = "Resíduos transformados",
+     ylab = "Densidade")
+lines(x = sort(rest),
+      y = dnorm(x = sort(rest),
+                mean = mean(rest),
+                sd = sd(rest)),
+      col  = "steelblue")
+```
+
+## Exemplo
+
+```{r qqres, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, out.height="90%", fig.align='center'}
+par(mfrow = c(1,2))
+qqnorm(y = res, main = "",
+     xlab = "Quantis amostrais dos resíduos",
+     ylab = "Quantis teóricos da normal padrão")
+qqline(y = res)
+qqnorm(y = rest, main = "",
+     xlab = "Quantis amostrais dos resíduos transformados",
+     ylab = "Quantis teóricos da normal padrão")
+qqline(y = rest)
+```
+
+## Exemplo
+
+Gráfico de dispersão dos Resíduos versus Valores ajustados
+
+```{r scatres, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, out.height="80%", fig.align='center'}
+par(mfrow = c(1,2))
+plot(pred, res,
+     xlab = "Valores preditos",
+     ylab = "Resíduos")
+abline(h = 0)
+lines(lowess(pred, res),
+      type = "l", lwd = 2,
+      col = "steelblue")
+plot(predt, rest, 
+     xlab = "Valores preditos transformados",
+     ylab = "Resíduos transformados")
+abline(h = 0)
+lines(lowess(predt, rest),
+      type = "l", lwd = 2,
+      col = "steelblue")
+```
+
+## Exemplo
+
+Semi-variograma? (Este gráfico ainda precisa ser melhor estudado)
+
+```{r variograma, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, out.height="80%", fig.align='center'}
+par(mfrow = c(1,1))
+plot(Variogram(mod1,
+               form = ~ lspline(x = time,
+                                knots = 0,
+                                marginal = TRUE) | id,
+               resType = "normalized"))
+```
+
+# Exercício
+
+## Exercício
+
+- Considere o exemplo anterior e ajuste um modelo linear de efeitos mistos com um termo _spline_ quadrático.
+- Realize a análise de resíduos para este modelo.
+
+# Avisos
+
+## Avisos
+
+- __Próxima aula (21/11):__ Modelos lineares generalizados para dados longitudinais.
+    + Revisão de modelos lineares generalizados.
+- __Para casa:__ ler o Capítulos 9 e 10 do livro "__Applied Longitudinal Analysis__".
+    + Caso ainda não tenha lido, leia também os Caps. 1, 2, 3, 4, 5, 6, 7 e 8.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'blackwell.jpg'))
+```
