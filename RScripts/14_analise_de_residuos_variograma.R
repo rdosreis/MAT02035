@@ -12,6 +12,8 @@ fat <- read_dta(
   file = here::here("data", "fat.dta"))
 fat
 
+fat$time0 <- ifelse(fat$time > 0, fat$time, 0)
+fat$time0sq <- ifelse(fat$time > 0, fat$time^2, 0)
 
 ## ----time_plot2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"----
 p <- ggplot(data = fat,
@@ -23,10 +25,10 @@ p <- ggplot(data = fat,
              linetype = "longdash") +
   labs(x = "Tempo (anos)",
        y = "Percentual de gordura corporal")
-p + geom_smooth(data = fat,
-                mapping = aes(x = time, y = pbf,
-                              group = NULL),
-                method = "loess", se = FALSE)
+p +   geom_smooth(data = fat,
+              mapping = aes(x = time, y = pbf,
+                            group = NULL),
+              method = "loess", se = FALSE)
 
 
 ## ----mlem, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------
@@ -42,6 +44,11 @@ mod1 <- lme(pbf ~ lspline(x = time,
             data = fat)
 
 
+mod1 <- lme(pbf ~ time + time0 + time0sq,
+            random = ~ time + time0 + time0sq | id,
+            data = fat)
+summary(mod1)
+
 ## ----coefm1, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, results='asis'----
 coef.tab <- summary(mod1)$tTable[,-c(3,5)]
 row.names(coef.tab) <- c("(Intercepto)", "tempo", "(tempo)$_{+}$")
@@ -55,22 +62,6 @@ knitr::kable(
   percentual de gordura.")
 
 
-## ----margeff, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"----
-library(ggeffects)
-
-margeff <- ggpredict(model = mod1, terms = "time")
-
-p + geom_smooth(data = fat,
-                mapping = aes(x = time, y = pbf,
-                              group = NULL),
-                method = "loess", se = FALSE) +
-  geom_line(data = margeff,
-            mapping = aes(x = x, y = predicted,
-                          group = NULL),
-            colour = "purple", size = 1) +
-  theme_bw()
-
-
 ## ----Gm1, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------
 G <- getVarCov(mod1, type = "random.effects")
 matrix(G, ncol = 3, byrow = T)
@@ -82,17 +73,14 @@ mod1$sigma^2 # sigma^2 ("R_i")
 library(mgcv)
 # Calculate the residuals
 res <- residuals(mod1, level = 0)
+res2 <- residuals(mod1, level = 0, type = "normalized")
 pred <- fitted(mod1, level = 0)
 # Cholesky residuals
-est.cov <- extract.lme.cov(mod1, fat) # We extract the blocked 
-# covariance function of the residuals
-Li <- t(chol(est.cov)) # We find the Cholesky transformation 
-# of the residuals. (The transform is to get the lower 
-# triangular matrix.)
-rest <- solve(Li) %*% res # We then calculate the 
-# transformed residuals.
+est.cov <- extract.lme.cov(mod1, fat) # We extract the blocked covariance function of the residuals
+Li <- t(chol(est.cov)) # We find the Cholesky transformation of the residuals. (The transform is to get the lower trangular matrix.)
+rest <- solve(Li) %*% res # We then calculate the transformed residuals.
 predt <- solve(Li) %*% pred
-
+timet <- solve(Li) %*% fat$time
 
 ## ----histres, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, out.height="90%", fig.align='center'----
 par(mfrow = c(1,2))
@@ -124,35 +112,26 @@ lines(x = sort(rest),
 ## ----qqres, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, out.height="90%", fig.align='center'----
 par(mfrow = c(1,2))
 qqnorm(y = res, main = "",
-     ylab = "Quantis amostrais dos resíduos",
-     xlab = "Quantis teóricos da normal padrão",
-     pch = 16,
-     col = rgb(128/250,128/250,128/250, alpha = 0.3))
-qqline(y = res, col = "steelblue")
+     xlab = "Quantis amostrais dos resíduos",
+     ylab = "Quantis teóricos da normal padrão")
+qqline(y = res)
 qqnorm(y = rest, main = "",
-     ylab = "Quantis amostrais dos resíduos transformados",
-     xlab = "Quantis teóricos da normal padrão",
-     pch = 16,
-     col = rgb(128/250,128/250,128/250, alpha = 0.3))
-qqline(y = rest, col = "steelblue")
-
+     xlab = "Quantis amostrais dos resíduos transformados",
+     ylab = "Quantis teóricos da normal padrão")
+qqline(y = rest)
 
 ## ----scatres, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, out.height="80%", fig.align='center'----
 par(mfrow = c(1,2))
 plot(pred, res,
      xlab = "Valores preditos",
-     ylab = "Resíduos",
-     pch = 16,
-     col = rgb(128/250,128/250,128/250, alpha = 0.3))
+     ylab = "Resíduos")
 abline(h = 0)
 lines(lowess(pred, res),
       type = "l", lwd = 2,
       col = "steelblue")
 plot(predt, rest, 
      xlab = "Valores preditos transformados",
-     ylab = "Resíduos transformados",
-     pch = 16,
-     col = rgb(128/250,128/250,128/250, alpha = 0.3))
+     ylab = "Resíduos transformados")
 abline(h = 0)
 lines(lowess(predt, rest),
       type = "l", lwd = 2,
@@ -167,3 +146,34 @@ plot(Variogram(mod1,
                                 marginal = TRUE) | id,
                resType = "normalized"))
 
+
+
+
+fat$rest <- rest
+fat$timet <- timet
+
+fat <- arrange(fat, id, time)
+
+lag.vec <- as.vector(dist(fat$timet[fat$id == 1]))
+res.vec <- as.vector((dist(fat$rest[fat$id == 1])^2)/2)
+
+for (i in 2:length(unique(fat$id))) {
+  lag.vec <- c(lag.vec, as.vector(dist(fat$timet[fat$id == i])))
+  res.vec <- c(res.vec, as.vector((dist(fat$rest[fat$id == i])^2)/2))
+}
+
+df <- data.frame(lag = lag.vec, res = res.vec)
+
+p.var <- ggplot(df,
+                mapping = aes(x = lag, y = res)) +
+  # geom_point(alpha = .3) +
+  geom_smooth(method = "loess", se = FALSE)
+
+p.var
+
+unique(lag.vec)
+
+plot(lag.vec, res.vec, xlim = c(0, 1.5), ylim = c(0, 5))
+lines(lowess(lag.vec, res.vec),
+      type = "l", lwd = 2,
+      col = "steelblue")
