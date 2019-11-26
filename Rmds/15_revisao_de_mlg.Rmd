@@ -194,13 +194,13 @@ $$
 $$
 
 - A estimativa de MV de $\beta_2$ implica que, para cada aumento de 1 grama no peso ao nascer, a log-odds de DBP diminuam 0,0042.
-- Por exemplo, as chances de DBP para um bebê com 1200 gramas são
+- Por exemplo, a probabilidade de DBP para um bebê com 1200 gramas são
 
 $$
 \exp (4.0343 - 1200\times 0.0042) = \exp(-1.0057) = 0.3658
 $$
 
--Assim, a probabilidade predita de DBP é:
+- Assim, a probabilidade predita de DBP é:
 
 $$
 0.3658/(1 + 0.3658) = 0.268.
@@ -313,7 +313,7 @@ knitr::include_graphics(here::here('images', 'tab_11_1.png'))
 ## Regressão de Poisson: exemplo
 
 - Neste modelo, a estimativa de MV de $\beta_2$ é 0,0318. Ou seja, a taxa de CHD aumenta por um fator de $\exp(0.0318) = 1.032$ para cada cigarro fumado.
-- Alternativamente, a taxa de CHD em fumantes de um maço por dia (20 cigarros) é estimada em $(1.032)^20 = 1.88$ vezes maior que a taxa de CHD em não fumantes.
+- Alternativamente, a taxa de CHD em fumantes de um maço por dia (20 cigarros) é estimada em $(1.032)^{20} = 1.88$ vezes maior que a taxa de CHD em não fumantes.
 - Podemos incluir os fatores de risco adicionais no seguinte modelo:
 
 $$
@@ -327,7 +327,7 @@ knitr::include_graphics(here::here('images', 'tab_11_2.png'))
 ## Regressão de Poisson: exemplo
 
 - A taxa ajustada de CHD (controle da pressão arterial e tipo de comportamento) aumenta em um fator de $\exp(0.027) = 1.028$ para cada cigarro fumado.
-- A taxa ajustada de CHD em fumantes de um maço por dia (20 cigarros) é estimada em $(1.027)^20 = 1.7$ vezes maior que a taxa de CHD em não fumantes.
+- A taxa ajustada de CHD em fumantes de um maço por dia (20 cigarros) é estimada em $(1.027)^{20} = 1.7$ vezes maior que a taxa de CHD em não fumantes.
 
 ## Regressão de Poisson
 
@@ -355,25 +355,51 @@ $$
 
 - Assuma $N$ observações independentes de uma única variável resposta $Y_i$.
 - Associada a cada resposta $Y_i$, existe um vetor $p\times 1$ de covariáveis, $X_{i1}, \ldots, X_{ip}$.
-- Objetivo: o interesse principal está em relacionar a média de $Y_i$, $\mu_i=\E(Y_i|X_{i1}, \ldots, X_{ip})$, às covariáveis.
+- __Objetivo:__ o interesse principal está em relacionar a média de $Y_i$, $\mu_i=\E(Y_i|X_{i1}, \ldots, X_{ip})$, às covariáveis.
 
-## Modelos lineares generalizados
+## Modelos lineares generalizados {.allowframebreaks}
 
 Em modelos lineares generalizados:
 
-1. Assume-se que  distribuição da variável resposta pertence a família de distribuições conhecida como __família exponencial__, por exemplo, as distribuições normal, Bernoulli, binomial, Poisson, entre outras.
-2. A transformação da média da resposta, $\mu_i$, tem uma relação linear com as covariáveis por meio de uma __função de ligação__ apropriada:
+1. Assume-se que  distribuição da variável resposta, $Y_i$, pertence a família de distribuições conhecida como __família exponencial__, por exemplo, as distribuições:
+    + normal;
+    + Bernoulli;
+    + binomial;
+    + Poisson, entre outras.
+2. Um __componente sistemático__ que especifícia os efeitos das covariáveis na média da distribuição de $Y_i$
 
 $$
-g(\mu_i) = \beta_1X_{i1} + \beta_2X_{i2} + \ldots + \beta_pX_{ip},
+\eta_i = \beta_1X_{i1} + \beta_2X_{i2} + \ldots + \beta_pX_{ip} = \sum_{k=1}^p{\beta_kX_{ik}}.
+$$
+
+3. A transformação da média da resposta, $\mu_i$, tem uma relação linear com as covariáveis por meio de uma __função de ligação__ apropriada:
+
+$$
+g(\mu_i) = \eta_i = \beta_1X_{i1} + \beta_2X_{i2} + \ldots + \beta_pX_{ip},
 $$
 
 em que a função de ligação $g(\cdot)$ é uma função conhecida, por exemplo, $\log(\mu_i)$.
 
+## A família exponencial
+
+- Todas as distribuições que pertencem a família exponencial podem ser expressas como
+
+$$
+f(y_i;\theta_i,\phi) = \exp[\{y_i\theta_i - a(\theta_i)\}/\phi + b(y_i, \phi)],
+$$
+
+em que $a(\cdot)$ e $b(\cdot)$ são funções específicas que distinguem um membro da família de outro.
+
+- A família exponencia expressa desta forma tem $\theta_i$ como um parâmetro de locação ("canônico") e $\phi$ como um parâmetro de escala (ou dispersão).
+
+- __Exercício:__ Identifique as distribuições normal, Bernoulli e Poisson como membors da família exponencial.
+
 ## Média e variância das distribuições na família exponencial
 
 - Distribuições na família exponencial compartilham algumas propriedades estatísticas comuns.
-- A variância de $Y_i$ pode ser expressa em termos de
+    + Por exemplo, $\E(Y_i) = \mu_i = \frac{\partial a(\theta_i)}{\partial\theta}$ e $\Var(Y_i) = \phi\frac{\partial^2 a(\theta_i)}{\partial\theta^2}$.
+- Assim, a variância de $Y_i$ pode ser expressa em termos de
+
 $$
 \Var(Y_i) = \phi v(\mu_i),
 $$
@@ -413,14 +439,171 @@ Poisson & $v(\mu) = \mu$ & Log: $\log(\mu) = \eta$ \\
 
 em que $\eta = \beta_1X_1 + \beta_2X_2 + \ldots + \beta_pX_p$.
 
+# Extensões de modelos lineares generalizados para dados longitudinais
+
+## Extensões de MLG para dados longitudinais
+
+- Quando a variável de resposta é categórica (por exemplo, dados binários e de contagem), modelos lineares generalizados (por exemplo, regressão logística) podem ser estendidos para lidar com as respostas correlacionadas.
+- No entanto, transformações não lineares da resposta média (por exemplo, logit) levantam questões adicionais relativas à interpretação dos coeficientes de regressão.
+- Como veremos, modelos diferentes para dados longitudinais discretos têm objetivos de inferência um tanto diferentes.
+
+## Exemplo: Tratamento oral da infecção das unhas dos pés
+
+- Estudo aleatorizado, duplo-cego, grupo paralelo, multicêntrico de 294 pacientes comparando 2 tratamentos orais (denotados A e B) para infecção nas unhas dos pés.
+- __Variável resposta:__ variável binária indicando presença de onicólise (separação da placa ungueal do leito ungueal).
+- Pacientes avaliados quanto ao grau de onicólise (separação da placa ungueal do leito ungueal) na linha de base (semana 0) e nas semanas 4, 8, 12, 24, 36 e 48.
+- Interesse está na taxa de declínio da proporção de pacientes com onicólise ao longo do tempo e os efeitos do tratamento nessa taxa.
+
+## Exemplo: Ensaio clínico de progabida anti-epiléptica
+
+- Estudo aleatorizado, controlado por placebo, do tratamento de crises epilépticas com progabida.
+- Os pacientes foram aleatorizados para tratamento com progabida ou placebo, além da terapia padrão.
+- __Variável resposta:__ Contagem do número de convulsões
+- Cronograma de medição: medição da linha de base durante 8 semanas antes da randomização. Quatro medições durante intervalos consecutivos de duas semanas.
+- Tamanho da amostra: 28 epiléticos com placebo; 31 epiléticos em progabide
+
+## Exemplo: Ensaio clínico de progabida anti-epiléptica
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'progabide.png'))
+```
+
+## MLG para dados longitudinais {.allowframebreaks}
+
+- Em seguida, focamos em várias abordagens distintas para analisar respostas longitudinais.
+- Essas abordagens podem ser consideradas extensões de modelos lineares generalizados para dados correlacionados.
+- A ênfase principal será em dados de resposta discretos, por exemplo, dados de contagem ou respostas binárias.
+- __Nota:__ nos modelos lineares (efeitos mistos) para respostas contínuas, a interpretação dos coeficientes de regressão é independente da correlação entre as respostas.
+
+\framebreak
+
+- Com dados discretos de resposta, esse não é mais o caso.
+- Com modelos não lineares para dados discretos, diferentes abordagens para contabilizar a correlação levam a modelos com coeficientes de regressão com interpretações distintas.
+    + Voltaremos a esta questão importante no decorrer do curso.
+- No restante desta aula, examinaremos brevemente três extensões principais de modelos lineares generalizados.
+
+## MLG para dados longitudinais {.allowframebreaks}
+
+- Suponha que $Y_i = (Y_{i1}, Y_{i2}, \ldots, Y_{in})$ é um vetor de respostas correlacionadas do $i$-ésimo indivíduo.
+- Para analisar esses dados correlacionados, precisamos especificar ou pelo menos fazer suposições sobre a distribuição multivariada ou conjunta,
+
+$$
+f(Y_{i1}, Y_{i2}, \ldots, Y_{in}).
+$$
+
+- A maneira pela qual a distribuição multivariada é especificada produz três abordagens analíticas um tanto diferentes:
+    1. Modelos marginais
+    2. Modelos de efeitos mistos
+    3. Modelos de transição
+
+## Modelos marginais
+
+- Uma abordagem é especificar a distribuição marginal em cada momento:
+
+$$
+f(Y_{ij})\quad \mbox{para}\quad j = 1, 2, \ldots, n.
+$$
+
+juntamente com algumas suposições sobre a estrutura de covariância das observações.
+
+- A premissa básica dos __modelos marginais__ é fazer inferências sobre as __médias populacionais__.
+- O termo __"marginal"__ é usado aqui para enfatizar que a resposta média modelada é condicional apenas para covariáveis e não para outras respostas (ou efeitos aleatórios).
+
+## Ilustração {.allowframebreaks}
+
+- Considere o __estudo tratamento oral da infecção das unhas dos pés__.
+- Estudo aleatorizado, duplo-cego, grupo paralelo, multicêntrico, de 294 pacientes comparando 2 tratamentos orais (denotados A e B) para infecção das unhas dos pés.
+- __Variável resposta:__ variável binária que indica presença de onicólise (separação da placa ungueal do leito ungueal).
+- Pacientes avaliados quanto ao grau de onicólise (separação da placa ungueal do leito ungueal) na linha de base (semana 0) e nas semanas 4, 8, 12, 24, 36 e 48.
+- O interesse encontra-se na taxa de declínio da proporção de pacientes com onicólise ao longo do tempo e nos efeitos do tratamento nessa taxa.
+
+\framebreak
+
+- Suponha que a probabilidade marginal de onicólise siga um modelo logístico,
+
+$$
+\logit\{\Pr(Y_{ij} = 1)\} = \beta_1 + \beta_2\mbox{Mês}_{ij} + \beta_3\mbox{Trt}_i +\beta_4(\mbox{Trt}_i\times\mbox{Mês}_{ij}),
+$$
+
+em que $\mbox{Trt} = 1$ se o grupo de tratamento B e $0$, caso contrário.
+
+- Este é um exemplo de um modelo marginal.
+- Note, no entanto, que a estrutura de covariância ainda precisa ser especificada.
+
+## Modelos de efeitos mistos
+
+- Outra possibilidade é supor que um subconjunto dos parâmetros de regressão no modelo linear generalizado varie de indivíduo para indivíduo.
+- Especificamente, poderíamos assumir que os dados de um único indivíduo são observações independentes com uma distribuição pertencente à família exponencial, mas que os coeficientes de regressão podem variar de indivíduo para indivíduo.
+- Ou seja, __condicional__ aos efeitos aleatórios, supõe-se que as respostas para um único indivíduo sejam observações independentes de uma distribuição pertencente à família exponencial.
+
+## Ilustração {.allowframebreaks}
+
+- Considere o __estudo tratamento oral da infecção das unhas dos pés__.
+- Suponha, por exemplo, que a probabilidade de onicólise para os participantes do estudo seja descrita por um modelo logístico, mas que o risco para um indivíduo dependa de seu "nível de resposta aleatória" __latente__ (talvez determinado ambiental e geneticamente).
+- Podemos considerar um modelo em que
+
+$$
+\logit\{\Pr(Y_{ij} = 1)\} = \beta_1 + \beta_2\mbox{Mês}_{ij} + \beta_3\mbox{Trt}_i +\beta_4(\mbox{Trt}_i\times\mbox{Mês}_{ij}) + b_i.
+$$
+
+- Observe que esse modelo também requer especificação da distribuição de efeitos aleatórios, $F(b_i)$.
+- Este é um exemplo de um modelo linear generalizado de efeitos mistos.
+
+## Modelos de transição (Markov)
+
+- Finalmente, outra abordagem é expressar a distribuição conjunta como uma série de distribuições condicionais,
+
+$$
+f(Y_{i1},Y_{i2},\ldots,Y_{in}) = f(Y_{i1})\times f(Y_{i2}|Y_{i1})\times \ldots \times f(Y_{in}|Y_{i1},\ldots,Y_{i, n-1}).
+$$
+
+- Isso é conhecido como __modelo de transição__ (ou modelo para as transições) porque representa a distribuição de probabilidade em cada ponto do tempo como condicional ao passado.
+- Isso fornece uma representação completa da distribuição conjunta.
+
+## Ilustração {.allowframebreaks}
+
+- Considere o __estudo tratamento oral da infecção das unhas dos pés__.
+- Poderíamos escrever o modelo de probabilidade como
+
+\begin{eqnarray*}
+f(Y_{i1},Y_{i2},\ldots,Y_{in}|X_i) &=&  f(Y_{i1}|X_i)\times f(Y_{i2}|Y_{i1},X_i) \times f(Y_{i3}|Y_{i1},Y_{i2},X_i)\\
+&&\times \ldots \times f(Y_{i7}|Y_{i1},Y_{i2},\ldots,Y_{i6},X_i).
+\end{eqnarray*}
+
+- Ou seja, a probabilidade de onicólise no tempo 2 é modelada condicionalmente à presença/ausência de onicólise no tempo 1 e assim por diante.
+
+\framebreak
+
+- Por exemplo, um modelo logístico de __"primeira ordem"__, permitindo dependência apenas da resposta anterior, é fornecido por
+
+$$
+\logit\{\Pr(Y_{ij} = 1 | Y_{i, j-1})\} = \beta_1 + \beta_2\mbox{Mês}_{ij} + \beta_3\mbox{Trt}_i +\beta_4(\mbox{Trt}_i\times\mbox{Mês}_{ij}) + \beta_5Y_{i, j-1}.
+$$
+
+## Em resumo {.allowframebreaks}
+
+- Discutimos as principais características dos modelos lineares generalizados
+- Descrevemos brevemente três extensões principais de modelos lineares generalizados para dados longitudinais:
+    1. Modelos marginais
+    2. Modelos de efeitos mistos
+    3. Modelos transitórios
+- No restante do curso, focaremos em (i) Modelos Marginais e (ii) Modelos de efeitos mistos.
+
+\framebreak
+
+- Em geral, os modelos de transição são um pouco menos úteis para modelar efeitos de covariáveis.
+- Especificamente, inferências de um modelo de transição podem ser potencialmente enganosas se um tratamento ou exposição alterar o risco ao longo do período de acompanhamento.
+- Nesse caso, o risco condicional, dado o histórico anterior do resultado, é alterado de maneira menos nitidamente.
+
 # Avisos
 
 ## Avisos
 
-- __Próxima aula (26/11):__ Modelos marginais (GEE).
+- __Próxima aula (28/11):__ Modelos marginais (GEE).
 - __Para casa:__ ler o Capítulo 11 do livro "__Applied Longitudinal Analysis__" (em particular a Seção 11.7).
     + Caso ainda não tenha lido, leia também os Caps. 1, 2, 3, 4, 5, 6, 7, 8, 9 e 10.
 - __Para casa:__ veja o _help_ da função `glm` do `R`; rode os exemplos apresentados no _help_ da função.
+- __Não deixe de ver:__ [Another mixed effects model visualization](https://www.r-bloggers.com/another-mixed-effects-model-visualization/)
 
 ## Bons estudos!
 
