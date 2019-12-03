@@ -65,14 +65,9 @@ fev <- read_dta(
 # ---------------------------------------------------
 # Conhecendo (a estrutura d)os dados
 
-fev
-dim(fev)
-glimpse(fev)
-unique(fev$id)
-length(unique(fev$id))
-tibble::as.tibble(as.data.frame(table(fev$id)))
-summary(as.numeric(table(fev$id)))
-summary(as.factor(as.numeric(table(fev$id))))
+ds
+fev$id <- 1:length(fev$)
+
 
 # ---------------------------------------------------
 # Conhecendo os dados: análise exploratória

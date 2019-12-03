@@ -187,9 +187,191 @@ fit2 <- geeglm(resp ~ factor(age) + smoke,
 anova(fit1, fit2)
 ```
 
+## Ensaio Clínico de Antibióticos para Hanseníase
+
+- Ensaio clínico controlado por placebo de 30 pacientes com hanseníase no Eversley Childs Sanitorium, nas Filipinas.
+- Os participantes foram aleatorizados para um dos dois antibióticos (medicamento indicado para tratamento A e B) ou para um placebo (medicamento indicado para tratamento C).
+- Os dados da linha de base sobre o número de bacilos da hanseníase em 6 locais do corpo foram registrados.
+- Após vários meses de tratamento, o número de bacilos foi registrado pela segunda vez.
+- Desfecho/resposta: contagem total do número de bacilos da hanseníase em 6 locais.
+
+## Ensaio Clínico de Antibióticos para Hanseníase
+
+```{r antib, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE}
+# ---------------------------------------------------
+# Carregando pacotes do R
+
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+library(dplyr)
+library(compareGroups)
+library(foreign)
+
+# ---------------------------------------------------
+# Carregando o arquivo de dados
+
+ds <- read.dta(here::here("data", "leprosy.dta"))
+
+# ds
+
+# ---------------------------------------------------
+# De largo para longo
+
+ds$id <- 1:length(ds$y1)
+ds.longo <- reshape(ds, idvar = "id", varying = c("y1","y2"), 
+                    v.names = "y", timevar = "time", time = 0:1, direction ="long")
+
+ds.longo$tempo <- ds.longo$time
+ds.longo <- ds.longo[order(ds.longo$id, ds.longo$tempo),]
+
+ds.longo$drugn <- as.numeric(ds.longo$drug)
+ds.longo$tempoA <- ds.longo$tempo*(ds.longo$drugn == 2)
+ds.longo$tempoB <- ds.longo$tempo*(ds.longo$drugn == 3)
+ds.longo$tempoAB <- ds.longo$tempo*I(ds.longo$drugn != 1)
+
+# ---------------------------------------------------
+# Compara grupos de tratamento
+
+res <- compareGroups(data = ds.longo, drug ~ y, method = 1, subset = tempo == 0)
+restab0 <- createTable(res, show.p.overall = FALSE)
+res <- compareGroups(data = ds.longo, drug ~ y, method = 1, subset = tempo == 1)
+restab1 <- createTable(res, show.p.overall = FALSE)
+rbind(restab0, restab1)
+# export2md(rbind(restab0, restab1), format = "markdown")
+
+```
+
+## Ensaio Clínico de Antibióticos para Hanseníase {.allowframebreaks}
+
+__Questão:__ O tratamento com antibióticos (medicamentos A e B) reduz a abundância de bacilos da hanseníase quando comparado ao placebo (medicamento C).
+
+Consideramos o modelo a seguir para alterações na contagem média
+
+$$
+\log \E(Y_{ij}) = \log\mu_{ij} = \beta_1+ \beta_2tempo_{ij} + \beta_3 tempo_{ij}\times trt_{1i} + \beta_4 tempo_{ij}\times trt_{2i},
+$$
+
+em que $Y_{ij}$ é a contagem de bacilos para o $i$-ésimo paciente no $j$-ésimo período ($j = 1, 2$).
+
+- $trt_1$ e $trt_2$ são variáveis indicadoras para os medicamentos A e B, respectivamente.
+- A variável binária, tempo, denota os períodos de linha de base e pós-tratamento, com $tempo = 0$ para o período de linha de base (período 1) e $tempo = 1$ para o período de acompanhamento de pós-tratamento (período 2).
+
+\framebreak
+
+- Para completar a especificação do modelo marginal, assumimos
+
+$$
+\Var(Y_{ij}) = \phi\mu_{ij},
+$$
+em que $\phi$ pode ser pensado como um fator de super-dispersão.
+
+- Por fim, a associação dentro de indivíduo é contabilizada assumindo uma correlação comum,
+
+$$
+\Corr(Y_{i1}, Y_{i2}) = \alpha.
+$$
+
+- Os parâmetros de regressão log-linear, $\beta$, podem receber interpretações em termos de  (log) razões de taxa.
+
+\framebreak
+
+\begin{table}
+\begin{tabular}{ l l l }
+\hline
+  Tratamento & Período & $\log(\mu_{ij})$ \\
+  \hline
+  Droga A (antibiótico) & Linha de base & $\beta_1$ \\
+   & Acompanhamento & $\beta_1 + \beta_2 + \beta_3$ \\
+     Droga B (antibiótico) & Linha de base & $\beta_1$ \\
+   & Acompanhamento & $\beta_1 + \beta_2 + \beta_4$ \\
+     Droga C (placebo) & Linha de base & $\beta_1$ \\
+   & Acompanhamento & $\beta_1 + \beta_2$ \\
+   \hline
+\end{tabular}
+\end{table}
+
+\framebreak
+
+- Por exemplo, $e^{\beta_2}$ é a razão de taxas de bacilos da hanseníase, comparando o período de acompanhamento com a linha de base, no grupo placebo (medicamento C).
+- Da mesma forma, $e^{\beta_2 + \beta_3}$ é a razão de taxas correspondente no grupo aleatorizado para a droga A.
+- Finalmente, e $e^{\beta_2 + \beta_4}$ é a razão de taxas correspondente no grupo aleatorizado para o medicamento B.
+- Assim, $\beta_3$ e $\beta_4$ representam a diferença entre as mudanças nas log-taxas esperadas, comparando os medicamentos A e B com o placebo (medicamento C).
+
+\framebreak
+\tiny
+
+```{r antib2, echo=TRUE, eval=TRUE}
+fit <- geeglm(y ~ tempo + tempoA + tempoB,
+              family = poisson(link = "log"), 
+              data = ds.longo, id = id, waves = tempo,
+              corstr = "exchangeable", std.err = "san.se")
+summary(fit)
+```
+
+\normalsize
+
+```{r antib3, echo=TRUE, eval=TRUE}
+L <- rbind(c(0,0,1,0),
+          c(0,0,0,1))
+esticon(fit, L, joint.test = TRUE)
+
+L <- c(0,0,1,-1)
+esticon(fit, L, joint.test = TRUE)
+
+```
+
+\framebreak
+
+- Para obter uma estimativa comum da log-razão de taxas, comparando ambos os antibióticos (medicamentos A e B) e o placebo, podemos usar o modelo reduzido
+
+$$
+\log \E(Y_{ij}) = \log\mu_{ij} = \beta_1+ \beta_2tempo_{ij} + \beta_3 tempo_{ij}\times trt_{i},
+$$
+
+em que a variável $trt$ é uma variável indicadora para uso de antibiótico, com $trt = 1$ se um paciente foi aleatorizado para o medicamento A ou B e $trt = 0$ caso contrário.
+
+- Mantemos as mesmas suposições sobre a variância e correlação de antes.
+
+\framebreak
+\tiny
+
+```{r antib4, echo=TRUE, eval=TRUE}
+fit <- geeglm(y ~ tempo + tempoAB,
+              family = poisson(link = "log"), 
+              data = ds.longo, id = id, waves = tempo,
+              corstr = "exchangeable", std.err = "san.se")
+summary(fit)
+```
+
+\normalsize
+
+```{r antib5, echo=TRUE, eval=TRUE}
+est <- esticon(fit, diag(3))
+# Odds ratio and confidence intervals
+RT.CI <- exp(cbind(est$estimate, est$lwr, est$upr))
+rownames(RT.CI) <- names(coef(fit))
+colnames(RT.CI) <- c("RT", "RT 95% LI", "RT 95% LS")
+RT.CI
+```
+
+\framebreak
+
+- A estimativa comum da log-taxa é de -0.52783.
+- A razão de taxas é de 0.60 (ou $e^{-0.52783}$), com intervalo de confiança de 95%, 0.4 a 0.87, indicando que o tratamento com antibióticos reduz significativamente o número médio de bacilos quando comparado ao placebo.
+- Para o grupo placebo, há uma redução não significativa no número médio de bacilos de aproximadamente 3% (ou $[1 - e^{-0.00286}]\times 100\%$).
+- No grupo de antibióticos, há uma redução significativa de aproximadamente 41% (ou $[1 - e^{-0.00286 - -0.52783}]\times 100\%$%).
+- A correlação estimada em pares de 0.74 é relativamente grande.
+- O parâmetro de escala estimado de 3.23 indica superdispersão substancial (se não há superdispersão, então $\phi = 1$).
+
+## Lista de Exercícios 3
+
+- Faça o exercício 13.1 do Cap. 13 do livro "__Applied Longitudinal Analysis__".
+
 ## Avisos
 
-- __Próxima aula (03/12):__ Modelos marginais (GEE) - exemplos.
+- __Próxima aula (05/12):__ Modelos multiníveis.
 - __Para casa:__ ler o Capítulo 12 e 13 do livro "__Applied Longitudinal Analysis__".
     + Caso ainda não tenha lido, leia também os Caps. 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 e 11.
 - __Para casa:__ veja o _help_ do pacote `geepack` do `R`.

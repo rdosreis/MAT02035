@@ -84,3 +84,84 @@
 ##                corstr = "exchangeable", std.err = "san.se")
 ## anova(fit1, fit2)
 
+
+## ----antib, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE----------
+# ---------------------------------------------------
+# Carregando pacotes do R
+
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+library(dplyr)
+library(compareGroups)
+library(foreign)
+
+# ---------------------------------------------------
+# Carregando o arquivo de dados
+
+ds <- read.dta(here::here("data", "leprosy.dta"))
+
+# ds
+
+# ---------------------------------------------------
+# De largo para longo
+
+ds$id <- 1:length(ds$y1)
+ds.longo <- reshape(ds, idvar = "id", varying = c("y1","y2"), 
+                    v.names = "y", timevar = "time", time = 0:1, direction ="long")
+
+ds.longo$tempo <- ds.longo$time
+ds.longo <- ds.longo[order(ds.longo$id, ds.longo$tempo),]
+
+ds.longo$drugn <- as.numeric(ds.longo$drug)
+ds.longo$tempoA <- ds.longo$tempo*(ds.longo$drugn == 2)
+ds.longo$tempoB <- ds.longo$tempo*(ds.longo$drugn == 3)
+ds.longo$tempoAB <- ds.longo$tempo*I(ds.longo$drugn != 1)
+
+# ---------------------------------------------------
+# Compara grupos de tratamento
+
+res <- compareGroups(data = ds.longo, drug ~ y, method = 1, subset = tempo == 0)
+restab0 <- createTable(res, show.p.overall = FALSE)
+res <- compareGroups(data = ds.longo, drug ~ y, method = 1, subset = tempo == 1)
+restab1 <- createTable(res, show.p.overall = FALSE)
+rbind(restab0, restab1)
+# export2md(rbind(restab0, restab1), format = "markdown")
+
+
+
+## ----antib2, echo=TRUE, eval=TRUE----------------------------------------
+fit <- geeglm(y ~ tempo + tempoA + tempoB,
+              family = poisson(link = "log"), 
+              data = ds.longo, id = id, waves = tempo,
+              corstr = "exchangeable", std.err = "san.se")
+summary(fit)
+
+
+## ----antib3, echo=TRUE, eval=TRUE----------------------------------------
+L <- rbind(c(0,0,1,0),
+          c(0,0,0,1))
+esticon(fit, L, joint.test = TRUE)
+
+L <- c(0,0,1,-1)
+esticon(fit, L, joint.test = TRUE)
+
+
+
+## ----antib4, echo=TRUE, eval=TRUE----------------------------------------
+fit <- geeglm(y ~ tempo + tempoAB,
+              family = poisson(link = "log"), 
+              data = ds.longo, id = id, waves = tempo,
+              corstr = "exchangeable", std.err = "san.se")
+summary(fit)
+
+
+## ----antib5, echo=TRUE, eval=TRUE----------------------------------------
+est <- esticon(fit, diag(3))
+# Odds ratio and confidence intervals
+RT.CI <- exp(cbind(est$estimate, est$lwr, est$upr))
+rownames(RT.CI) <- names(coef(fit))
+colnames(RT.CI) <- c("RT", "RT 95% LI", "RT 95% LS")
+RT.CI
+
