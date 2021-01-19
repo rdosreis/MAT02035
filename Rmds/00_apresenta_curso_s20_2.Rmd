@@ -1,0 +1,218 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Apresentações"
+fontsize: 10pt
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2021
+# header-includes:
+#   - \titlegraphic{\hfill\includegraphics[height=1.5cm]{logos/ime.png}}
+---
+
+# A disciplina {-}
+
+## Objetivos 
+
+- Capacitar os alunos para identificar situações em que pode existir __correlação nos dados__ observados.
+- Apresentar aos alunos as técnicas de __Equações de Estimação Generalizadas__ e __Modelos Mistos Lineares__.
+- Capacitar os alunos no uso das técnicas para análise de dados correlacionados proporcionando __domínio teórico, aplicado e computacional__ dos conceitos envolvidos.
+
+## Organização
+
+- __Disciplina:__ Modelos para dados correlacionados
+- __Turma:__ U
+- __Modalidade:__ Ensino Remoto __(Moodle)__
+- __Professor:__ Rodrigo Citton Padilha dos Reis
+    + e-mail: citton.padilha@ufrgs.br ou rodrigocpdosreis@gmail.com
+    + Sala: B215 do Instituto de Matemática e Estatística (quando as atividades presenciais retornarem)
+
+## Aulas e material didático
+
+- __Videoaulas__
+    + Exposição dos conteúdos
+    + Exemplos
+    + Implementação computacional (funções em `R`)
+    + Resolução de exercícios
+- __Notas de aula__
+    + Slides
+    + Arquivos de rotinas em `R`
+- __Exercícios__
+    + Listas de exercícios
+    + Para casa
+    + Questionários do Moodle
+- __Webconferência__
+    - Todas às terças-feiras, das 10hs 30min às 12hs no MConf/Moodle, realizaremos uma webconferência para discutirmos tópicos centrais do conteúdo, exercícios e dúvidas.
+
+## Moodle
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', out.height='80%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'moodle.png'))
+
+```
+
+## Conteúdo programático
+
+__Área 1__
+
+1. Introdução aos dados correlacionados
+2. Dados longitudinais
+3. Visão geral dos modelos lineares para dados longitudinais
+4. Estimação e inferência estatística
+5. Modelando a média
+6. Modelando a covariância
+7. Modelos lineares de efeitos mistos
+
+
+## Conteúdo programático (cont.)
+
+__Área 2__
+
+8. Modelos de efeitos fixos versus efeitos aleatórios
+9. Diagnóstico e análise de resíduos
+10. Revisão de modelos lineares generalizados (MLG)
+11. Modelos marginais: introdução e visão geral
+12. Modelos marginais: Equações de Estimação Generalizadas (GEE)
+13. Dados ausentes: conceitos básicos
+14. Modelos multiníveis
+15. Tópicos complementares
+
+
+## Avaliação
+
+- Serão realizadas pelo menos duas avaliações pontuais (atividades individuais) distribuídas dentro de cada Área por meio de questionários e tarefas do Moodle ($MAP$ representa a média de todas a avaliações pontuais do semestre)
+- Será realizado um teste ($T$) no Moodle (atividade individual) sobre o conteúdo da Área 1
+- Será realizado um seminário ($S$) (atividade em grupo) sobre um dos tópicos complementares
+    + __As datas do teste e do seminário serão definidas em breve__
+    + __Os grupos e seus respectivos temas de seminário serão definidos em breve__
+    + As atividades de avaliação conterão exercícios teóricos e aplicados
+- Cada atividade de avaliação vale 10 pontos
+- Será realizado um um teste no Moodle (individual) como atividade de recuperação ($TR$)
+    + Para os alunos que não atingirem o conceito mínimo
+    + __Este teste abrange todo o conteúdo da disciplina__
+
+## Avaliação
+
+$$
+MF = \frac{[(T\times 3) + (S\times 3) + (MAP \times 4)]}{10}
+$$
+
++ __A:__ $9 \leq MF \leq 10$
++ __B:__ $7,5 \leq MF < 9$
++ __C:__ $6 \leq MF < 7,5$
+
++ Se $MF < 6$ o aluno poderá realizar o teste de recuperação e neste caso
+
+$$
+MF' = MF \times 0,4 + TR \times 0,6
+$$
+
+- __C:__ $MF' \geq 6$
+- __D:__ $MF' < 6$
+
+## Referências bibliográficas
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='30%', paged.print=FALSE}
+knitr::include_graphics(here('images','ctanlion.png'))
+```
+
+### Principal
+
+Fitzmaurice, G., Laird, N., Ware, J. __Applied Longitudinal Analysis__. John Wiley & Sons, 2011, 2ed.
+
+### Complementares
+
+Singer, J. M., Nobre, J. S., Rocha, F. M. M. __Análise de dados longitudinais__. USP, 2018.
+
+Diggle, P., Heagerty, P., Liang, K. Y., Zeger, S. __Analysis of Longitudinal Data__. Oxford University Press, 2002, 2ed.
+
+## Referências bibliográficas
+
+\begin{center}
+https://content.sph.harvard.edu/fitzmaur/ala2e/
+\end{center}
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='90%',  out.height='70%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'ref_biblio.png'))
+
+```
+
+# Os dados correlacionados
+
+## Séries temporais
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', out.height='70%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'time_series.jpeg'))
+
+```
+
+- Não discutiremos!
+    + Disciplina MAT02263 - ANÁLISE DE SÉRIES TEMPORAIS A
+
+## Dados espaciais
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', out.height='70%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'space_data.jpg'))
+
+```
+
+- Não discutiremos!
+    + Disciplina MAT02040 - ESTATÍSTICA ESPACIAL
+
+## Dados espaço-temporais
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', out.height='70%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'space_time_data.jpg'))
+
+```
+
+- Não discutiremos!
+    + Disciplina MAT02040 - ESTATÍSTICA ESPACIAL
+
+## Dados longitudinais
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', out.height='60%', paged.print=FALSE}
+
+knitr::include_graphics(here('output_figs', 'capa.png'))
+
+```
+
+- Discutiremos!
+
+## Dados agrupados
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', out.height='60%', paged.print=FALSE}
+
+knitr::include_graphics(here('images', 'Multilevel_data_structure.png'))
+
+```
+
+- Discutiremos!
+
+## O que veremos nesta disciplina?
+
+Daremos atenção a estruturas de __dados longitudinais__ e __dados agrupados (multiníveis ou hierárquicos)__ para
+
++ Descrever os dados
+    - Gráficos e resumos numéricos
++ Modelar os dados
+    - Aplicar modelos estatísticos para representar de maneira compacta a estrutura dos dados
+    - Fazer estimação e inferência (construção de intervalos de confiança e testes de hipóteses) com respeito às quantidades de interesse (coeficientes de regressão, componentes de variância, etc.)
+
+## Por hoje é só! Sejam todos bem-vindos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE}
+knitr::include_graphics(here('images', 'perna_longa.png'))
+```
+
+
