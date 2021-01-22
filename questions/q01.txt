@@ -1,0 +1,93 @@
+#######
+Bloco 1
+#######
+
+CARACTERÍSTICAS DOS ESTUDOS LONGITUDINAIS
+
+Feedback geral: 
+Esta questão propôs-se a avaliar as características de estudos longitudinais.
+
+Feed opção correta: 
+Parabéns, resposta correta!
+
+Feed opção incorreta: 
+Revisar a aula 01.
+
+
+A característica definidora de estudos longitudinais é que medidas dos
+mesmos indivíduos são tomadas repetidamente através do tempo,
+permitindo, assim, o estudo direto da mudança ao longo do tempo.
+
+O objetivo principal de um estudo longitudinal é caracterizar a
+mudança na resposta ao longo do tempo e fatores que influenciam a
+mudança.
+
+Com medidas repetidas realizadas nos indivíduos não é possível capturar
+a mudança dentro de indivíduo.
+
+#######
+Bloco 2
+#######
+
+CARACTERÍSTICAS DE DADOS LONGITUDINAIS
+
+Feedback geral: 
+Esta questão propôs-se a avaliar as características de dados longitudinais.
+
+Feed opção correta: 
+Parabéns, resposta correta!
+
+Feed opção incorreta: 
+Revisar a aula 01.
+
+Uma característica distintiva de dados longitudinais é que eles são agrupados.
+
+Em dados longitudinais, cada indivíduo forma um grupo de observações repetidas ao longo do tempo.
+
+Dados longitudinais também possuem um ordenamento temporal, e este tem implicações importantes para a análise.
+
+Dados longitudinais não são um caso especial de dados agrupados.
+
+#######
+Bloco 3
+#######
+
+
+Feedback geral: 
+Esta questão propôs-se a avaliar as implicações da correlação, presente em dados longitudinais, para a análise.
+
+Feed opção correta: 
+Parabéns, resposta correta!
+
+Feed opção incorreta: 
+Revisar a aula 01.
+
+Observações dentro de um grupo tipicamente irão exibir correlação
+positiva, e esta correlação deve ser levada em conta na análise.
+
+Esta correlação invalida a suposição crucial de independência
+que é o pilar de tantas técnicas estatísticas.
+
+Modelos estatísticos para dados correlacionados devem explicitamente
+descrever e levar em conta esta correlação.
+
+#######
+Bloco 4
+#######
+
+Feedback geral: 
+Esta questão propôs-se a avaliar a abordagem de modelos lineares para respostas longitudinais.
+
+Feed opção correta: 
+Parabéns, resposta correta!
+
+Feed opção incorreta: 
+Revisar a aula 01.
+
+A linearidade neste cenário tem um significado muito preciso e
+refere-se ao fato de que todos esses modelos para a média (ou alguma
+transformação da média) são lineares nos parâmetros
+(coeficientes) da regressão.
+
+A inclusão de covariáveis transformadas não viola a “linearidade” do
+modelo de regressão.
