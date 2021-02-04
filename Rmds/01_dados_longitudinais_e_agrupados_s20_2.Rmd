@@ -56,8 +56,8 @@ knitr::include_graphics(here::here('images', 'dims.jpg'))
 
 - Na década de 1980 \textbf{\textcolor{darkpastelgreen}{Laird e Ware}} propuseram o uso do algoritmo EM para ajustar uma classe de __modelos lineares de efeitos mistos__ apropriados para a análise de medidas repetidas\footnote{Laird, N. M., Ware, J. H. Random-effects models for longitudinal data. \emph{Biometrics}, 38:963-974, 1982.}.
     + \textbf{\textcolor{darkpastelgreen}{Jennrich e Schluchter}} propuseram uma variedade de algoritmos alternativos, incluindo algoritmos de Fisher e Newton-Raphson\footnote{Jennrich, R.I., Schluchter, M.D. Unbalanced repeated-measures
-models with structured covariance matrices. \emph{Biometrics}, 42:805-820, 1986.}..
-- Mais tarde, na mesma década, \textbf{\textcolor{darkpastelgreen}{Liang e Zeger}} introduziram as __equações de estimativas generalizadas__ na literatura bioestatística e propuseram uma família de modelos lineares generalizados para ajustar observações repetidas de dados binários e contagens\footnote{Liang, K.Y., Zeger, S.L. Longitudinal Data Analysis Using Generalized Linear Models. \emph{Biometrika}, 73:13-22, 1986.}$^{,}$\footnote{Zeger, S.L., Liang, K.Y. Longitudinal Data Analysis for Discrete and Continuous Outcomes. \emph{Biometrics}, 42:121-130, 1986.}.
+models with structured covariance matrices. \emph{Biometrics}, 42:805-820, 1986.}.
+- Mais tarde, na mesma década, \textbf{\textcolor{darkpastelgreen}{Liang e Zeger}} introduziram as __equações de estimação generalizadas__ na literatura bioestatística e propuseram uma família de modelos lineares generalizados para ajustar observações repetidas de dados binários e contagens\footnote{Liang, K.Y., Zeger, S.L. Longitudinal Data Analysis Using Generalized Linear Models. \emph{Biometrika}, 73:13-22, 1986.}$^{,}$\footnote{Zeger, S.L., Liang, K.Y. Longitudinal Data Analysis for Discrete and Continuous Outcomes. \emph{Biometrics}, 42:121-130, 1986.}.
 
 ## Introdução
 

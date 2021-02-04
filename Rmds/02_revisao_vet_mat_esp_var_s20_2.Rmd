@@ -373,7 +373,7 @@ diag(x = S)
 2 & 7 & 11 \\
 4 & 9 & 3 \\
 13 & 8 & 2
-\end{array}\right) + \left(\begin{array}{ccc}
+\end{array}\right) - \left(\begin{array}{ccc}
 3 & 2 & 14 \\
 7 & 8 & 4 \\
 6 & 5 & 9
@@ -512,7 +512,7 @@ $$
 é um vetor $n\times 1$ com
 
 $$
-c_{ij} = \sum_{k=1}^p{x_{ik}b_k}, i = 1, \ldots, n.
+c_{i} = \sum_{k=1}^p{x_{ik}b_k}, i = 1, \ldots, n.
 $$
 
 ## Multiplicação de matrizes
