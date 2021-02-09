@@ -90,11 +90,13 @@ chumbo.df.longo <- gather(data = chumbo.df, key = "tempo", value = "chumbo", -id
 # Formata variáveis
 
 chumbo.df.longo$tempo <- factor(chumbo.df.longo$tempo, labels = c("0", "1", "4", "6"))
+chumbo.df.longo$tempo.num <- as.numeric(as.character(chumbo.df.longo$tempo))
 
 # ----------------------------------------------------
 # Versões placebo
 
 chumbo.df.p <- subset(chumbo.df, subset = trt == "Placebo")
+names(chumbo.df.p)[3:6] <- paste0("y", 1:4)
 
 chumbo.df.longo.p <- subset(chumbo.df.longo, subset = trt == "Placebo")
 
@@ -157,9 +159,10 @@ set.seed(10)
 ids <- sample(x = unique(chumbo.df.longo.p$id), size = 5, replace = FALSE)
 
 p <- ggplot(data = chumbo.df.longo.p[which(chumbo.df.longo.p$id %in% ids), ],
-            mapping = aes(x = tempo, y = chumbo, group = id, colour = id)) +
+            mapping = aes(x = tempo.num, y = chumbo, group = id, colour = id)) +
   geom_point() +
   geom_line() +
+  scale_x_continuous(breaks = c(0,1,4,6)) +
   labs(x = "Tempo",
        y = expression("Média nível de chumbo no sangue"~(mu*g/dL)),
        colour = "ID")

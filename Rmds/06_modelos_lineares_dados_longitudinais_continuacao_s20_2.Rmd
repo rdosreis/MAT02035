@@ -1,0 +1,460 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Visão geral de modelos lineares para dados longitudinais (continuação) - Métodos de análise descritiva"
+fontsize: 10pt
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2021
+---
+
+# Questões preliminares
+
+## Carregando os dados
+
+```{r, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, purl=FALSE}
+
+library(here)
+library(haven)
+
+chumbo <- read_dta(
+  file = here::here("data", "tlc.dta"))
+
+```
+
+```{r carrega_dados, echo=TRUE, eval=FALSE, message=FALSE, warning=FALSE}
+
+# install.packages("haven")
+library(haven)
+
+chumbo <- read_dta(file = "tlc.dta"))
+
+```
+
+## Remodelando os dados
+
+- Os dados de um estudo são frequentemente inseridos em um formato __largo__ (_wide_), em que cada linha é  um local/indivíduo/paciente e as medidas repetidas e covariáveis observadas dispostas em colunas.
+
+```{r largo, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+head(chumbo)
+```
+
+## Remodelando os dados
+
+- O formato __largo__ é intuitivo para entrada de dados, mas nem tanto para análise de dados.
+- Nas análises de dados em geral, mas principalmente no caso de dados longitudinais, os dados devem ser remodelados.
+- Um formato mais apropriado para a maioria das análises que iremos realizar é o formato __longo__ (_long_).
+    + As medidas repetidas são empilhadas em uma única coluna.
+    + A coluna id, e demais covariáveis fixas no tempo, repetem o seu valor.
+    + Uma nova coluna que indexa as ocasiões, ou com os valores dos tempos de medição, é criada.
+    
+## Remodelando os dados
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'largo_para_longo.png'))
+```
+
+## Remodelando os dados
+
+### De "largo" para "longo"
+
+```{r reshape, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+# install.packages("tidyr")
+library(tidyr)
+
+chumbo.longo <- gather(data = chumbo,
+                        key = "tempo",
+                        value = "chumbo", -id, -trt)
+
+```
+
+## Remodelando os dados
+
+```{r reshape2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+head(chumbo.longo)
+
+```
+
+## Remodelando os dados
+
+### Pacotes para remodelar dados
+
+Os pacotes `reshape` e `reshape2` foram substituídos pelo pacote `tidyr`. Para maiores detalhes das funções do pacote, consulte:
+
+- https://tidyr.tidyverse.org/
+- https://github.com/rstudio/cheatsheets/blob/master/data-import.pdf
+
+## Transformando os dados
+
+\footnotesize
+
+```{r transforma_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+chumbo.longo$tempo <- as.numeric(
+  as.character(factor(chumbo.longo$tempo,
+                      labels = c(0, 1, 4, 6))))
+
+chumbo.longo$trt <- factor(chumbo.longo$trt,
+                           labels = c("Placebo", "Succimer"))
+
+```
+
+## Transformando os dados
+
+```{r transforma_dados2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+head(chumbo.longo)
+
+```
+
+# Time plot
+
+## Time plot
+
+- Apresenta os valores da variável resposta no eixo vertical e os tempos das medidas no eixo horizontal, com medidas repetidas sucessivas no mesmo indivíduo unidas por linhas retas.
+- É utilizado para observar as trajetórias individuais, tendências, variabilidade entre indivíduos e dentro de indivíduos.
+
+## Diagrama de dispersão {.allowframebreaks}
+
+```{r time_plot, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+
+# install.packages("ggplot2")
+library(ggplot2)
+
+p <- ggplot(data = chumbo.longo,
+            mapping = aes(x = tempo, y = chumbo)) +
+  geom_point() +
+  labs(x = "Tempo (semanas)",
+       y = "Nível de chumbo no sangue (mcg/dL)")
+p
+
+```
+
+## Perfis individuais (spaghetti) {.allowframebreaks}
+
+\footnotesize
+
+```{r time_plot2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+
+p <- ggplot(data = chumbo.longo,
+            mapping = aes(x = tempo, y = chumbo,
+                          group = id)) +
+  geom_point() + geom_line() +
+  labs(x = "Tempo (semanas)",
+       y = expression("Média nível de chumbo no sangue"~(mu*g/dL))) +
+  theme_bw()
+p
+
+```
+
+## Perfis individuais (spaghetti) {.allowframebreaks}
+
+\footnotesize
+
+```{r time_plot3, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+
+p <- ggplot(data = chumbo.longo,
+            mapping = aes(x = tempo, y = chumbo,
+                          group = id, colour = trt)) +
+  geom_point() + geom_line() +
+  labs(x = "Tempo (semanas)",
+       y = expression("Média nível de chumbo no sangue"~(mu*g/dL)),
+       colour = "Grupo de tratamento") +
+  theme_bw() + theme(legend.position = "bottom")
+p
+
+```
+
+## Perfis individuais (spaghetti)
+
+- Com gráficos de perfis para dados longitudinais balanceados, pode ser difícil discernir o "sinal" (isto é, a tendência na resposta média ao longo do tempo) do "ruído" e as fontes de variabilidade não são distinguíveis.
+- Em geral, é mais informativo exibir um gráfico de __perfis de médias__, com pontos sucessivos no gráfico unidos por linhas retas.
+
+## Perfis de médias {.allowframebreaks}
+
+### "Pré-processamento"
+
+```{r resumo_medias, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+# install.packages("dplyr")
+library(dplyr)
+
+chumbo.resumo <- chumbo.longo %>% 
+  group_by(trt, tempo) %>% 
+  summarise(chumbo.m = mean(chumbo))
+
+```
+
+## Perfis de médias {.allowframebreaks}
+
+```{r resumo_medias2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+chumbo.resumo
+
+```
+
+## Perfis de médias {.allowframebreaks}
+
+\footnotesize
+
+```{r time_plot4, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+
+p <- ggplot(data = chumbo.resumo,
+            mapping = aes(x = tempo, y = chumbo.m,
+                          colour = trt)) +
+  geom_point() + geom_line() +
+  scale_x_continuous(breaks = c(0, 1, 4, 6)) +
+  labs(x = "Tempo (semanas)",
+       y = expression("Média nível de chumbo no sangue"~(mu*g/dL)),
+       colour = "Grupo de tratamento") +
+  theme_bw() + theme(legend.position = "bottom")
+p
+
+```
+
+## Perfis de médias com barras de erros {.allowframebreaks}
+
+- Os gráficos de perfis médios também podem ser aprimorados incluindo __barras de erro padrão__ para a resposta média em cada ocasião.
+
+### "Pré-processamento"
+
+```{r resumo_ep, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+chumbo.resumo <- chumbo.longo %>% 
+  group_by(trt, tempo) %>% 
+  summarise(chumbo.m = mean(chumbo),
+            dp = sd(chumbo), n = n()) %>% 
+  mutate(ep = dp/sqrt(n))
+
+```
+
+## Perfis de médias com barras de erros {.allowframebreaks}
+
+```{r resumo_ep2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+chumbo.resumo
+
+```
+
+## Perfis de médias com barras de erros {.allowframebreaks}
+
+\footnotesize
+
+```{r time_plot5, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+
+p <- ggplot(data = chumbo.resumo,
+            mapping = aes(x = tempo, y = chumbo.m,
+                          colour = trt)) +
+  geom_errorbar(aes(ymin = chumbo.m - ep,
+                    ymax = chumbo.m + ep),
+                width = .1) +
+  geom_point() + geom_line() +
+  labs(x = "Tempo (semanas)",
+       y = expression("Média nível de chumbo no sangue"~(mu*g/dL)),
+       colour = "Grupo de tratamento") +
+  theme_bw() + theme(legend.position = "bottom")
+p
+
+```
+
+## Perfis de médias com barras de erros {.allowframebreaks}
+
+- Uma alternativa: o _boxplot_.
+
+\footnotesize
+
+```{r boxplot, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+
+chumbo.longo$tempof <- factor(chumbo.longo$tempo)
+
+p <- ggplot(data = chumbo.longo,
+            mapping = aes(x = tempof, y = chumbo,
+                          fill = trt)) +
+  geom_boxplot() +
+  labs(x = "Tempo (semanas)",
+       y = expression("Média nível de chumbo no sangue"~(mu*g/dL)),
+       fill = "Grupo de tratamento") +
+  theme_bw() + theme(legend.position = "bottom")
+p
+
+```
+# Dados desbalanceados
+
+## Um exemplo
+
+- Dados longitudinais sobre o crescimento da função pulmonar em crianças e adolescentes do _Six Cities Study of Air Pollution and Health_. 
+- Os dados são de uma coorte de 300 meninas em idade escolar que moram em Topeka, Kansas, que, na maioria dos casos, estavam matriculadas na primeira ou segunda série (com idades entre seis e sete anos).
+- As meninas foram medidas anualmente até a formatura do ensino médio (aproximadamente aos dezoito anos) ou perda de acompanhamento, e cada menina forneceu no mínimo uma e no máximo 12 observações.
+- A cada exame, as medidas da função pulmonar foram obtidas a partir da espirometria simples.
+- Uma medida amplamente utilizada, calculada a partir da espirometria simples, é o volume de ar expirado no primeiro segundo da manobra, $\mbox{FEV}_1$.
+
+## Carregando os dados
+
+```{r, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, purl=FALSE}
+
+fev <- read_dta(file = here::here("data", "fev1.dta"))
+
+fev$fev1 <- exp(fev$logfev1)
+fev$logfh <- log(fev$fev1/fev$ht)
+
+fev <- fev[- which(fev$logfh < -0.5), ]
+```
+
+```{r fev_carrega_dados, echo=TRUE, eval=FALSE, message=FALSE, warning=FALSE}
+
+fev <- read_dta(file = "fev1.dta")
+
+# cria variável log(fev1/ht)
+fev$fev1 <- exp(fev$logfev1)
+fev$logfh <- log(fev$fev1/fev$ht)
+
+# uma observação atípica (?)
+fev <- fev[- which(fev$logfev1/fev$ht < -0.5), ]
+
+```
+
+## Carregando os dados
+
+\footnotesize
+
+```{r fev, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+head(fev, 16)
+
+```
+
+## Diagrama de dispersão {.allowframebreaks}
+
+```{r fev2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+
+p <- ggplot(data = fev,
+            mapping = aes(x = age, y = logfh)) +
+  geom_point() +
+  labs(x = "Idade (anos)",
+       y = "Log(FEV1/Altura)") +
+  theme_bw()
+p
+
+```
+
+## Perfis individuais {.allowframebreaks}
+
+```{r fev3, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+
+set.seed(5)
+id.s <- sample(x = unique(fev$id), size = 50,
+               replace = FALSE)
+
+p <- ggplot(data = fev[which(fev$id %in% id.s),],
+            mapping = aes(x = age, y = logfh,
+                          group = id)) +
+  geom_point(alpha = 0.3) +
+  geom_line(alpha = 0.3) +
+  labs(x = "Idade (anos)",
+       y = "Log(FEV1/Altura)") +
+  theme_bw()
+p
+
+```
+
+## Perfis de médias
+
+- Como cada indivíduo não é medido na mesma idade, a construção de gráficos da resposta média em função da idade pode representar dificuldades devido à escassez de dados em qualquer idade específica.
+- Nos casos em que as ocasiões de medição são diferentes, é útil produzir um gráfico __"suavizado"__ da tendência média de resposta ao longo do tempo.
+- Tal gráfico pode ser obtido usando uma variedade de abordagens chamadas de __"técnicas de suavização"__.
+- Muitas dessas técnicas de suavização abordam a estimativa da resposta média a qualquer momento, considerando não apenas as observações naquela ocasião, mas também as observações "vizinhas".
+    + Ou seja, a média estimada é baseada em observações feitas antes, no e depois do momento de interesse.
+    + A resposta média em qualquer momento, digamos $t$, é considerada uma média ponderada das observações em alguma vizinhança em torno de $t$.
+
+## Suavização
+
+- Para dados longitudinais que são balanceados e completos (sem dados ausentes), a média móvel no tempo $t$, denotado $S_t$, é dada por
+
+$$
+S_t = \frac{1}{N}\sum_{i=1}^N{\sum_{j=-k}^k{w_jy_{i,t+j}}},\ t = k + 1, \ldots, n - k, \sum_{j=-k}^k{w_j} = 1.
+$$
+
+- Quando os dados longitudinais são espaçados irregularmente e desbalanceados ao longo do tempo, outros métodos de regressão não paramétricos podem ser usados para estimar a tendência de resposta média ao longo do tempo.
+- Um método popular disponível na maioria dos pacotes de software estatístico padrão é a regressão localmente ponderada ou ___lowess___.
+
+## Suavização
+
+### Lowess ou loess explicado
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'lowess_explicado.png'))
+```
+
+
+## Suavização: lowess {.allowframebreaks}
+
+```{r fev4, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+
+p <- ggplot(data = fev,
+            mapping = aes(x = age, y = logfh)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "loess", se = FALSE) +
+  labs(x = "Idade (anos)",
+       y = "Log(FEV1/Altura)") +
+  theme_bw()
+p
+
+```
+
+# Estrutura de correlação (succimer)
+
+## Estrutura de correlação (succimer) {.allowframebreaks}
+
+```{r filtra_succimer, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+chumbo.succimer <- chumbo %>% 
+  filter(trt == 1) %>% 
+  select(y0, y1, y4, y6) %>% 
+  mutate(y0 = as.numeric(y0),
+         y1 = as.numeric(y1),
+         y4 = as.numeric(y4),
+         y6 = as.numeric(y6))
+
+```
+
+## Estrutura de correlação (succimer) {.allowframebreaks}
+
+```{r grupo_succimer, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+chumbo.succimer
+
+```
+
+## Estrutura de correlação (succimer) {.allowframebreaks}
+
+\footnotesize
+
+```{r correlacao, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="90%"}
+
+library(GGally)
+
+p <- ggpairs(chumbo.succimer,
+             columnLabels = paste("Semana", c(0, 1, 4, 6))) +
+  theme_bw()
+p
+
+```
+
+## Avisos
+
+- __Para casa:__ ler o Capítulo 3 do livro "__Applied Longitudinal Analysis__". Caso ainda não tenha lido, leia também os Caps. 1 e 2.
+- Uma introdução ao pacote `ggplot2` pode ser vista em https://datathon-ufrgs.github.io/Pintando_e_Bordando_no_R/
+- __Próxima aula:__ Considerações a respeito da modelagem da média e da covariância, e abordagem histórica dos métodos de análise de medidas repetidas.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'supeRRR.jpg'))
+```
