@@ -40,11 +40,14 @@ Normalidade $\rightsquigarrow$ Máxima verossimilhança  $\rightsquigarrow$ Esti
 
 ## Notação
 
-- Assumimos uma amostra de $N$ indivíduos são medidos repetidamente ao longo do tempo.
+- Assumimos que uma amostra de $N$ indivíduos são medidos repetidamente ao longo do tempo.
 - Denotamos $Y_{ij}$ a variável resposta do $i$-ésimo indivíduo na $j$-ésima ocasião de medição.
 - Como mencionado anteriormente, os indivíduos podem não ter o mesmo número de medidas e podem não ser medidos nas mesmas ocasiões.
-    + Para tal, utilizamos $n_i$ para representar o número de medidas repetidas e $t_{ij}$ os tempos de medida do $i$-ésimo indivíduo.
-        - Se $n$ é o número de __ocasiões planejadas__ do estudo, então $n_i \leq n$.
+
+###
+
+- Para tal, utilizamos $n_i$ para representar o número de medidas repetidas e $t_{ij}$ os tempos de medida do $i$-ésimo indivíduo.
+    + Se $n$ é o número de __ocasiões planejadas__ do estudo, então $n_i \leq n$.
 
 ## O vetor de respostas
 
@@ -93,15 +96,19 @@ $$
 
 - Existe um vetor correspondente de covariáveis associado a cada uma das $n_i$ medidas repetidas no $i$-ésimo indivíduo.
     + $X_{i1}$ é o vetor $p \times 1$ cujos elementos são os valores das covariáveis associadas à variável de resposta do $i$-ésimo indivíduo na 1ª ocasião de medição;
-    + $X_{i2}$ é o vetor $p \times 1$ cujos elementos são os valores das covariáveis associadas à variável de resposta do $i$-ésimo indivíduo na 1ª ocasião de medição e assim por diante.
+    + $X_{i2}$ é o vetor $p \times 1$ cujos elementos são os valores das covariáveis associadas à variável de resposta do $i$-ésimo indivíduo na 2ª ocasião de medição e assim por diante.
 
 ## Vetor de covariáveis
 
-- O vetor $X_{ij}$ pode incluir dois tipos principais de covariáveis: covariáveis cujos valores não mudam ao longo da duração do estudo e covariáveis cujos valores mudam ao longo do tempo.
-- Exemplos do primeiro incluem tratamentos experimentais fixos.
-- Exemplos deste último incluem o tempo desde a linha de base, o status atual do tabagismo e as exposições ambientais.
-- No primeiro caso, os mesmos valores das covariáveis são replicados nas linhas correspondentes de $X_{ij}$ para $j = 1, \ldots, n_i$.
-- Neste último caso, os valores obtidos pelas covariáveis podem variar ao longo do tempo (para pelo menos alguns indivíduos) e os valores nas linhas correspondentes de $X_{ij}$ podem ser diferentes a cada ocasião da medição. 
+- O vetor $X_{ij}$ pode incluir dois tipos principais de covariáveis: \structure{(i)} covariáveis cujos valores não mudam ao longo da duração do estudo e \structure{(ii)} covariáveis cujos valores mudam ao longo do tempo.
+
+i. Exemplos do primeiro caso incluem tratamentos experimentais fixos.
+ii. Exemplos do segundo caso incluem o tempo desde a linha de base, idade, o status atual do tabagismo e as exposições ambientais.
+
+## Vetor de covariáveis
+
+- No primeiro caso, __os mesmos valores das covariáveis são replicados nas linhas__ correspondentes de $X_{ij}$ para $j = 1, \ldots, n_i$.
+- Já para no segundo caso, os valores obtidos pelas covariáveis podem variar ao longo do tempo (para pelo menos alguns indivíduos) e os valores nas linhas correspondentes de $X_{ij}$ podem ser diferentes a cada ocasião da medição. 
 
 ## Matriz de covariáveis
 
@@ -126,13 +133,13 @@ $$
 
 ## Modelo de regressão linear
 
-- Consideramos um modelo de regressão linear para alterações na resposta média ao longo do tempo e para relacionar as alterações às covariáveis,
+- Consideramos um modelo de regressão linear para alterações na resposta média ao longo do tempo e para relacionar estas mudanças às covariáveis,
 
 \begin{equation}
 \label{mod1}
 Y_{ij} = \beta_1X_{ij1} + \beta_2X_{ij2} + \ldots + \beta_pX_{ijp} + e_{ij}, j = 1, \ldots, n_i;
 \end{equation}
-em que $\beta_1, \ldots, \beta_p$ são __coeficientes de regressão desconhecidos__ relacionando a média de $Y_{ij}$ às suas correspondentes covariáveis.
+em que \structure{$\beta_1, \ldots, \beta_p$} são __coeficientes de regressão desconhecidos__ relacionando a média de $Y_{ij}$ às suas correspondentes covariáveis.
 
 - Este modelo descreve como as respostas em cada ocasião são relacionadas com as covariáveis.
 
@@ -153,26 +160,26 @@ em que $\beta = (\beta_1, \beta_2, \ldots, \beta_p)'$ é um vetor $p \times 1$.
 
 ## Modelo de regressão linear
 
-- No modelo \eqref{mod1} os $e_{ij}$ são erros aleatórios, com __média zero__, representando desvios das respostas a partir de suas respectivas médias preditas
+- No modelo da Equação \eqref{mod1} os \structure{$e_{ij}$} são erros aleatórios, com __média zero__, representando desvios das respostas a partir de suas respectivas médias preditas
 
 $$
 \E(Y_{ij}|X_{ij}) = \beta_1X_{ij1} + \beta_2X_{ij2} + \ldots + \beta_pX_{ijp}.
 $$
 
-- Tipicamente, mas não sempre, $X_{ij1} = 1$ para todo $i$ e $j$, e então $\beta_1$ é o termo de intercepto do modelo.
+- Tipicamente, mas não sempre, $X_{ij1} = 1$ para todo $i$ e $j$, e então \structure{$\beta_1$} é o termo de \structure{intercepto} do modelo.
     + Não utilizaremos $\beta_0$ nem $\alpha$.
     
 ## Modelo de regressão linear
 
-- Por fim, usando notação de vetor e matriz, o modelo de regressão dado por \eqref{mod1} ou \eqref{mod1.longo} pode ser expresso de uma forma ainda mais compacta,
+- Por fim, usando notação de vetor e matriz, o modelo de regressão dado pelas Equações \eqref{mod1} ou \eqref{mod1.longo} pode ser expresso de uma forma ainda mais compacta,
 
 \begin{equation}
 \label{mod1.curto}
 Y_i = X_i\beta + e_i,
 \end{equation}
-em que $e_i = (e_{i1}, e_{i2}, \ldots, e_{in_i})'$ é um vetor $n_i \times 1$ de erros aleatórios.
+em que \structure{$e_i = (e_{i1}, e_{i2}, \ldots, e_{in_i})'$} é um vetor $n_i \times 1$ de \structure{erros aleatórios}.
 
-- O modelo de regressão dado por \eqref{mod1.curto} é simplesmente uma representação abreviada para
+- O modelo de regressão dado pela Equação \eqref{mod1.curto} é simplesmente uma representação abreviada para
 
 $$
 \left(\begin{array}{c}
@@ -202,27 +209,27 @@ $$
 
 ## Estudo TLC
 
-- Lembre-se de que no __estudo sobre tratamento de crianças expostas ao chumbo__, há 100 participantes do estudo que têm níveis de chumbo no sangue medidos no mesmo conjunto de quatro ocasiões: linha de base (ou semana 0), semana l, semana 4 e semana 6.
+- Lembre-se de que no __estudo sobre tratamento de crianças expostas ao chumbo__, há 100 participantes do estudo que têm níveis de chumbo no sangue medidos no mesmo conjunto de quatro ocasiões: linha de base (ou semana 0), semana 1, semana 4 e semana 6.
 - Como todos os indivíduos tem o mesmo número de medidas repetidas observadas no mesmo conjunto de ocasiões, o índice $i$ pode ser retirado de $n_i$ e $t_{ij}$.
     + Ou seja, $n_1 = n_2 = \ldots = n_N = n$ e da mesma forma $t_{1j} = t_{2j} = \ldots = t_{Nj} = t_j$ para $j = 1, \ldots, 4$.
-- No estudo TLC, o vetor de resposta tem comprimento $4\ (n = 4)$ e todos os indivíduos são medidos no mesmo conjunto de ocasiões: $t_1 = 0, t_2 = 1, t_3 = 4\ \mbox{e}\ t_4 = 6$.
+- No estudo TLC, o vetor de resposta tem comprimento $4\ (n = 4)$ e todos os indivíduos são medidos no mesmo conjunto de ocasiões: \structure{$t_1 = 0, t_2 = 1, t_3 = 4\ \mbox{e}\ t_4 = 6$}.
 
 ## Estudo TLC
 
 - Suponha que seja interessante ajustar um modelo à resposta média que pressupõe que o nível médio de chumbo no sangue mude linearmente ao longo do tempo, mas a uma taxa que pode ser diferente para os dois grupos de tratamento.
-- Em particular, podemos querer ajustar um modelo em que os dois grupos de tratamento tenham o mesmo intercepto (ou resposta média na linha de base), mas inclinações diferentes.
+- Em particular, podemos querer ajustar um modelo em que __os dois grupos de tratamento tenham o mesmo intercepto__ (ou sejam, a mesma resposta média na linha de base), mas inclinações diferentes.
     + Isso pode ser representado no seguinte modelo de regressão
 
 \begin{eqnarray*}
 Y_{ij} &=& \beta_1X_{ij1} + \beta_2X_{ij2} + \beta_3X_{ij3} + e_{ij}\\
 &=& X_{ij}'\beta + e_{ij},
 \end{eqnarray*}
-em que $X_{ij1} = 1$ para todo $i$ e $j$ ($\beta_1$ é um termo de intercepto).
+em que $X_{ij1} = 1$ para todo $i$ e $j$ \structure{($\beta_1$ é um termo de intercepto)}.
 
 ## Estudo TLC
 
 - A segunda covariável, $X_{ij2} = t_j$, representa a semana em que o nível de chumbo no sangue foi obtido.
-- Por fim, $X_{ij3} = t_j \times\ \mbox{Grupo}$, em que $\mbox{Grupo}_i = 1$ se o $i$-ésimo indivíduo é designado ao grupo succimer e $\mbox{Grupo}_i = 0$ se o $i$-ésimo indivíduo é designado ao grupo placebo.
+- Por fim, $X_{ij3} = t_j \times\ \mbox{Grupo}_i$, em que $\mbox{Grupo}_i = 1$ se o $i$-ésimo indivíduo é designado ao grupo succimer e $\mbox{Grupo}_i = 0$ se o $i$-ésimo indivíduo é designado ao grupo placebo.
 
 ## Estudo TLC
 
@@ -247,7 +254,10 @@ $$
 
 - $\beta_1$ representa o nível de chumbo no sangue médio na linha de base (assumido ser o mesmo como no grupo placebo, pois o ensaio aleatorizou indivíduos para dois grupos);
 - $\beta_2 + \beta_3$ tem interpretação como uma mudança no nível médio de chumbo no sangue (em $\mu g/dL$) por semana.
-- Assim, se os dois grupos de tratamentos diferem em suas taxas de declínio nos níveis de chumbo no sangue, então $\beta_3 \neq 0$.
+
+###
+
+Assim, se os dois grupos de tratamentos diferem em suas taxas de declínio nos níveis de chumbo no sangue, então $\beta_3 \neq 0$.
 
 ## Estudo TLC
 
@@ -362,13 +372,13 @@ para crianças no grupo succimer.
 \label{mod1.media}
 \E(Y_i|X_i) = \mu_i = X_i\beta,
 \end{equation}
-em que $\mu_i = (\mu_{i1}, \ldots, \mu_{in_i})'$ é o vetor $n_i \times 1$ de médias condicionais para o $i$-ésimo indivíduo, com $\mu_{ij} = \E(Y_{ij}|X_i) = \E(Y_{ij}|X_{ij})$.
+em que \structure{$\mu_i = (\mu_{i1}, \ldots, \mu_{in_i})'$} é o vetor $n_i \times 1$ de médias condicionais para o $i$-ésimo indivíduo, com $\mu_{ij} = \E(Y_{ij}|X_i) = \E(Y_{ij}|X_{ij})$.
 
 ## Componente sistemático e distribuição dos erros
 
 - Em seguida, consideramos as suposições distribucionais relativas ao vetor de erros aleatórios, $e_i$.
 - O vetor de resposta $Y_i$ em \eqref{mod1.curto} é assumido como sendo composto por dois componentes:
-    1. um "componente sistemático", $X_i\beta$
+    1. um "componente sistemático", $X_i\beta$;
     2. um "componente aleatório", $e_i$.
 - A variabilidade aleatória de $Y_i$ decorre da adição de $e_i$.
     + Isso implica que suposições feitas sobre a forma da distribuição dos erros aleatórios se traduzem em suposições sobre a forma da __distribuição condicional__ de $Y_i$ dado $X_i$.
@@ -544,7 +554,7 @@ em que $\Sigma_i^{-1}$ denota a inversa da matriz $\Sigma_i$.
 - A suposição de normalidade multivariada não é crucial para __estimação__ e validade das inferências com respeito a $\beta$ quando os dados são completos (sem ausência de dados).
     + Além disso, essa propriedade se estende à configuração de dados incompletos se os dados observados puderem ser considerados como uma amostra aleatória dos dados completos.
 - Os desvios da normalidade, a menos que sejam muito extremos (por exemplo, dados de resposta altamente assimétricos), não são tão críticos.
-- No cenário de dados longitudinais existem resultados muito semelhantes, que sugerem que são as suposições sobre a dependência entre os erros e as suposições sobre as variações e covariâncias que têm maior impacto na inferência estatística.
+- No cenário de dados longitudinais existem resultados muito semelhantes, que sugerem que são as suposições sobre a dependência entre os erros e as suposições sobre as variâncias e covariâncias que têm maior impacto na inferência estatística.
     + Desvios da normalidade multivariada, a menos que sejam muito extremas, não são tão críticos.
 - Na prática, não se espera que os dados longitudinais tenham uma distribuição conjunta que seja __exatamente__ normal multivariada.
     + A distribuição normal multivariada é adotada como uma __aproximação__, mas possui muitas propriedades estatísticas convenientes.

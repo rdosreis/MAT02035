@@ -1,10 +1,10 @@
 ## ----carrega_dados, echo=TRUE, eval=FALSE, message=FALSE, warning=FALSE--------------------------------------------
 ## 
 ## # install.packages("haven")
-## library(haven)
-## 
-## chumbo <- read_dta(file = "tlc.dta"))
-## 
+library(haven)
+
+chumbo <- read_dta(file = "data\\tlc.dta")
+
 
 
 ## ----largo, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------------------------------------

@@ -1,4 +1,4 @@
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE-------------
+## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE--------------------------------
 
 library(ggplot2)
 library(cowplot)

@@ -2,7 +2,8 @@ library(here)
 library(rmarkdown)
 
 pasta <- "Rmds"
-arquivo <- "06_modelos_lineares_dados_longitudinais_continuacao_s20_2"
+arquivo <- "10_mm_perfis_de_respostas_p1_s20_2"
+# arquivo <- "09_inferencia_estatistica_s20_2"
 
 arquivo_rmd <- paste0(arquivo, ".Rmd")
 arquivo_pdf <- paste0(arquivo, ".pdf")
@@ -27,3 +28,7 @@ knitr::purl(input = input,
             output = here::here("RScripts", arquivo_r),
             documentation = 1,
             encoding = "UTF-8")
+
+
+# rmarkdown::render(input = input, 
+#                   output_format = "powerpoint_presentation")

@@ -32,7 +32,7 @@ chumbo <- read_dta(
 # install.packages("haven")
 library(haven)
 
-chumbo <- read_dta(file = "tlc.dta"))
+chumbo <- read_dta(file = "tlc.dta")
 
 ```
 
