@@ -2,7 +2,7 @@ library(here)
 library(rmarkdown)
 
 pasta <- "Rmds"
-arquivo <- "10_mm_perfis_de_respostas_p1_s20_2"
+arquivo <- "12_modelando_a_covariancia_s20_2"
 # arquivo <- "09_inferencia_estatistica_s20_2"
 
 arquivo_rmd <- paste0(arquivo, ".Rmd")

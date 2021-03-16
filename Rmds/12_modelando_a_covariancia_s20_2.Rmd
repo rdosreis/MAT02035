@@ -1,0 +1,540 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Modelando a covariância"
+fontsize: 10pt
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2021
+---
+
+# Introdução
+
+## Introdução
+
+- Uma vez que uma das características definidoras dos __dados longitudinais__ é que eles __são correlacionados__, devemos considerar abordagens para __modelar__ apropriadamente __a covariância__ ou dependência do tempo entre as medidas repetidas obtidas nos mesmos indivíduos.
+- Quando um modelo apropriado para a covariância é adotado, erros padrão corretos são obtidos e inferências válidas sobre os parâmetros de regressão podem ser feitas.
+- Levar em consideração a covariância entre medidas repetidas geralmente aumenta a eficiência ou a precisão com a qual os parâmetros de regressão podem ser estimados; ou seja, a correlação positiva entre as medidas repetidas reduz a variabilidade da estimativa de mudança ao longo do tempo dentro dos indivíduos.
+
+## Introdução
+
+- Além disso, quando há dados ausentes, a modelagem correta da covariância é frequentemente um requisito para obter estimativas válidas dos parâmetros de regressão.
+- Em geral, a falha em levar em consideração a covariância entre as medidas repetidas resultará em estimativas incorretas da variabilidade da amostragem e pode levar a inferências científicas enganosas.
+
+## Introdução
+
+- Os dados longitudinais apresentam __dois aspectos__ dos dados que __requerem modelagem__: a __resposta média__ ao longo do tempo e a __covariância__.
+- Embora esses dois aspectos dos dados possam ser modelados separadamente, eles estão __inter-relacionados__.
+- As escolhas de modelos para resposta média e covariância são __interdependentes__.
+- Um modelo para a covariância deve ser escolhido com base em algum modelo assumido para a resposta média.
+- A covariância entre qualquer par de resíduos, digamos $[Y_{ij} -  \mu_{ij}(\beta)]$ e $[Y_{ik} -  \mu_{ik}(\beta)]$, depende do modelo para a média condicional.
+
+## Introdução
+
+- Um modelo para a covariância deve ser escolhido com base em algum modelo para a resposta média; este representa uma tentativa de levar em consideração a covariância entre os resíduos que resultam de um modelo específico para a média.
+- Uma escolha diferente de modelo para a média ou, além disso, qualquer especificação incorreta do modelo para a média, pode potencialmente resultar em uma escolha diferente de modelo para a covariância.
+- Como resultado dessa interdependência entre os modelos de média e covariância, precisaremos desenvolver uma estratégia geral de modelagem que leve essa interdependência em consideração.
+
+## Introdução
+
+Três abordagens gerais podem ser distinguidas:
+
+(1) \colorbox{darkpastelgreen}{padrão de covariância "não estruturado" ou arbitrário};
+(2) \colorbox{darkpastelgreen}{modelos de padrão de covariância};
+(3) \colorbox{darkpastelred}{estrutura de covariância de efeitos aleatórios}.
+
+# Covariância não estruturada
+
+## Covariância não estruturada
+
+- __Apropriada__ quando o __delineamento__ é __balanceado__ e o __número de ocasiões__ de medições é relativamente __pequeno__.
+- Nenhuma estrutura explícita é assumida além da __homogeneidade de covariância entre diferentes indivíduos__, $\Cov(Y_i) = \Sigma_i = \Sigma$.
+- __Principal vantagem:__ nenhuma suposição sobre os padrões de variância e covariâncias.
+
+## Covariância não estruturada
+
+- Com $n$ ocasiões de medição, a matriz de covariância "não estruturada" possui $n \times (n + 1)/2$ parâmetros:
+    + as $n$ variâncias ($\sigma^2_j = \Var[Y_{ij}]$) e as $n \times (n - 1)/2$ covariâncias ($\sigma_{jk} = \Cov[Y_{ij}, Y_{ik}]$) duas-a-duas,
+
+$$
+\Cov(Y_i) = \left(\begin{array}{cccc}
+\sigma^2_1 & \sigma_{12} & \cdots & \sigma_{1n} \\
+\sigma_{21} & \sigma^2_{2} & \cdots & \sigma_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+\sigma_{n1} & \sigma_{n2} & \cdots & \sigma^2_{n}
+\end{array}\right).
+$$
+
+## Covariância não estruturada
+
+### Potenciais desvantagens:
+
+- O número de parâmetros de covariância cresce rapidamente com o número de ocasiões de medição:
+    + $n = 3$, o número de parâmetros de covariância é $6$;
+    + $n = 5$, o número de parâmetros de covariância é $15$;
+    + $n = 10$, o número de parâmetros de covariância é $55$.
+- Quando o número de parâmetros de covariância é grande, em relação ao tamanho da amostra, é provável que a estimativa seja muito instável.
+- O uso de uma covariância não estruturada é atraente apenas quando $N$ é grande em relação a $n\times(n + 1)/2$.
+- A covariância não estruturada é problemática quando há medições irregulares no tempo.
+
+# Modelos de padrão de covariância
+
+## Modelos de padrão de covariância
+
+- Ao tentar impor alguma estrutura à covariância, um __equilíbrio__ sutil precisa ser alcançado.
+    - Com __pouca estrutura__, pode haver __muitos parâmetros__ a serem estimados com quantidade limitada de dados.
+    - Com __muita estrutura__, risco potencial de __erros de especificação do modelo__ e inferências enganosas a respeito de $\beta$.
+- Este é o clássico __tradeoff__ entre __viés__ e __variância__.
+- Os modelos de padrão de covariância têm como base __modelos de correlação serial__ originalmente desenvolvidos para dados de __séries temporais__.
+    + A seguir, veremos alguns destes modelos.
+
+## Relação entre a covariância e a correlação
+
+- Lembre que $\rho_{jk} = \Corr(Y_{ij}, Y_{ik})$ pode ser expresso como
+
+\begin{eqnarray*}
+\rho_{jk} &=& \frac{\Cov(Y_{ij}, Y_{ik})}{ \sqrt{\Var(Y_{ij})} \sqrt{\Var(Y_{ik})} }\\
+ &=& \frac{\sigma_{jk}}{\sigma_{j}\sigma_{k}}\\
+ &\Rightarrow& \sigma_{jk} = \rho_{jk}\sigma_{j}\sigma_{k}.
+\end{eqnarray*}
+
+- Se assumirmos que $\Var(Y_{i1}) = \Var(Y_{i2}) = \ldots \Var(Y_{in}) = \sigma^2$, então $\sigma_j = \sigma_k$ e $\sigma_j\sigma_k = \sigma^2$, e assim $\sigma_{jk} = \rho_{jk}\sigma^2$.
+    + Ou seja, modelos de padrão de covariância podem ser obtidos a partir da especificação de um padrão da estrutura de correlação.
+
+## Simetria composta
+
+- Este padrão asssume que a __variância é constante__ entre as ocasiões, digamos $\sigma^2$, e $\Corr(Y_{ij}, Y_{ik}) = \rho$ para todo $j$ e $k$.
+
+$$
+\Cov(Y_i) = \sigma^2\left(\begin{array}{ccccc}
+1 & \rho & \rho & \cdots & \rho \\
+\rho & 1 & \rho & \cdots & \rho \\
+\vdots & \vdots & \ddots & \vdots \\
+\rho & \rho & \rho & \cdots & 1
+\end{array}\right).
+$$
+
+- __Vantagem:__ (parcimônia) possui apenas dois parâmetros, independentemente do número de ocasiões de medição.
+- __Desvantagem:__ Fas fortes suposições sobre variância e correlação geralmente não são válidas com dados longitudinais.
+
+## Toeplitz
+
+- Assume que a variância é constante entre as ocasiões, digamos $\sigma^2$, e $\Corr(Y_{ij}, Y_{i,j+k}) = \rho_k$ para todo $j$ e $k$.
+
+$$
+\Cov(Y_i) = \sigma^2\left(\begin{array}{ccccc}
+1 & \rho_1 & \rho_2 & \cdots & \rho_{n-1} \\
+\rho_1 & 1 & \rho_1 & \cdots & \rho_{n-2} \\
+\rho_2 & \rho_1 & 1 & \cdots & \rho_{n-3} \\
+\vdots & \vdots & \ddots & \vdots \\
+\rho_{n-1} & \rho_{n-2} & \rho_{n-3} & \cdots & 1
+\end{array}\right).
+$$
+
+- Assume que a correlação entre as respostas em ocasiões adjacentes de medição é constante, $\rho_1$.
+
+## Toeplitz
+
+- Toeplitz é apropriado apenas quando as medições são feitas em intervalos de tempo iguais (ou aproximadamente iguais).
+- A covariância Toeplitz possui $n$ parâmetros ($1$ parâmetro de variância e $n - 1$ parâmetros de correlação).
+- Um caso especial da covariância Toeplitz é a covariância __autoregressiva__ (de primeira ordem).
+
+## Autoregressiva
+
+- Assume que a variância é constante entre as ocasiões, digamos $\sigma^2$, e $\Corr(Y_{ij}, Y_{i,j+k}) = \rho^k$ para todo $j$ e $k$, e $\rho \geq 0$.
+
+$$
+\Cov(Y_i) = \sigma^2\left(\begin{array}{ccccc}
+1 & \rho & \rho^2 & \cdots & \rho^{n-1} \\
+\rho & 1 & \rho & \cdots & \rho^{n-2} \\
+\rho^2 & \rho & 1 & \cdots & \rho^{n-3} \\
+\vdots & \vdots & \ddots & \vdots \\
+\rho^{n-1} & \rho^{n-2} & \rho^{n-3} & \cdots & 1
+\end{array}\right).
+$$
+
+- __Parcimônia:__ apenas 2 parâmetros, independentemente do número de ocasiões de medição.
+- Somente apropriado quando as medições são feitas em intervalos de tempo iguais (ou aproximadamente iguais).
+
+## Autoregressiva
+
+- Simetria composta, Toeplitz e covariância autoregressiva assumem que as variâncias são constantes ao longo do tempo.
+- Essa suposição pode ser relaxada considerando-se versões desses modelos com variâncias heterogêneas, $\Var(Y_{ij}) = \sigma^2_j$.
+- Um padrão heterogêneo de covariância autoregressiva:
+
+$$
+\Cov(Y_i) = \left(\begin{array}{ccccc}
+\sigma^2_1 & \rho\sigma_1\sigma_2 & \rho^2\sigma_1\sigma_3 & \cdots & \rho^{n-1}\sigma_1\sigma_n \\
+\rho\sigma_1\sigma_2 & \sigma^2_2 & \rho\sigma_2\sigma_3 & \cdots & \rho^{n-2}\sigma_2\sigma_n \\
+\rho^2\sigma_1\sigma_3 & \rho\sigma_2\sigma_3 & \sigma^2_3 & \cdots & \rho^{n-3}\sigma_3\sigma_n \\
+\vdots & \vdots & \ddots & \vdots \\
+\rho^{n-1}\sigma_1\sigma_n & \rho^{n-2}\sigma_2\sigma_n & \rho^{n-3}\sigma_3\sigma_n & \cdots & \sigma^2_n
+\end{array}\right).
+$$
+
+e possui $n + 1$ parâmetros ($n$ parâmetros de variância e $1$ parâmetro de correlação).
+
+## Banded (em faixas)
+
+- Assume que a correlação é zero além de algum intervalo especificado.
+- Por exemplo, um padrão de covariância em faixas com tamanho de banda 3 pressupõe que $\Corr(Y_{ij}, Y_{i,j+k}) = 0$ para $k \geq 3$.
+- É possível aplicar um padrão em faixas a qualquer um dos modelos de padrão de covariância considerados até o momento.
+
+## Banded (em faixas)
+
+- Um padrão de covariância de Toeplitz em faixas com um tamanho de banda 2 é dado por,
+
+$$
+\Cov(Y_i) = \sigma^2\left(\begin{array}{ccccc}
+1 & \rho_1 & 0 & \cdots & 0 \\
+\rho_1 & 1 & \rho_1 & \cdots & 0 \\
+0 & \rho_1 & 1 & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 &0 & \cdots & 1
+\end{array}\right).
+$$
+
+em que $\rho_2 = \rho_3 = \ldots = \rho_{n-1} = 0$.
+
+- A estrutura banded faz suposições muito fortes sobre a rapidez com que a correlação cai para zero com o aumento da separação entre as ocasiões de medição.
+
+## Exponencial
+
+- Quando as ocasiões de medição não são igualmente espaçadas ao longo do tempo, o modelo autorregressivo pode ser generalizado da seguinte maneira.
+
+- Denote os tempos de observação para o $i$-ésimo indivíduo por $\{t_{i1},\ldots, t_{in}\}$ e assuma que a variância é constante em todas as ocasiões de medição, digamos $\sigma^2$, e
+
+$$
+\Corr(Y_{ij}, Y_{ik}) = \rho^{|t_{ij} - t_{ik}|},\ \mbox{para}\ \rho \geq 0.
+$$
+
+- A correlação entre qualquer par de medidas repetidas diminui exponencialmente com as separações de tempo entre elas.
+
+## Exponencial
+
+- Este padrão é referido como __covariância "exponencial"__ porque pode ser reexpressa como
+
+\begin{eqnarray*}
+\Cov (Y_{ij}, Y_{ik}) &=& \sigma^2 \rho^{|t_{ij} - t_{ik}|}\\
+&=& \sigma^2\exp(-\theta |t_{ij} - t_{ik}|),
+\end{eqnarray*}
+
+em que $\theta = -\log(\rho)$ ou $\rho = \exp(-\theta)$ para $\theta \geq 0$.
+
+- O modelo de covariância exponencial é invariante sob transformação linear da escala de tempo.
+    + Se substituirmos $t_{ij}$ por $(a + bt_{ij})$ (por exemplo, se substituirmos o tempo medido em "semanas" pelo tempo medido em "dias"), a mesma forma para a matriz de covariância se mantém.
+
+## Escolha entre modelos de padrão de covariância
+
+- A escolha de modelos para covariância e média são interdependentes.
+- A escolha do modelo de covariância deve ser baseada em um modelo __"maximal"__ para a média que minimiza qualquer possível erro de especificação.
+- Com delineamentos balanceados e um número muito pequeno de covariáveis discretas, escolha o "modelo saturado" para a resposta média.
+- __Relembrando:__ o __modelo saturado__ inclui os efeitos principais do tempo (considerado como um fator dentro de indivíduo) e todos os outros efeitos principais, além de suas interações duas-a-duas e de ordem superiores.
+
+## Escolha entre modelos de padrão de covariância
+
+- De forma mais geral, quando o modelo saturado não puder ser empregado, um modelo maximal deve ser especificado para a média da resposta.
+    + O modelo maximal deve ser, em certo sentido, o modelo mais elaborado para a resposta média que consideraríamos do ponto de vista do indivíduo.
+- Uma vez escolhido o modelo maximal, a variância e a covariância residual podem ser usadas para selecionar o modelo apropriado para covariância.
+
+## Escolha entre modelos de padrão de covariância
+
+- Dado um modelo maximal para a média, uma sequência de modelos de padrão de covariância pode ser ajustada aos dados disponíveis.
+- __A escolha__ entre os modelos pode ser feita __comparando as verossimilhanças maximizadas__ para cada um dos modelos de padrão de covariância.
+- Ou seja, quando qualquer par de modelos é encaixado, uma estatística de __teste de razão de verossimilhanças__ pode ser construída para comparar os modelos "completo" e "reduzido".
+
+## Escolha entre modelos de padrão de covariância
+
+- Lembre-se que dois modelos são encaixados quando o modelo "reduzido" é um caso especial do modelo "completo".
+- Por exemplo, o modelo de simetria composta é um caso especial do modelo Toeplitz, desde que $\rho_1 = \rho_2 = \ldots= \rho_{n-1}$.
+- A estatística do teste da razão de verossimilhanças é obtido tomando-se o dobro da diferença das respectivas __log-verossimilhanças REML maximizadas__,
+
+$$
+G^2 = 2(\hat{\ell}_{comp} - \hat{\ell}_{red}),
+$$
+
+e comparando a estatística com uma distribuição qui-quadrado com graus de liberdade igual à diferença entre o número de parâmetros de covariância nos modelos completo e reduzido.
+
+## Escolha entre modelos de padrão de covariância
+
+- __Para comparar modelos não encaixados__, uma abordagem alternativa é o __Critério de Informação de Akaike__ \structure{(Akaike Information Criterion - AIC)}.
+- De acordo com a AIC, dado um conjunto de modelos concorrentes para a covariância, __deve-se selecionar o modelo que minimiza__
+
+\begin{eqnarray*}
+AIC &=& -2(\mbox{log-vero. maximizada}) + 2(\mbox{número de parãmetros})\\
+ &=& -2(\hat{\ell} - c),
+\end{eqnarray*}
+
+em que $\hat{\ell}$ é a __log-verossimilhança REML maximizada__ e $c$ é o número de parâmetros de covariância.
+
+# Estudo de caso
+
+## Experimento de Terapia por Exercício
+
+- Neste estudo, os indivíduos foram designados para um dos dois programas de levantamento de peso para aumentar a força muscular.
+    + __Tratamento 1:__ o número de repetições dos exercícios foi aumentado à medida que os indivíduos se tornaram mais fortes.
+    + __Tratamento 2:__ o número de repetições foi mantido constante, mas a quantidade de peso foi aumentada à medida que os indivíduos se tornaram mais fortes.
+- As medidas de força corporal foram realizadas na linha de base e nos dias 2, 4, 6, 8, 10 e 12.
+- Vamos nos concentrar apenas nas medidas de força obtidas na linha de base (ou no dia 0) e nos dias 4, 6, 8 e 12.
+
+## Experimento de Terapia por Exercício
+
+- Antes de considerar modelos para a covariância, é necessário escolher um modelo maximal para a resposta média.
+- Neste exemplo (delineamento balanceado e apenas dois grupos de tratamento), optamos pelo modelo saturado como o modelo maximal para a média.
+- Primeiramente, vamos considerar uma matriz de __covariância não estruturada__.
+
+```{r carrega-dados, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE}
+# ----------------------------------------------------
+# Carregando pacotes do R
+
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+
+af <- read_dta(file = here::here("data",
+                                 "exercise.dta"))
+
+names(af)[which(names(af) == "group")] <- "trt"
+
+# ----------------------------------------------------
+# Reformando o objeto: de "largo" para "longo"
+
+af.longo <- gather(data = af,
+                        key = "tempo",
+                        value = "fc", -id, -trt)
+
+# ----------------------------------------------------
+# Filtra dados
+
+af.longo <- subset(x = af.longo,
+                   subset = tempo != "y2" & tempo != "y10")
+
+# ----------------------------------------------------
+# Formata variáveis
+
+af.longo$dia <- factor(af.longo$tempo,
+                       labels = c(0, 12, 4, 6, 8))
+
+af.longo$dia <- factor(af.longo$dia,
+                       levels = c("0", "4", "6", "8", "12"))
+
+af.longo$tempo <- as.numeric(af.longo$dia)
+
+af.longo$trt <- factor(af.longo$trt)
+
+```
+
+## Modelo maximal com cov. não estruturada {.allowframebreaks}
+
+```{r gls_ne, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+library(nlme)
+
+# matriz de covariância não estruturada
+mod1 <- gls(fc ~ trt*dia,
+            na.action = na.omit,
+            
+            corr = corSymm(form = ~ tempo | id),
+            weights = varIdent(form = ~ 1 | tempo),
+            
+            method = "REML",
+            data = af.longo)
+
+```
+
+## Matriz de covariância não estruturada estimada {.allowframebreaks}
+
+```{r cov_est, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+library(lavaSearch2)
+
+knitr::kable(
+  getVarCov2(mod1)$Omega,
+  digits = 3)
+
+```
+
+- Observe que a variância parece ser maior no final do estudo, quando comparada à variância na linha de base.
+
+- A correspondente matriz de correlação pode ser obtida com
+
+```{r cov_est2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+mod1$modelStruct$corStruct
+
+```
+
+- Note que as correlações diminuem à medida que a separação do tempo entre as medidas repetidas aumenta.
+
+## Modelo maximal com cov. autoregressiva {.allowframebreaks}
+
+- Apesar do aparente aumento da variância ao longo do tempo, consideramos um __modelo autoregressivo__ para a covariância.
+- Este modelo é muito parcimonioso, com apenas dois parâmetros, um descrevendo a variância, $\sigma^2$, o outro a correlação, $\rho$.
+
+```{r gls_ar1, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+# library(nlme)
+
+# matriz de covariância autoregressiva
+mod2 <- gls(fc ~ trt*dia,
+            na.action = na.omit,
+            
+            corr = corAR1(form = ~ tempo | id),
+            
+            method = "REML",
+            data = af.longo)
+
+```
+
+- Quando um modelo autorregressivo de primeira ordem é ajustado aos dados, ele resulta nas seguintes estimativas dos parâmetros de variância e correlação
+
+```{r cor_est, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+summary(mod2)$sigma^2
+
+coef(mod2$modelStruct$corStruct,
+     uncons = FALSE, allCoef = TRUE)
+
+```
+
+\framebreak
+
+\scriptsize
+
+- As correlações pareadas estimadas resultantes entre as cinco medições repetidas são fornecidas por
+
+```{r cor_est2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+getVarCov(mod2)/summary(mod2)$sigma^2
+
+```
+
+- O modelo autoregressivo foi ajustado principalmente para fins ilustrativos; o modelo não é muito apropriado para esses dados, pois eles estão espaçados de forma desigual ao longo do tempo (ou seja, há um intervalo de quatro dias entre as duas primeiras medidas repetidas e as duas últimas medidas repetidas, mas todas as outras medidas repetidas adjacentes foram feitas com dois dias de intervalo).
+
+## Modelo maximal com cov. exponencial {.allowframebreaks}
+
+- A fim de contabilizar o intervalo de tempo desigual, um modelo exponencial para a covariância foi considerado, em que
+
+$$
+\Cov (Y_{ij}, Y_{ik}) = \sigma^2 \rho^{|t_{ij} - t_{ik}|},
+$$
+para $t_{i1} = 0,\ t_{i2} = 4,\ t_{i3} = 6,\ t_{i4} = 8$ e $t_{i5} = 12$ para todos os indivíduos.
+
+```{r gls_exp, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+af.longo$dia.num <- as.numeric(as.character(af.longo$dia))
+
+# library(nlme)
+
+# matriz de covariância exponencial
+mod3 <- gls(fc ~ trt*dia,
+            na.action = na.omit,
+            
+            corr = corExp(form = ~ dia.num | id),
+            
+            method = "REML",
+            data = af.longo)
+
+```
+
+\framebreak
+
+- A variância e as correlações pareadas estimadas resultantes entre as cinco medições repetidas são fornecidas por
+
+```{r cor_est_exp, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+summary(mod3)$sigma^2
+
+getVarCov(mod3)/summary(mod3)$sigma^2
+
+```
+
+- Note que os declínios nas correlações estimadas dos modelos autoregressivo e exponencial são muito rápidos quando comparados aos declínios correspondentes do modelo de covariância não estruturada.
+
+## Comparando os modelos {.allowframebreaks}
+
+- A seguir, consideramos a escolha entre esses modelos de padrão de covariância.
+- A log-verossimilhança REML maximizada e o AIC para cada um dos modelos de padrão de covariância são exibidos a seguir
+
+
+```{r compara, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+anova(mod1, mod2, mod3, test = FALSE)
+
+```
+
+## Comparando os modelos {.allowframebreaks}
+
+- Observe que existe uma hierarquia entre os modelos. 
+    + Os modelos autoregressivo e exponencial são encaixados no modelo de covariância não estruturada. 
+- As comparações dos modelos autoregressivo e exponencial com o modelo de covariância não estruturada podem ser feitas usando __testes de razão de verossimilhança (REML)__.
+- No entanto, os modelos autoregressivo e exponencial não são modelos encaixados; ainda, ambos os modelos têm o mesmo número de parâmetros.
+    + Como resultado, qualquer comparação entre esses dois modelos pode ser feita diretamente em termos de suas log-verossimilhanças maximizadas, uma vez que qualquer penalidade extraída por critérios de informação será a mesma em ambos os casos.
+
+## Comparando os modelos {.allowframebreaks}
+
+- Com base no teste da razão de verossimilhanças, há evidências de que o modelo autorregressivo não fornece um ajuste adequado para a covariância, quando comparado à covariância não estruturada ($p < 0.05$).
+
+\scriptsize
+
+```{r compara2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+anova(mod1, mod2)
+
+```
+
+## Comparando os modelos {.allowframebreaks}
+
+- Por outro lado, o teste da razão de verossimilhanças, comparando a covariância exponencial e não estruturada, resulta em 
+
+\scriptsize
+
+```{r compara3, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+anova(mod1, mod3)
+
+```
+
+\normalsize
+
+- Assim, a covariância exponencial fornece um ajuste adequado aos dados  ($p > 0.05$).
+- Além disso, em termos do AIC, o modelo exponencial minimiza esse critério.
+
+# Pontos fortes e fracos dos modelos de covariância
+
+## Pontos fortes e fracos dos modelos de covariância
+
+- Os modelos de padrão de covariância tentam caracterizar a covariância com um número relativamente pequeno de parâmetros.
+- No entanto, muitos modelos (por exemplo, autoregressivo, Toeplitz e em faixas) são apropriados apenas quando medições repetidas são obtidas em intervalos iguais e não podem lidar com medições irregulares no tempo.
+- Embora exista uma grande variedade de modelos para correlações, a escolha de modelos para variâncias é limitada.
+- Eles não são adequados para modelar dados de delineamentos longitudinais inerentemente desbalanceados.
+
+# Exercícios
+
+## Exercícios
+
+- Resolva os exercícios do Capítulo 7 do livro "__Applied Longitudinal Analysis__" (páginas 186 e 187).
+    + O arquivo de dados (`dental.dta`) está no Moodle.
+
+# Avisos
+
+## Avisos
+
+- __Próxima aula:__ Modelos lineares de efeitos mistos.
+- __Para casa:__ ler o Capítulo 7 do livro "__Applied Longitudinal Analysis__".
+    + Caso ainda não tenha lido, leia também os Caps. 1, 2, 3, 4, 5 e 6.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'georgeepboxmodels.jpg'))
+```

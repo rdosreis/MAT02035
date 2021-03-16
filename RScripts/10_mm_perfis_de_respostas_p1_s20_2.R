@@ -1,42 +1,47 @@
-## ----perfis_medios, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"----
+## ----tlc_p, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, fig.align='center', out.width="80%"----
 # ----------------------------------------------------
 # Carregando pacotes do R
+
 library(here)
 library(haven)
 library(tidyr)
 library(ggplot2)
-library(dplyr)
+
 # ----------------------------------------------------
 # Carregando o arquivo de dados
-chumbo <- read_dta(
-  file = here::here("data", "tlc.dta"))
 
-chumbo.longo <- gather(data = chumbo,
-                        key = "tempo",
-                        value = "chumbo", -id, -trt)
+chumbo.df <- read_dta(file = here::here("data", "tlc.dta"))
 
-chumbo.longo$tempo <- as.numeric(
-  as.character(
-    factor(chumbo.longo$tempo,
-           labels = c(0, 1, 4, 6))))
+chumbo.df$trt <- factor(chumbo.df$trt, labels = c("Placebo", "Succimer"))
 
-chumbo.longo$trt <- factor(chumbo.longo$trt,
-                           labels = c("Placebo",
-                                      "Succimer"))
+# ----------------------------------------------------
+# Reformando o objeto: de "largo" para "longo"
 
-chumbo.resumo <- chumbo.longo %>% 
-  group_by(trt, tempo) %>% 
-  summarise(chumbo.m = mean(chumbo))
+chumbo.df.longo <- gather(data = chumbo.df, key = "tempo", value = "chumbo", -id, -trt)
+
+# ----------------------------------------------------
+# Formata variáveis
+
+chumbo.df.longo$tempo <- factor(chumbo.df.longo$tempo, labels = c("0", "1", "4", "6"))
+chumbo.df.longo$tempo.num <- as.numeric(as.character(chumbo.df.longo$tempo))
+
+# ----------------------------------------------------
+
+library(plyr)
+
+chumbo.resumo <- ddply(chumbo.df.longo, ~ trt + tempo.num, summarize, chumbo.m = mean(chumbo))
 
 p <- ggplot(data = chumbo.resumo,
-            mapping = aes(x = tempo,
-                          y = chumbo.m,
-                          colour = trt)) +
+            mapping = aes(x = tempo.num, y = chumbo.m, group = trt, colour = trt)) +
   geom_point() +
   geom_line() +
-  labs(x = "Tempo (semanas)",
-       y = "Média do nível de chumbo no sangue (mcg/dL)",
-       colour = "Grupo de tratamento")
+  scale_x_continuous(breaks = c(0, 1, 4, 6)) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(x = "Semana",
+       y = expression("Média nível de chumbo no sangue"~(mu*g/dL)),
+       colour = "Grupo de tratamento") +
+  theme_bw() +
+  theme(legend.position = "bottom")
 p
 
 
@@ -46,134 +51,91 @@ p
 
 
 
-## ----carrega_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------------------
-# ----------------------------------------------------
-# Carregando pacotes do R
-library(here)
-library(haven)
-library(tidyr)
-library(ggplot2)
-# ----------------------------------------------------
-# Carregando o arquivo de dados
-here::here("data", "tlc.dta")
-chumbo <- read_dta(
-  file = here::here("data", "tlc.dta"))
+## ----tlc_perfis, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, fig.align='center', out.width="80%"----
 
-
-## ----carrega_dados2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------
-chumbo
-
-
-## ----transforma_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------
-chumbo.longo <- gather(data = chumbo,
-                        key = "tempo",
-                        value = "chumbo", -id, -trt)
-
-chumbo.longo
-
-
-## ----transforma_dados2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------------------
-chumbo.longo$tempo <- as.numeric(
-  as.character(
-    factor(chumbo.longo$tempo,
-           labels = c(0, 1, 4, 6))))
-
-chumbo.longo$trt <- factor(chumbo.longo$trt,
-                           labels = c("Placebo",
-                                      "Succimer"))
-
-chumbo.longo
-
-
-## ----time_plot3a, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------------------------
-library(dplyr)
-
-chumbo.resumo <- chumbo.longo %>% 
-  group_by(trt, tempo) %>% 
-  summarise(chumbo.m = mean(chumbo))
-
-chumbo.resumo
-
-
-## ----time_plot3b, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"----
-p <- ggplot(data = chumbo.resumo,
-            mapping = aes(x = tempo,
-                          y = chumbo.m,
-                          colour = trt)) +
-  geom_point() +
-  geom_line() +
-  labs(x = "Tempo (semanas)",
-       y = "Média do nível de chumbo no sangue (mcg/dL)",
-       colour = "Grupo de tratamento")
 p
 
 
-## ----gls, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------------
-chumbo.longo$tempo <- factor(chumbo.longo$tempo)
+
+## ----factor, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------------------
+class(chumbo.df.longo$tempo)
+class(chumbo.df.longo$trt)
+
+
+## ----gls, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------------------------------
 
 library(nlme)
 
-# matriz de covariância não estruturada
-mod.unst <- gls(chumbo ~ trt * tempo,
+# modelo de perfis de respostas
+# com matriz de covariância não estruturada
+mod.pr <- gls(chumbo ~ trt * tempo,
                 corr = corSymm(form = ~ 1 | id),
                 weights = varIdent(form = ~ 1 | tempo),
                 method = "REML",
-                data = chumbo.longo)
-
-summary(mod.unst)
+                data = chumbo.df.longo)
 
 
-## ----cov_est, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------------------------
-library(lavaSearch2)
 
-knitr::kable(
-  getVarCov2(mod.unst)$Omega,
-  digits = 1)
+## ----summary.gls, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------
+
+summary(mod.pr)
 
 
-## ----wald, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------------------
+
+## ----cov_est, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------------------------------
+
+getVarCov(mod.pr)
+
+
+
+## ----cov_est2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------------------------
+
+knitr::kable(x = matrix(getVarCov(mod.pr),
+                        ncol = 4),
+             digits = 1)
+
+
+
+## ----wald, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------------------
 library(car)
 
+Anova(mod.pr)
+
+
+
+## ----wald2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------------
+
 knitr::kable(
-  Anova(mod.unst),
+  Anova(mod.pr),
   digits = c(0, 2, 4))
 
 
-## ----coef, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------------------
+
+## ----trv, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------------------------------
+
+mod.comp <- gls(chumbo ~ trt * tempo,
+                corr = corSymm(form = ~ 1 | id),
+                weights = varIdent(form = ~ 1 | tempo),
+                method = "ML",
+                data = chumbo.df.longo)
+
+mod.red <- gls(chumbo ~ trt + tempo,
+                corr = corSymm(form = ~ 1 | id),
+                weights = varIdent(form = ~ 1 | tempo),
+                method = "ML",
+                data = chumbo.df.longo)
+
+
+
+## ----trv2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------------------
+
+anova(mod.comp, mod.red)
+
+
+
+## ----coef, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------------------
 knitr::kable(
-  summary(mod.unst)$tTable[,-4],
+  summary(mod.pr)$tTable[,-4],
   digits = c(3, 3, 2),
   col.names = c("Estimativa", "EP", "Z"))
-
-
-## ----mat.del, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------------------------
-chumbo.longo <- arrange(chumbo.longo, id)
-chumbo.longo
-
-model.matrix(chumbo ~ trt * tempo,
-             data = chumbo.longo[chumbo.longo$id == 1,])
-
-model.matrix(chumbo ~ trt * tempo,
-             data = chumbo.longo[chumbo.longo$id == 2,])
-
-
-## ----mat.del2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------------
-model.matrix(chumbo ~ -1 + trt * tempo,
-             data = chumbo.longo[chumbo.longo$id == 1,])
-
-model.matrix(chumbo ~ -1 + trt * tempo,
-             data = chumbo.longo[chumbo.longo$id == 2,])
-
-
-## ----mat.del3, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------------
-chumbo.longo$trt <- relevel(chumbo.longo$trt,
-                            ref = "Succimer")
-
-chumbo.longo$tempo <- relevel(chumbo.longo$tempo,
-                              ref = "6")
-model.matrix(chumbo ~ trt * tempo,
-             data = chumbo.longo[chumbo.longo$id == 1,])
-
-model.matrix(chumbo ~ trt * tempo,
-             data = chumbo.longo[chumbo.longo$id == 2,])
 

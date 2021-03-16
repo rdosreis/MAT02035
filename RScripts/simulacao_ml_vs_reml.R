@@ -57,11 +57,11 @@ for (i in 1:N){
   if (i <= N/2){
     e <- mvrnorm(n = 1, mu = rep(0, n), Sigma = Sigma)
     y <- X_0%*%beta + e
-    df[[i]] <- data.frame(id = rep(i, n), y, tempo = t, trt = rep(0, n))
+    df[[i]] <- data.frame(id = rep(i, n), y, tempo = t, trt = rep(0, n), j = 1:n)
   }else{
     e <- mvrnorm(n = 1, mu = rep(0, n), Sigma = Sigma)
     y <- X_1%*%beta + e
-    df[[i]] <- data.frame(id = rep(i, n), y, tempo = t, trt = rep(1, n))
+    df[[i]] <- data.frame(id = rep(i, n), y, tempo = t, trt = rep(1, n), j = 1:n)
   }
 }
 
@@ -111,14 +111,14 @@ p
 mod.ml <- gls(y ~ tempo + tempo:trt,
               data = df,
               corr = corSymm(form = ~ 1 | id),
-              weights = varIdent(form = ~ 1 | tempo),
+              weights = varIdent(form = ~ 1 | j),
               method = "ML")
 
 # Método da máxima verossimilhança restrita (reml)
 mod.reml <- gls(y ~ tempo + tempo:trt,
                 data = df,
                 corr = corSymm(form = ~ 1 | id),
-                weights = varIdent(form = ~ 1 | tempo),
+                weights = varIdent(form = ~ 1 | j),
                 method = "REML")
 
 # ------------------------------------
