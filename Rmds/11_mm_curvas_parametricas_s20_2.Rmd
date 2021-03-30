@@ -37,7 +37,7 @@ date: |
 - Por outro lado, o ajuste de curvas paramétricas ou semiparamétricas a dados longitudinais pode ser justificado em bases substantivas e estatísticas.
 - Substancialmente, em muitos estudos longitudinais, o verdadeiro __processo de resposta média subjacente__ provavelmente __mudará ao longo do tempo__ em um __padrão__ relativamente __suave__, monotonicamente crescente ou decrescente, pelo menos durante a duração do estudo.
     + Como resultado, curvas paramétricas ou semiparamétricas simples podem ser usadas para descrever como a resposta média muda com o tempo.
-- De uma perspectiva estatística, o ajuste de modelos parcimoniosos para a resposta média resultará em testes estatísticos de efeitos de covariáveis (por exemplo, interações tratamento x tempo) que têm __maior poder__ do que em uma análise de perfis de resposta.
+- De uma perspectiva estatística, o ajuste de modelos parcimoniosos para a resposta média resultará em testes estatísticos de efeitos de covariáveis (por exemplo, interações $tratamento \times tempo$) que têm __maior poder__ do que em uma análise de perfis de resposta.
 
 <!-- A razão para o poder maior é que os testes de efeitos covariáveis se concentram apenas em uma gama relativamente estreita de hipóteses alternativas. Por outro lado, as estatísticas de teste na análise dos perfis de resposta dispersam seu poder sobre uma gama de hipóteses alternativas muito mais ampla, mas em muitos casos menos substancialmente plausível ou relevante. -->
 
@@ -51,7 +51,7 @@ date: |
 ## Tendências lineares no tempo
 
 - A curva mais simples possível para descrever mudanças na resposta média ao longo do tempo é uma __linha reta__.
-    + Neste modelo, a inclinação do tempo tem interpretação direta em termos de uma __mudança constante__ na resposta média para uma mudança de unitária única no tempo\footnote{Se $\E(Y_{ij}) = \beta_1 + \beta_2 t_{ij}$, então $\frac{d}{dt_{ij}}\E(Y_{ij}) = \beta_2$.}.
+    + Neste modelo, a inclinação do tempo tem interpretação direta em termos de uma __mudança constante__ na resposta média para uma mudança unitária no tempo\footnote{Se $\E(Y_{ij}) = \beta_1 + \beta_2 t_{ij}$, então $\frac{d}{dt_{ij}}\E(Y_{ij}) = \beta_2$.}.
 - Considere o estudo hipotético de __dois grupos__ comparando um __novo tratamento__ e um __controle__.
 
 ## Tendências lineares no tempo
@@ -132,8 +132,8 @@ knitr::include_graphics(here::here('images', 'fig6_2.png'))
 
 ## Tendências quadráticas no tempo
 
-- Observe que no modelo de tendências quadráticas, a resposta média muda a uma taxa diferente, dependendo do $Time_{ij}$.
-- Por exemplo, a taxa de mudança no grupo controle é dada por $\color{darkviolet}{\beta_2 + 2\beta_3 Time_{ij}}$. 
+- Observe que no modelo de tendências quadráticas, a resposta média muda a uma taxa diferente, dependendo do $Tempo_{ij}$.
+- Por exemplo, a taxa de mudança no grupo controle é dada por $\color{darkviolet}{\beta_2 + 2\beta_3 Tempo_{ij}}$. 
     + Assim, no início do estudo, quando $\color{darkviolet}{Tempo_{ij} = 1}$, a taxa de mudança na resposta média é $\color{darkviolet}{\beta_2 + 2\beta_3}$, enquanto mais tarde no estudo, digamos $\color{darkviolet}{Tempo_{ij} = 4}$, a taxa de mudança na resposta média é $\color{darkviolet}{\beta_2 + 8\beta_3}$.
 
 ## Tendências quadráticas no tempo
@@ -428,8 +428,8 @@ p
 - No entanto, para ilustrar a aplicação de modelos spline, acomodamos a não linearidade com um modelo linear por partes com nó comum na semana 1 ($t^{*} = 1$),
 
 \begin{eqnarray*}
-\E(Y_{ij}) &=& \beta_1 + \beta_2 Semana_{ij} + \beta_3 (Semana_{ij} - 1)_{+} + \beta_4 Grupo_i\\
-&& + \beta_5 (Semana_{ij} \times Grupo_i) + \beta_6 \{(Semana_{ij} - 1)_{+} \times Grupo_i\},
+\E(Y_{ij}) &=& \beta_1 + \beta_2 Semana_{ij} + \beta_3 (Semana_{ij} - 1)_{+}\\
+&& + \beta_4 (Semana_{ij} \times Grupo_i) + \beta_5 \{(Semana_{ij} - 1)_{+} \times Grupo_i\},
 \end{eqnarray*}
 em que $Grupo_i = 1$ se o $i$-ésimo indivíduo foi designado ao novo tratamento, e $Grupo_i = 0$ caso contrário.
 
@@ -452,8 +452,8 @@ library(nlme)
 # modelo de curvas paramétricas
 #     splines lineares
 # com matriz de covariância não estruturada
-mod.spline <- gls(chumbo ~ semana + I( (semana - 1) * (semana >= 1) ) +
-                    semana:trt + I( (semana - 1) * (semana >= 1) ):trt,
+mod.spline <- gls(chumbo ~ semana + I( (semana - 1) * (semana > 1) ) +
+                    semana:trt + I( (semana - 1) * (semana > 1) ):trt,
                   corr = corSymm(form = ~ tempo | id),
                   weights = varIdent(form = ~ 1 | tempo),
                   method = "REML",
@@ -615,8 +615,8 @@ p2
 ```{r trv, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
 
 # modelo linear por partes
-mod.comp <- gls(chumbo ~ semana + I( (semana - 1) * (semana >= 1) ) +
-                    semana:trt + I( (semana - 1) * (semana >= 1) ):trt,
+mod.comp <- gls(chumbo ~ semana + I( (semana - 1) * (semana > 1) ) +
+                    semana:trt + I( (semana - 1) * (semana > 1) ):trt,
                   corr = corSymm(form = ~ tempo | id),
                   weights = varIdent(form = ~ 1 | tempo),
                   method = "ML",

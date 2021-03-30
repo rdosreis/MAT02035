@@ -108,19 +108,20 @@ $$
 
 ## Simetria composta
 
-- Este padrão asssume que a __variância é constante__ entre as ocasiões, digamos $\sigma^2$, e $\Corr(Y_{ij}, Y_{ik}) = \rho$ para todo $j$ e $k$.
+- Este padrão assume que a __variância é constante__ entre as ocasiões, digamos $\sigma^2$, e $\Corr(Y_{ij}, Y_{ik}) = \rho$ para todo $j$ e $k$.
 
 $$
 \Cov(Y_i) = \sigma^2\left(\begin{array}{ccccc}
 1 & \rho & \rho & \cdots & \rho \\
 \rho & 1 & \rho & \cdots & \rho \\
-\vdots & \vdots & \ddots & \vdots \\
+\rho & \rho & 1 & \cdots & \rho \\
+\vdots & \vdots & \vdots& \ddots & \vdots \\
 \rho & \rho & \rho & \cdots & 1
 \end{array}\right).
 $$
 
 - __Vantagem:__ (parcimônia) possui apenas dois parâmetros, independentemente do número de ocasiões de medição.
-- __Desvantagem:__ Fas fortes suposições sobre variância e correlação geralmente não são válidas com dados longitudinais.
+- __Desvantagem:__ Faz fortes suposições sobre variância e correlação que geralmente não são válidas com dados longitudinais.
 
 ## Toeplitz
 
@@ -131,7 +132,7 @@ $$
 1 & \rho_1 & \rho_2 & \cdots & \rho_{n-1} \\
 \rho_1 & 1 & \rho_1 & \cdots & \rho_{n-2} \\
 \rho_2 & \rho_1 & 1 & \cdots & \rho_{n-3} \\
-\vdots & \vdots & \ddots & \vdots \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
 \rho_{n-1} & \rho_{n-2} & \rho_{n-3} & \cdots & 1
 \end{array}\right).
 $$
@@ -142,7 +143,7 @@ $$
 
 - Toeplitz é apropriado apenas quando as medições são feitas em intervalos de tempo iguais (ou aproximadamente iguais).
 - A covariância Toeplitz possui $n$ parâmetros ($1$ parâmetro de variância e $n - 1$ parâmetros de correlação).
-- Um caso especial da covariância Toeplitz é a covariância __autoregressiva__ (de primeira ordem).
+- Um caso especial da covariância Toeplitz é a covariância __autorregressiva__ (de primeira ordem).
 
 ## Autoregressiva
 
@@ -153,7 +154,7 @@ $$
 1 & \rho & \rho^2 & \cdots & \rho^{n-1} \\
 \rho & 1 & \rho & \cdots & \rho^{n-2} \\
 \rho^2 & \rho & 1 & \cdots & \rho^{n-3} \\
-\vdots & \vdots & \ddots & \vdots \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
 \rho^{n-1} & \rho^{n-2} & \rho^{n-3} & \cdots & 1
 \end{array}\right).
 $$
@@ -163,16 +164,16 @@ $$
 
 ## Autoregressiva
 
-- Simetria composta, Toeplitz e covariância autoregressiva assumem que as variâncias são constantes ao longo do tempo.
+- Simetria composta, Toeplitz e covariância autorregressiva assumem que as variâncias são constantes ao longo do tempo.
 - Essa suposição pode ser relaxada considerando-se versões desses modelos com variâncias heterogêneas, $\Var(Y_{ij}) = \sigma^2_j$.
-- Um padrão heterogêneo de covariância autoregressiva:
+- Um padrão heterogêneo de covariância autorregressiva:
 
 $$
 \Cov(Y_i) = \left(\begin{array}{ccccc}
 \sigma^2_1 & \rho\sigma_1\sigma_2 & \rho^2\sigma_1\sigma_3 & \cdots & \rho^{n-1}\sigma_1\sigma_n \\
 \rho\sigma_1\sigma_2 & \sigma^2_2 & \rho\sigma_2\sigma_3 & \cdots & \rho^{n-2}\sigma_2\sigma_n \\
 \rho^2\sigma_1\sigma_3 & \rho\sigma_2\sigma_3 & \sigma^2_3 & \cdots & \rho^{n-3}\sigma_3\sigma_n \\
-\vdots & \vdots & \ddots & \vdots \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
 \rho^{n-1}\sigma_1\sigma_n & \rho^{n-2}\sigma_2\sigma_n & \rho^{n-3}\sigma_3\sigma_n & \cdots & \sigma^2_n
 \end{array}\right).
 $$
@@ -194,7 +195,7 @@ $$
 1 & \rho_1 & 0 & \cdots & 0 \\
 \rho_1 & 1 & \rho_1 & \cdots & 0 \\
 0 & \rho_1 & 1 & \cdots & 0 \\
-\vdots & \vdots & \ddots & \vdots \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
 0 & 0 &0 & \cdots & 1
 \end{array}\right).
 $$
@@ -266,7 +267,7 @@ e comparando a estatística com uma distribuição qui-quadrado com graus de lib
 - De acordo com a AIC, dado um conjunto de modelos concorrentes para a covariância, __deve-se selecionar o modelo que minimiza__
 
 \begin{eqnarray*}
-AIC &=& -2(\mbox{log-vero. maximizada}) + 2(\mbox{número de parãmetros})\\
+AIC &=& -2(\mbox{log-vero. maximizada}) + 2(\mbox{número de parâmetros})\\
  &=& -2(\hat{\ell} - c),
 \end{eqnarray*}
 
@@ -377,14 +378,14 @@ mod1$modelStruct$corStruct
 
 ## Modelo maximal com cov. autoregressiva {.allowframebreaks}
 
-- Apesar do aparente aumento da variância ao longo do tempo, consideramos um __modelo autoregressivo__ para a covariância.
+- Apesar do aparente aumento da variância ao longo do tempo, consideramos um __modelo autorregressivo__ para a covariância.
 - Este modelo é muito parcimonioso, com apenas dois parâmetros, um descrevendo a variância, $\sigma^2$, o outro a correlação, $\rho$.
 
 ```{r gls_ar1, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
 
 # library(nlme)
 
-# matriz de covariância autoregressiva
+# matriz de covariância autorregressiva
 mod2 <- gls(fc ~ trt*dia,
             na.action = na.omit,
             
@@ -418,7 +419,7 @@ getVarCov(mod2)/summary(mod2)$sigma^2
 
 ```
 
-- O modelo autoregressivo foi ajustado principalmente para fins ilustrativos; o modelo não é muito apropriado para esses dados, pois eles estão espaçados de forma desigual ao longo do tempo (ou seja, há um intervalo de quatro dias entre as duas primeiras medidas repetidas e as duas últimas medidas repetidas, mas todas as outras medidas repetidas adjacentes foram feitas com dois dias de intervalo).
+- O modelo autorregressivo foi ajustado principalmente para fins ilustrativos; o modelo não é muito apropriado para esses dados, pois eles estão espaçados de forma desigual ao longo do tempo (ou seja, há um intervalo de quatro dias entre as duas primeiras medidas repetidas e as duas últimas medidas repetidas, mas todas as outras medidas repetidas adjacentes foram feitas com dois dias de intervalo).
 
 ## Modelo maximal com cov. exponencial {.allowframebreaks}
 
@@ -458,7 +459,7 @@ getVarCov(mod3)/summary(mod3)$sigma^2
 
 ```
 
-- Note que os declínios nas correlações estimadas dos modelos autoregressivo e exponencial são muito rápidos quando comparados aos declínios correspondentes do modelo de covariância não estruturada.
+- Note que os declínios nas correlações estimadas dos modelos autorregressivo e exponencial são muito rápidos quando comparados aos declínios correspondentes do modelo de covariância não estruturada.
 
 ## Comparando os modelos {.allowframebreaks}
 
@@ -475,9 +476,9 @@ anova(mod1, mod2, mod3, test = FALSE)
 ## Comparando os modelos {.allowframebreaks}
 
 - Observe que existe uma hierarquia entre os modelos. 
-    + Os modelos autoregressivo e exponencial são encaixados no modelo de covariância não estruturada. 
-- As comparações dos modelos autoregressivo e exponencial com o modelo de covariância não estruturada podem ser feitas usando __testes de razão de verossimilhança (REML)__.
-- No entanto, os modelos autoregressivo e exponencial não são modelos encaixados; ainda, ambos os modelos têm o mesmo número de parâmetros.
+    + Os modelos autorregresivo e exponencial são encaixados no modelo de covariância não estruturada. 
+- As comparações dos modelos autorregressivo e exponencial com o modelo de covariância não estruturada podem ser feitas usando __testes de razão de verossimilhança (REML)__.
+- No entanto, os modelos autorregresivo e exponencial não são modelos encaixados; ainda, ambos os modelos têm o mesmo número de parâmetros.
     + Como resultado, qualquer comparação entre esses dois modelos pode ser feita diretamente em termos de suas log-verossimilhanças maximizadas, uma vez que qualquer penalidade extraída por critérios de informação será a mesma em ambos os casos.
 
 ## Comparando os modelos {.allowframebreaks}
@@ -514,7 +515,7 @@ anova(mod1, mod3)
 ## Pontos fortes e fracos dos modelos de covariância
 
 - Os modelos de padrão de covariância tentam caracterizar a covariância com um número relativamente pequeno de parâmetros.
-- No entanto, muitos modelos (por exemplo, autoregressivo, Toeplitz e em faixas) são apropriados apenas quando medições repetidas são obtidas em intervalos iguais e não podem lidar com medições irregulares no tempo.
+- No entanto, muitos modelos (por exemplo, autorregresivo, Toeplitz e em faixas) são apropriados apenas quando medições repetidas são obtidas em intervalos iguais e não podem lidar com medições irregulares no tempo.
 - Embora exista uma grande variedade de modelos para correlações, a escolha de modelos para variâncias é limitada.
 - Eles não são adequados para modelar dados de delineamentos longitudinais inerentemente desbalanceados.
 

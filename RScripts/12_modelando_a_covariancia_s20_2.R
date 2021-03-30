@@ -1,4 +1,4 @@
-## ----carrega-dados, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE---------------------
+## ----carrega-dados, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE---------------------------------------------------
 # ----------------------------------------------------
 # Carregando pacotes do R
 
@@ -43,7 +43,7 @@ af.longo$trt <- factor(af.longo$trt)
 
 
 
-## ----gls_ne, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------------
+## ----gls_ne, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------------------------------------------
 
 library(nlme)
 
@@ -59,7 +59,7 @@ mod1 <- gls(fc ~ trt*dia,
 
 
 
-## ----cov_est, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------
+## ----cov_est, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------------------------------------
 
 library(lavaSearch2)
 
@@ -69,17 +69,17 @@ knitr::kable(
 
 
 
-## ----cov_est2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------------
+## ----cov_est2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------------------------------------------
 
 mod1$modelStruct$corStruct
 
 
 
-## ----gls_ar1, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------
+## ----gls_ar1, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------------------------------------
 
 # library(nlme)
 
-# matriz de covariância autoregressiva
+# matriz de covariância autorregressiva
 mod2 <- gls(fc ~ trt*dia,
             na.action = na.omit,
             
@@ -90,7 +90,7 @@ mod2 <- gls(fc ~ trt*dia,
 
 
 
-## ----cor_est, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------
+## ----cor_est, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------------------------------------
 
 summary(mod2)$sigma^2
 
@@ -99,13 +99,13 @@ coef(mod2$modelStruct$corStruct,
 
 
 
-## ----cor_est2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------------
+## ----cor_est2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------------------------------------------
 
 getVarCov(mod2)/summary(mod2)$sigma^2
 
 
 
-## ----gls_exp, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------
+## ----gls_exp, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------------------------------------
 
 af.longo$dia.num <- as.numeric(as.character(af.longo$dia))
 
@@ -122,7 +122,7 @@ mod3 <- gls(fc ~ trt*dia,
 
 
 
-## ----cor_est_exp, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------------------
+## ----cor_est_exp, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------------------------------------------------
 
 summary(mod3)$sigma^2
 
@@ -130,19 +130,19 @@ getVarCov(mod3)/summary(mod3)$sigma^2
 
 
 
-## ----compara, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------
+## ----compara, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------------------------------------
 
 anova(mod1, mod2, mod3, test = FALSE)
 
 
 
-## ----compara2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------------
+## ----compara2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------------------------------------------
 
 anova(mod1, mod2)
 
 
 
-## ----compara3, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------------
+## ----compara3, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------------------------------------------
 
 anova(mod1, mod3)
 

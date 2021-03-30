@@ -46,21 +46,21 @@ p <- ggplot(data = chumbo.resumo,
 p
 
 
-## ----df, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------------------------------
+## ----df, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------------
 
 chumbo.df.longo
 
 
 
-## ----spline_mod, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------------
+## ----spline_mod, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------------------------
 
 library(nlme)
 
 # modelo de curvas paramétricas
 #     splines lineares
 # com matriz de covariância não estruturada
-mod.spline <- gls(chumbo ~ semana + I( (semana - 1) * (semana >= 1) ) +
-                    semana:trt + I( (semana - 1) * (semana >= 1) ):trt,
+mod.spline <- gls(chumbo ~ semana + I( (semana - 1) * (semana > 1) ) +
+                    semana:trt + I( (semana - 1) * (semana > 1) ):trt,
                   corr = corSymm(form = ~ tempo | id),
                   weights = varIdent(form = ~ 1 | tempo),
                   method = "REML",
@@ -68,13 +68,13 @@ mod.spline <- gls(chumbo ~ semana + I( (semana - 1) * (semana >= 1) ) +
 
 
 
-## ----summary_spline, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------------------
+## ----summary_spline, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------
 
 summary(mod.spline)
 
 
 
-## ----spline_mod2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------
+## ----spline_mod2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------------------
 
 library(lspline)
 
@@ -94,13 +94,13 @@ mod.spline2 <- gls(chumbo ~ lspline(x = semana,
 
 
 
-## ----summary_spline2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------------------
+## ----summary_spline2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------
 
 summary(mod.spline2)
 
 
 
-## ----coef, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------------------
+## ----coef, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------------------------------
 
 knitr::kable(
   summary(mod.spline)$tTable[,-4],
@@ -109,7 +109,7 @@ knitr::kable(
 
 
 
-## ----media_estimada, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------------------
+## ----media_estimada, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------
 
 library(ggeffects)
 
@@ -118,7 +118,7 @@ media_chap_df
 
 
 
-## ----media_estimada2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------------------
+## ----media_estimada2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------
 
 df_aux <- as.data.frame(media_chap_df)[c(6, 2, 1)]
 names(df_aux) <- c("trt", "chumbo.m", "semana")
@@ -134,11 +134,11 @@ p2
 
 
 
-## ----trv, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------------------------------
+## ----trv, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------------------
 
 # modelo linear por partes
-mod.comp <- gls(chumbo ~ semana + I( (semana - 1) * (semana >= 1) ) +
-                    semana:trt + I( (semana - 1) * (semana >= 1) ):trt,
+mod.comp <- gls(chumbo ~ semana + I( (semana - 1) * (semana > 1) ) +
+                    semana:trt + I( (semana - 1) * (semana > 1) ):trt,
                   corr = corSymm(form = ~ tempo | id),
                   weights = varIdent(form = ~ 1 | tempo),
                   method = "ML",
@@ -154,13 +154,13 @@ mod.red <- gls(chumbo ~ semana +
 
 
 
-## ----trv2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------------------
+## ----trv2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------------------------------
 
 anova(mod.comp, mod.red)
 
 
 
-## ----quadratica, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------------
+## ----quadratica, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------------------------
 
 # modelo linear por partes
 mod.linpartes <- mod.comp
@@ -177,7 +177,7 @@ mod.quad <- gls(chumbo ~ semana + I(semana^2) +
                   data = chumbo.df.longo)
 
 
-## ----quadratica2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------
+## ----quadratica2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------------------
 
 logLik(mod.linpartes)
 logLik(mod.quad)
