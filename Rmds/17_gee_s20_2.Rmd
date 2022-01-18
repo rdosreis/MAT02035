@@ -1,0 +1,265 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Modelos marginais e Equações de Estimação Generalizadas"
+fontsize: 10pt
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2021
+---
+
+## Introdução
+
+- A premissa básica dos modelos marginais é fazer inferências sobre as médias populacionais.
+- O termo marginal é usado aqui para enfatizar que a resposta média modelada é condicional apenas para covariáveis e não para outras respostas ou efeitos aleatórios.
+- Uma característica dos modelos marginais é que os modelos para a média e a "associação dentro do indivíduo" (por exemplo, covariância) são especificados separadamente.
+
+## Notação
+
+- $Y_{ij}$ denota a variável de resposta para o $i$-ésimo indivíduo na $j$-ésima ocasião.
+- $Y_{ij}$ pode ser contínuo, binário ou uma contagem.
+- Assumimos que existem $n_i$ medições repetidas no $i$-ésimo indivíduo e cada $Y_{ij}$ é observado no tempo $t_{ij}$.
+- Associado a cada resposta, $Y_{ij}$, há um vetor $p\times 1$ de covariáveis, $X_{ij}$.
+- As covariáveis podem ser invariantes no tempo (por exemplo, grupo de tratamento) ou variar no tempo (por exemplo, tempo desde a linha de base).
+
+## Características dos modelos marginais {.allowframebreaks}
+
+- O foco dos modelos marginais está nas inferências sobre as médias populacionais.
+- A média marginal, $\mu_{ij} = \E(Y_{ij}|X_{ij})$, de cada resposta é modelada em função das covariáveis.
+- Especificamente, os modelos marginais têm as três partes a seguir especificadas.
+
+\framebreak
+
+1. A média marginal da resposta, $\mu_{ij}$, depende das covariáveis através de uma função de ligação conhecida
+
+$$
+g(\mu_{ij}) = \beta_1X_{1ij} + \beta_2X_{2ij} + \ldots + \beta_pX_{pij}
+$$
+
+2. A variância marginal de $Y_{ij}$ depende da média marginal de acordo com
+
+$$
+\Var(Y_{ij}|X_{ij}) = \phi v(\mu_{ij}),
+$$
+
+em que $v(\mu_{ij})$ é uma "função de variância" conhecida e $\phi$ é um parâmetro de escala que pode precisar ser estimado.
+
+__Nota:__ Para resposta contínua, pode permitir $\Var(Y_{ij}|X_{ij}) = \phi_j v(\mu_{ij})$.
+
+3. A "associação intra-indivídual" entre as respostas é uma função das médias e de parâmetros adicionais, digamos $\alpha$, que também precisam ser estimados.
+
+\framebreak
+
+- Por exemplo, quando $\alpha$ representa correlações dois-a-dois entre respostas, as covariâncias entre as respostas dependem de $\mu_{ij}(\beta)$, $\phi$ e $\alpha$:
+
+\begin{eqnarray*}
+\Cov(Y_{ij}, Y_{ik}) &=& dp(Y_{ij}) \Corr(Y_{ij}, Y_{ik}) dp(Y_{ik})\\
+ &=& \sqrt{\phi v(\mu_{ij})} \Corr(Y_{ij}, Y_{ik}) \sqrt{\phi v(\mu_{ik})},
+\end{eqnarray*}
+
+em que $dp(Y_{ij})$ é o desvio padrão de $Y_{ij}$.
+
+## Medidas de Associação para Respostas Binárias {.allowframebreaks}
+
+- Com respostas binárias, as correlações não são a melhor opção para modelar a associação, porque são limitadas pelas probabilidades marginais.
+- Por exemplo, se $\E(Y_1) = \Pr(Y_1 = 1) = 0.2$ e $\E(Y_2) = \Pr(Y_2 = 1) = 0.8$,
+então $\Corr(Y_1, Y_2) < 0.25$.
+- As correlações devem satisfazer certas desigualdades lineares determinadas pelas probabilidades marginais.
+- É provável que essas restrições causem dificuldades na modelagem paramétrica da associação.
+
+\framebreak
+
+- Com respostas binárias, o _odds ratio_ é uma medida natural de associação entre um par de respostas.
+- O _odds ratio_ para qualquer par de respostas binárias, $Y_j$ e $Y_k$, é definido como
+
+$$
+\mbox{OR}(Y_j, Y_k) = \frac{\Pr(Y_j = 1, Y_k = 1) \Pr(Y_j = 0, Y_k = 0)}{\Pr(Y_j = 1, Y_k = 0) \Pr(Y_j = 0, Y_k = 1)}.
+$$
+
+- Observe que as restrições no _odds ratio_ são muito menos restritivas do que na correlação.
+    + Com a resposta binária, pode-se modelar a associação dentro do indivíduo em termos de razão de chances (_odds ratio_), em vez de correlações.
+
+## Exemplos de modelos marginais {.allowframebreaks}
+
+__Exemplo 1.__ Respostas contínuas
+
+1. $\mu_{ij} = \beta_1X_{ij1} + \beta_2X_{ij2} + \ldots + \beta_pX_{ijp}$ (ou seja, regressão linear).
+2. $\Var(Y_{ij}|X{ij}) = \phi_j$ (ou seja, variância heterogênea, mas nenhuma dependência da variância em relação à média).
+3. $\Corr(Y_{ij}, Y_{ik}) = \alpha^{|k-j|}\ (0 \leq \alpha \leq 1)$ (ou seja, correlação autoregressiva).
+
+\framebreak
+
+__Exemplo 2.__ Respostas binárias
+
+1. $\logit(\mu_{ij}) = \beta_1X_{ij1} + \beta_2X_{ij2} + \ldots + \beta_pX_{ijp}$ (ou seja, regressão logística).
+2. $\Var(Y_{ij}|X{ij}) = \mu_{ij}(1 - \mu_{ij})$ (variância Bernoulli).
+3. $\mbox{OR}(Y_{ij}, Y_{ik}) = \alpha_{jk}$ (ou seja, _odds ratio_ não estruturado), em que
+
+$$
+\mbox{OR}(Y_j, Y_k) = \frac{\Pr(Y_j = 1, Y_k = 1) \Pr(Y_j = 0, Y_k = 0)}{\Pr(Y_j = 1, Y_k = 0) \Pr(Y_j = 0, Y_k = 1)}.
+$$
+
+\framebreak
+
+__Exemplo 3.__ Dados de contagem
+
+1. $\log(\mu_{ij}) = \beta_1X_{ij1} + \beta_2X_{ij2} + \ldots + \beta_pX_{ijp}$ (ou seja, regressão de Poisson).
+2. $\Var(Y_{ij}|X{ij}) = \phi\mu_{ij}$ (ou seja, variância extra-Poisson, ou "sobredispersão" quando $\phi > 1$).
+3. $\Corr(Y_{ij}, Y_{ik}) = \alpha$ (ou seja, correlação de simetria composta).
+
+## Interpretação dos parâmetros marginais do modelo {.allowframebreaks}
+
+- Os parâmetros de regressão, $\beta$, têm interpretações na "média da população" (em que "média" é sobre todos os indivíduos dentro dos subgrupos da população):
+    + Descreve o efeito das covariáveis nas respostas médias.
+    + contrasta as médias nas subpopulações que compartilham valores de covariáveis comuns
+- \structure{Modelos marginais são mais úteis para inferências em nível populacional.}
+- Os parâmetros de regressão são diretamente estimados a partir dos dados.
+- A natureza ou magnitude da associação dentro do indivíduo (por exemplo, correlação) não altera a interpretação de $\beta$.
+
+\framebreak
+
+- Por exemplo, considere o seguinte modelo logístico,
+
+$$
+\logit(\mu_{ij}) = \logit(\E[Y_{ij}|X_{ij}]) = \beta_1X_{ij1} + \beta_2X_{ij2} + \ldots + \beta_pX_{ijp}.
+$$
+
+- Cada elemento mede a mudança nas log-odds de uma resposta "positiva" por mudança de unidade na respectiva covariável, para subpopulações definidas por valores covariáveis fixos e conhecidos.
+- A interpretação de qualquer componente de $\beta$, digamos $\beta_k$, é em termos de mudanças na resposta média transformada (ou "média da população") para uma alteração de uma unidade na covariável correspondente, digamos $X_{ijk}$.
+
+\framebreak
+
+- Quando $X_{ijk}$ assume um valor $x$, o log-odds de uma resposta positiva é,
+
+\footnotesize
+$$
+\log\left[\frac{\Pr(Y_{ij}=1|X_{ij1},\ldots,X_{ijk} = x, \ldots, X_{ijp})}{\Pr(Y_{ij}=0|X_{ij1},\ldots,X_{ijk} = x, \ldots, X_{ijp})}\right] = \beta_1X_{ij1} + \ldots + \beta_kx + \ldots + \beta_pX_{ijp}.
+$$
+\normalsize
+
+- Similarmente, quando $X_{ijk}$ assume algum valor $x + 1$,
+
+\footnotesize
+$$
+\log\left[\frac{\Pr(Y_{ij}=1|X_{ij1},\ldots,X_{ijk} = x + 1, \ldots, X_{ijp})}{\Pr(Y_{ij}=0|X_{ij1},\ldots,X_{ijk} = x + 1, \ldots, X_{ijp})}\right] = \beta_1X_{ij1} + \ldots + \beta_k(x + 1) + \ldots + \beta_pX_{ijp}.
+$$
+\normalsize
+
+- $\beta_k$ é a mudança na log-odds para subgrupos da população de estudo (definadas por quaisquer valores fixos $X_{ij1}, \ldots, X_{ij(k-1)}, X_{ij(k+1)}, \ldots, X_{ijp}$).
+
+## Inferência estatística para modelos marginais
+
+- Máxima verossimilhança (MV)?
+    + Infelizmente, com dados de resposta discretos, não existe um análogo simples da distribuição normal multivariada.
+- Na ausência de uma função de verossimilhança "conveniente" para dados discretos, não existe uma abordagem unificada baseada em probabilidade para modelos marginais.
+- Abordagem alternativa para estimação: \structure{Equações de Estimação Generalizadas (GEE)}.
+
+## Equações de Estimação Generalizadas {.allowframebreaks}
+
+- Evita fazer suposições distribucionais sobre $Y_i$ completamente.
+
+- Potenciais vantagens:
+    + O pesquisador não precisa se preocupar com o fato de a distribuição de $Y_i$ se aproximar de alguma distribuição multivariada.
+    + Isso evita a necessidade de especificar modelos para as associações complexas (momentos de ordem superior) entre as respostas.
+- Isso leva a um método de estimação, conhecido como equações de estimação generalizadas (GEE), fácil de implementar.
+
+\framebreak
+
+- A abordagem GEE tornou-se um método extremamente popular para analisar dados longitudinais discretos.
+- Esta fornece uma abordagem flexível para modelar a média e a estrutura de associação intra-indivíduo em pares.
+- Ele pode lidar com delineamentos inerentemente desbalanceados e com a perda de dados com facilidade (embora faça suposições fortes sobre o mecanismo de perda de dados).
+- A abordagem GEE é computacionalmente direta e foi implementada _softwares_ estatístico amplamente disponíveis.
+
+\framebreak
+
+- O estimador GEE de $\beta$ soluciona as seguintes __equações de estimação generalizadas__
+
+$$
+\sum_{i=1}^N{D'V_i^{-1}(y_i - \mu_i)} = 0,
+$$
+
+em que $V_i$ é a chamada matriz de covariância de __"trabalho"__.
+
+- Por matriz de covariância de trabalho, queremos dizer que $V_i$ se aproxima da verdadeira matriz de covariância subjacente para $Y_i$.
+- Ou seja, $V_i\approx \Cov(Y_i)$, reconhecendo que $V_i\neq \Cov(Y_i)$, a menos que os modelos para as variâncias e as associações intra-indivíduo estejam corretos.
+- $D_i = \partial\mu_i/\partial\beta$ é a matriz "derivativa" (de $\mu_i$ em relação aos
+componentes de $\beta$).
+
+\framebreak
+
+- Portanto, as equações de estimação generalizadas dependem de $\beta$ e $\alpha$.
+- Como as equações de estimação generalizadas dependem de ambos, é necessário um __procedimento iterativo__ de estimação em dois estágios:
+    1. Dadas as estimativas atuais de $\alpha$ e $\phi$, é obtida uma estimativa de $\beta$ como a solução para as "equações de estimação generalizadas";
+    2. Dada a estimativa atual de $\beta$, estimativas $\alpha$ e $\phi$ são obtidas com base nos resíduos padronizados,
+
+$$
+r_{ij} = (Y_{ij} - \mu_{ij})/v(\hat{\mu}_{ij})^{1/2}.
+$$
+
+\framebreak
+
+- Por exemplo, $\phi$ pode ser estimado por
+
+$$
+\frac{1}{Nn - p}\sum_{i=1}^N{\sum_{j=1}^n{r_{ij}^2}}
+$$
+
+- Os parâmetros de correlação, $\alpha$, podem ser estimados de maneira similar.
+- Por exemplo, correlações não-estruturadas, $\alpha_{jk} =\Corr(Y_{ij}, Y_{ik})$, pode ser estiamda por
+
+$$
+\hat{\alpha} = \frac{1}{N - p} \hat{\phi}^{-1}\sum_{i=1}^N{r_{ij}r_{ik}}
+$$
+
+- Finalmente, no procedimento de estimação em duas etapas, iteramos entre as etapas \structure{(1)} e \structure{(2)} até que a convergência seja alcançada.
+
+## Propriedades dos estimadores GEE {.allowframebreaks}
+
+- $\hat{\beta}$, a solução para as equações de estimação generalizadas, possui as seguintes propriedades:
+    1. $\hat{\beta}$ é um estimador consistente de $\beta$.
+    2. Em amostras grandes, $\hat{\beta}$ tem distribuição normal multivariada.
+    3. $\Cov(\hat{\beta}) = B^{-1}MB^{-1}$, em que
+
+$$
+B = \sum_{i=1}^N{D_i'V_i^{-1}D_i},
+$$
+
+e
+
+$$
+M = \sum_{i=1}^N{D_i'V_i^{-1}\Cov(Y_i)V_i^{-1}D_i}.
+$$
+
+\framebreak
+
+- $B$ e $M$ podem ser estimados substituindo $\alpha$, $\phi$, e $\beta$ por suas estimativas, e substituindo $\Cov(Y_i)$ por $(Y_i -\hat{\mu}_i)(Y_i -\hat{\mu}_i)'$.
+
+### Estimador sanduíche
+
+- __Nota:__ podemos usar esse __estimador de variância empírico__ ou denominado __"sanduíche"__, mesmo quando a covariância foi mal especificada.
+
+## Resumindo
+
+Os estimadores GEE têm as seguintes propriedades atraentes:
+
+1. Em muitos casos, $\hat{\beta}$ é quase tão eficiente quanto ao EMV. Por exemplo, o GEE tem a mesma forma que as equações de verossimilhança para o modelo normal multivariado e também alguns modelos para dados discretos.
+2. $\hat{\beta}$ é consistente mesmo que a covariância de $Y_i$ tenha sido mal especificada.
+3. Erros padrão para $\hat{\beta}$ podem ser obtidos usando o __estimador empírico__ ou denominado __"sanduíche"__.
+
+## Avisos
+
+- __Próxima aula:__ Modelos marginais (GEE) - exemplos.
+- __Para casa:__ ler o Capítulo 12 e 13 do livro "__Applied Longitudinal Analysis__".
+    + Caso ainda não tenha lido, leia também os Caps. 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 e 11.
+    + Veja o _help_ do pacote `geepack` do `R`.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', out.height='90%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'geeminiposter2.jpg'))
+```

@@ -1,0 +1,252 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Modelos multiníveis"
+fontsize: 10pt
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2021
+---
+
+## Introdução {.allowframebreaks}
+
+- Até hoje, este curso se concentrou na análise de dados longitudinais.
+- Modelos mistos também podem ser usados para analisar __dados multiníveis__.
+- Os __dados hierárquicos__ ou __multiníveis__ surgem quando há uma estrutura agrupada nos dados.
+- Dados desse tipo frequentemente surgem nas ciências sociais, comportamentais e de saúde, uma vez que os indivíduos podem ser agrupados de muitas maneiras diferentes.
+- Por exemplo, em estudos de serviços de saúde e desfechos, frequentemente são obtidas avaliações da qualidade do atendimento de pacientes __aninhados__ em diferentes clínicas.
+
+\framebreak
+
+- Esses dados podem ser considerados hierárquicos/multiníveis, com pacientes referidos como unidades de nível 1 e clínicas como unidades de nível 2.
+    + Neste exemplo, existem dois níveis na hierarquia de dados e, por convenção, o nível mais baixo da hierarquia é referido como nível 1.
+- O termo "nível", usado neste contexto, significa a posição de uma unidade de observação dentro de uma hierarquia.
+- O agrupamento de dados em vários níveis pode ser devido a uma hierarquia que ocorre naturalmente na população-alvo ou a uma consequência do desenho do estudo (ou às vezes a ambos).
+
+\framebreak
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', out.height='80%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'Multilevel_data_structure.png'))
+```
+
+## Hierarquias de dados que ocorrem naturalmente
+
+- \structure{Estudos de núcleos familiares:} observações sobre mãe, pai e filhos (unidades de nível 1) aninhadas nas famílias (unidades de nível 2).
+- \structure{Estudos de serviços/desfechos de saúde:} observações em pacientes (unidades de nível 1) aninhadas nas clínicas (unidades de nível 2).
+- \structure{Estudos de educação:} observações em crianças (unidades de nível 1) aninhadas nas salas de aula (unidades de nível 2).
+- __Observação:__ as estruturas hierárquicas de dados que ocorrem naturalmente podem ter mais de dois níveis, por exemplo, crianças (unidades de nível 1) aninhadas nas salas de aula (unidades de nível 2), aninhadas nas escolas (unidades de nível 3).
+
+## Agrupamento como consequência do desenho do estudo {.allowframebreaks}
+
+- \structure{Estudos longitudinais:} os agrupamentos são compostos de medidas repetidas obtidas de um único indivíduo em diferentes ocasiões.
+    + Em estudos longitudinais, as unidades de nível 1 são as repetidas ocasiões de medição e as unidades de nível 2 são os indivíduos.
+- \structure{Ensaios clínicos aleatorizados por \emph{cluster}:} grupos (unidades de nível 2) de indivíduos (unidades de nível 1), em vez de os próprios indivíduos, são aleatoriamente designados para diferentes tratamentos ou intervenções.
+
+\framebreak
+
+- \structure{Pesquisas de amostras  complexas:} muitas pesquisas nacionais usam amostragem em vários estágios, por exemplo, a \structure{Pesquisa Nacional em Saúde (PNS)}.
+    + Por exemplo, na 1ª etapa, as "unidades de amostragem primária" (UPAs) são definidas com base nos setores censitários. Uma amostra aleatória de UPAs de primeiro estágio é selecionada. No 2º estágio, dentro de cada UPA selecionada, uma amostra aleatória de domicílis é selecionada. No terceiro estágio, dentro dos domicílos selecionados, um indivíduo é aleatoriamente selecionado.
+- Os dados resultantes podem ser considerados hierárquicos, sendo os indivíduos as unidades de nível 1, os domícilios as unidades de nível 2 e os setores censitários as unidades de nível 3.
+
+\framebreak
+
+- Finalmente, o agrupamento pode ser devido ao desenho do estudo e às hierarquias que ocorrem naturalmente na população-alvo.
+- __Exemplo:__ Os ensaios clínicos são frequentemente realizados em muitos centros diferentes para garantir um número suficiente de pacientes e/ou avaliar a eficácia do tratamento em diferentes contextos.
+- As observações de um __ensaio clínico longitudinal multicêntrico__ podem ser consideradas dados hierárquicos com 3 níveis, com ocasiões de medição repetidas (unidades de nível 1) aninhadas nos indivíduos (unidades de nível 2) aninhadas nas clínicas (unidades de nível 3).
+
+## Característica distintiva de vários níveis de Dados
+
+- A característica distintiva dos dados multiníveis é que eles estão \structure{agrupados}.
+- Uma consequência desse agrupamento é que a medição em unidades dentro de um agrupamento é __mais semelhante__ do que as medidas em unidades em diferentes agrupamentos.
+    + Por exemplo, espera-se que duas crianças selecionadas aleatoriamente da mesma família respondam de maneira mais semelhante do que duas crianças selecionadas aleatoriamente de famílias diferentes.
+- O agrupamento pode ser expresso em termos de __correlação__ entre as medidas em unidades dentro do mesmo agrupamento.
+- Modelos estatísticos para dados hierárquicos devem levar em consideração a correlação intra-agrupamento em cada nível; não fazer isso pode resultar em inferências enganosas.
+
+## Modelos lineares multiníveis {.allowframebreaks}
+
+- A abordagem dominante à análise de dados multiníveis emprega um tipo de __modelo linear de efeitos mistos__ conhecido como \structure{modelo linear hierárquico}.
+- A __correlação induzida__ pelo agrupamento é descrita por __efeitos aleatórios__ em cada nível da hierarquia.
+- __Observação:__ Em um modelo multinível, a resposta é obtida no primeiro nível, mas as covariáveis podem ser medidas em qualquer nível.
+    + Por exemplo, se estamos estudando o IMC, podemos medir dietas individuais,
+atitudes familiares sobre hábitos alimentares e de compras e atributos da comunidade, como a densidade de restaurantes de _fast-food_.
+
+\framebreak
+
+- A combinação de covariáveis medidas em diferentes níveis da hierarquia em um único modelo de regressão é central para a modelagem hierárquica.
+- Começamos introduzindo as ideias com o modelo de dois níveis.
+- Posteriormente, passamos ao modelo de três níveis para ilustrar a abordagem geral.
+
+## Modelos lineares de dois níveis {.allowframebreaks}
+
+\structure{Notação}
+
+- Deixe $i$ indexar o nível 1 e $j$ indexar unidades de nível 2 (por convenção, os subscritos são ordenados do nível mais baixo ao mais alto).
+- Assumimos $n_2$ unidades de nível 2 na amostra.
+- Cada um desses agrupamentos ($j = 1, 2,\dots, n_2$) é composto por $n_{1j}$ unidades de nível 1.
+    + Por exemplo, em um estudo de dois níveis de práticas médicas, estudaríamos as $n_2$ práticas, com $n_{1j}$ pacientes na $j$-ésima prática.
+
+\framebreak
+
+- Deixe $Y_{ij}$ denotar a resposta para o paciente $i$ na $j$-ésima prática.
+- Associado a cada $Y_{ij}$ está um vetor de $1\times p$ (linha) de covariáveis, $X_{ij}$.
+- Considere o seguinte modelo para a média:
+
+$$
+\E(Y_{ij}) = X_{ij}\beta.
+$$
+
+- Por exemplo, em um ensaio clínico multicêntrico comparando dois tratamentos, podemos supor que:
+
+$$
+\E(Y_{ij}) = \beta_1 + \beta_2 Trt_{ij},
+$$
+
+em que  $Trt_{ij}$ é uma variável indicadora para o grupo de tratamento (ou $Trt_j$, se o tratamento for constante dentro da prática).
+
+\framebreak
+
+- O modelo linear hierárquico de dois níveis pressupõe que a correlação nas práticas possa ser descrita por um efeito aleatório.
+- Assim, assumimos que
+
+$$
+Y_{ij} = X_{ij}\beta + b_j + \epsilon_{ij}.
+$$
+
+Ou, de maneira mais geral,
+
+$$
+Y_{ij} = X_{ij}\beta + Z_{ij}b_j + \epsilon_{ij},
+$$
+com mais de um efeito aleatório.
+
+## Características do modelo linear de dois níveis
+
+1. O modelo define __duas fontes de variação__.
+    + As magnitudes da variação dentro e entre grupos determinam o grau de agrupamento/correlação.
+2. Para uma determinada unidade de nível 2, efeitos aleatórios são assumidos constantes nas unidades de nível 1.
+3. A esperança condicional de $Y_{ij}$, dada a identidade do grupo de nível 2, é
+
+$$
+X_{ij} + Z_{ij}b_j.
+$$
+
+4. Presume-se que as observações de nível 1 sejam __condicionalmente independentes__, dados os efeitos aleatórios.
+
+- O modelo de dois níveis é idêntico ao modelo linear misto com estrutura de correlação intraclasse para medidas repetidas (embora com inversão do subscrito!).
+
+## Modelos lineares de três níveis {.allowframebreaks}
+
+Considere um ensaio clínico longitudinal de três níveis em que
+
+1. as práticas médicas são aleatorizadas para tratamento,
+2. os pacientes estão aninhados nas práticas e
+3. os pacientes são medidos no início e em três ocasiões após o tratamento.
+
+- O nível 1 é a ocasião, o nível 2 é o paciente e o nível 3 é a prática.
+
+\framebreak
+
+- Deixe $Y_{ijk}$ denotar a resposta na $i$-ésima observação do $j$-ésimo paciente na $k$-ésima prática.
+- As covariáveis podem ser medidas em qualquer um dos três níveis. No entanto, agora
+introduza efeitos aleatórios para representar agrupamentos nos níveis 2 e 3.
+- O modelo linear geral de três níveis é escrito da seguinte maneira:
+
+$$
+Y_{ijk} = X_{ijk}\beta + Z^{(3}_{ijk}b^{(3)}_k + Z^{(2)}_{ijk}b^{(2)}_{jk} + \epsilon_{ijk}
+$$
+
+## Exemplo: modelo de três níveis para o ensaio clínico longitudinal multinível {.allowframebreaks}
+
+- Vamos denotar $t_{ijk}$ o tempo a partir da linha de base na qual $Y_{ijk}$ é obtido.
+- $Trt_{ij}$ deve denotar o tratamento dado ao $j$-ésimo paciente na $i$-ésima ocasião.
+- O tratamento pode ser constante nas ocasiões para um determinado paciente ($Trt_j$).
+- Um modelo hierárquico de três níveis para a resposta é dado por
+
+$$
+Y_{ijk} = \beta_1 + \beta_2t_{ijk} + \beta_3 (Trt_j \times t_{ijk}) + b^{(3)}_k + b^{(2)}_{jk} + \epsilon_{ijk}.
+$$
+
+- Este modelo assume um intercepto comum e separa tendências lineares ao longo do tempo nos dois grupos de tratamento.
+
+\framebreak
+
+E se $\Var(b^{(3)}_k) = G^{(3)}$, $\Var(b^{(2)}_{jk}) = G^{(2)}$ e $\Var(\epsilon_{ijk}) = \sigma^2$, e todos os efeitos aleatórios são assumidos como independentes, então
+
+$$
+\Var(Y_{ijk}) = G^{(2)} + G^{(3)} + \sigma^2
+$$
+
+e a covariância entre duas observações do mesmo paciente é $G^{(2)} + G^{(3)}$.
+
+\framebreak
+
+- Assim, as observações para um determinado paciente têm uma estrutura de correlação intraclasse, com
+
+$$
+\Corr(Y_{ijk}, Y_{ijl}) = \frac{G^{(2)} + G^{(3)}}{G^{(2)} + G^{(3)} + \sigma^2}.
+$$
+
+- Por ser um modelo misto linear,
+
+$$
+\E(Y_{ijk}) = \beta_1 + \beta_2t_{ijk} + \beta_3(Trt_{ij} \times t_{ijk}).
+$$
+
+## Estimação {.allowframebreaks}
+
+- Para o modelo linear de três níveis, as suposições distribucionais padrão
+são: $b^{(3)}_k\sim N (0 G^{(3)})$, $b^{(2)}_{jk}\sim N(0, G^{(2)})$, e $\epsilon_{ijk}\sim N (0, \sigma^2)$.
+- Dadas essas suposições, a estimação dos parâmetros do modelo é relativamente direta. O estimador MQG é dada por
+
+$$
+\hat{\beta} = \left\{\sum_{k=1}^{n_3}{(X_k'V_k^{-1}X_k)}\right\}^{-1}\sum_{k=1}^{n_3}{(X_k'V_k^{-1}X_k)},
+$$
+
+em que $Y_k$ é um vetor coluna de comprimento $\sum_{j=1}^{n_{2k}}{n_{1jk}}$, o número de observações no $k$-ésimo agrupamento. $X_k$ é a matriz correspondente de covariáveis e $V_k$ é a matriz de covariância de $Y_k$.
+
+\framebreak
+
+- Como anteriormente, usamos o __método da máxima verossimilhança restrita (REML)__, ou MV, para obter estimativas de $G^{(3)}$, $G^{(2)}$ e $\sigma^2$.
+- Uma vez obtidas essas estimativas, podemos estimar as matrizes de covariância, $V_k$, e substituir essas estimativas na expressão do estimador MQG de $\beta$.
+- Este procedimento de estimativa está disponível nos pacotes `nlme` e `lme4`.
+
+## Exemplo!
+
+## Generalizações
+
+- O modelo multinível pode ser generalizado para um número arbitrário de níveis.
+- Modelos lineares generalizados de efeitos mistos (GLMMs) também foram desenvolvidos para a análise de desfechos binários e contagens no cenário multinível.
+
+### Observações
+
+A modelagem multinível pode ser difícil:
+
+- Uma covariável pode operar em diferentes níveis
+- Nem sempre é claro como combinar covariáveis em um único modelo
+- Embora modelos lineares hierárquicos com efeitos aleatórios sejam atraentes, a extensão para modelos lineares generalizados levanta problemas difíceis de interpretação.
+- Como discutido anteriormente, modelos marginais e modelos de efeitos mistos podem dar resultados bastante diferentes no __cenário não-linear__.
+
+## Resumindo
+
+- Apesar de certas complexidades, os modelos multiníveis agora são amplamente utilizados.
+- Nos experimentos delineados e nos estudos dos efeitos de fatores familiares/comunitários na saúde, os modelos multiníveis fornecem uma abordagem geralmente eficaz para a análise de dados que explica as correlações induzidas pelo agrupamento.
+- Modelos multiníveis não são, em certo sentido, diferentes de modelos longitudinais.
+- Diferentemente da regressão logística e da análise de sobrevivência, onde o conceito de análise de regressão pode ser aplicado com bastante robustez e com poucas opções, a análise longitudinal e multinível exige uma reflexão mais cuidadosa sobre a escolha e o significado dos modelos.
+- Esse é o desafio e a recompensa deles\structure{!}
+
+## Avisos
+
+- __Próxima aula (10/12):__ Seminários! Modelos lineares generalizados de efeitos mistos.
+- __Para casa:__ ler o Capítulo 22 do livro "__Applied Longitudinal Analysis__".
+    + Caso ainda não tenha lido, leia também os Caps. 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 e 13.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', out.height='80%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'Multilevel_data_structure.png'))
+```

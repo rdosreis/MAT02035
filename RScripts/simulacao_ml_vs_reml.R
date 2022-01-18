@@ -46,12 +46,11 @@ for (j in 1:n){
 }
 
 # ------------------------------------
-# Gerando os daos
+# Gerando os dados
 # ------------------------------------
+set.seed(1540)
 
 df <- list()
-
-set.seed(1540)
 
 for (i in 1:N){
   if (i <= N/2){
@@ -122,7 +121,7 @@ mod.reml <- gls(y ~ tempo + tempo:trt,
                 method = "REML")
 
 # ------------------------------------
-# Estiva dos parâmetros
+# Estimativa dos parâmetros
 # coeficientes de regressão (beta)
 # ------------------------------------
 

@@ -1,0 +1,126 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Modelos lineares de efeitos mistos (exemplos)"
+fontsize: 10pt
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2021
+---
+
+## Exemplo: Ensaio de Terapia por Exercício
+
+- Indivíduos foram designados para um dos dois programas de levantamento de peso para aumentar a força muscular.
+- Tratamento 1: o número de repetições dos exercícios foi aumentado à medida que os indivíduos se tornaram mais fortes.
+- Tratamento 2: o número de repetições foi mantido constante, mas a quantidade de peso foi aumentada à medida que os indivíduos se tornaram mais fortes.
+- As medidas de força corporal foram realizadas na linha de base e nos dias 2, 4, 6, 8, 10 e 12.
+- Concentramo-nos apenas nas medidas de força obtidas na linha de base (ou no dia 0) e nos dias 4, 6, 8 e 12.
+
+## Exemplo: Ensaio de Terapia por Exercício {.allowframebreaks}
+
+```{r carrega_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+# ----------------------------------------------------
+# Carregando pacotes do R
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+library(dplyr)
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+af <- read_dta(
+  file = here::here("data", "exercise.dta"))
+af
+```
+
+## Exemplo: Ensaio de Terapia por Exercício {.allowframebreaks}
+
+```{r transforma_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+names(af)[which(names(af) == "group")] <- "trt"
+af.longo <- gather(data = af,
+                        key = "tempo",
+                        value = "fc", -id, -trt)
+af.longo
+af.longo <- subset(af.longo, tempo != "y2" & tempo != "y10")
+
+af.longo$dia <- factor(af.longo$tempo,
+                       labels = c(0, 12, 4, 6, 8))
+af.longo$dia <- factor(af.longo$dia,
+                       levels = c("0", "4", "6", "8", "12"))
+af.longo$tempo <- as.numeric(
+  as.character(af.longo$dia))
+af.longo$trt <- factor(af.longo$trt)
+af.longo
+```
+
+## Exemplo: Ensaio de Terapia por Exercício {.allowframebreaks}
+
+```{r time_plot2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+p <- ggplot(data = af.longo,
+            mapping = aes(x = dia, y = fc,
+                          group = id, colour = trt)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Tempo (dias)",
+       y = "Força corporal",
+       colour = "Tratamento")
+p + theme_gray()
+```
+
+## Exemplo: Ensaio de Terapia por Exercício {.allowframebreaks}
+
+```{r time_plot3b, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+library(dplyr)
+
+af.resumo <- af.longo %>% 
+  group_by(trt, dia) %>% 
+  summarise(fc.m = mean(fc, na.rm = T)) %>% 
+  mutate(dia = as.numeric(as.character(dia)))
+
+p <- ggplot(data = af.resumo,
+            mapping = aes(x = dia,
+                          y = fc.m,
+                          colour = trt)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Tempo (dias)",
+       y = "Força corporal",
+       colour = "Tratamento")
+p
+```
+
+## Exemplo: Ensaio de Terapia por Exercício {.allowframebreaks}
+
+- Considere um modelo com intercepto e inclinação que variam aleatoriamente entre os indivíduos, e que permita que os valores médios do intercepto e da inclinação sejam diferentes nos dois grupos de tratamento.
+- Para esse modelo, use o seguinte código:
+
+```{r mlem, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+af.longo <- as.data.frame(af.longo)
+library(nlme)
+mod1 <- lme(fc ~ trt*tempo,
+            random = ~ 1 + tempo | id,
+            na.action = na.omit,
+            data = af.longo)
+```
+
+## Exemplo: Ensaio de Terapia por Exercício
+
+- Com base nas estimativas dos efeitos fixos:
+    + a taxa constante de aumento de força no grupo 1 é de 0,135 por dia
+    + a taxa constante de aumento de força no grupo 2 é de 0,173
+(0,35 $+$ 0,038) por dia a diferença entre essas duas taxas, 0,038 (EP = 0,064) não é
+estatisticamente significante.
+- Não parece haver diferenças entre os dois grupos em seu padrão de aumento de força.
+
+- __Exercício:__ ajuste o modelo de intercepto aleatório para os mesmos dados.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'cropped-logo-60-tranparente.png'))
+```

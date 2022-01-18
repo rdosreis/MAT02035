@@ -2,7 +2,7 @@ library(here)
 library(rmarkdown)
 
 pasta <- "Rmds"
-arquivo <- "13_modelos_lineares_de_efeitos_mistos_s20_2"
+arquivo <- "2022_00_apresenta_curso"
 # arquivo <- "09_inferencia_estatistica_s20_2"
 
 arquivo_rmd <- paste0(arquivo, ".Rmd")
@@ -21,7 +21,7 @@ rmarkdown::render(input = input,
                                                       number_sections = FALSE,
                                                       fig_caption = FALSE),
                   output_file = arquivo_pdf,
-                  output_dir = here::here("output_pdf"),
+                  output_dir = here::here("output_pdf_v2"),
                   encoding = "UTF-8")
 
 knitr::purl(input = input,
