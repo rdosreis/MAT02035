@@ -2,8 +2,7 @@ library(here)
 library(rmarkdown)
 
 pasta <- "Rmds"
-arquivo <- "2022_00_apresenta_curso"
-# arquivo <- "09_inferencia_estatistica_s20_2"
+arquivo <- "2022_03_conceitos_basicos"
 
 arquivo_rmd <- paste0(arquivo, ".Rmd")
 arquivo_pdf <- paste0(arquivo, ".pdf")

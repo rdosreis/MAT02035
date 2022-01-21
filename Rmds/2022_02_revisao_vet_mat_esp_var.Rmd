@@ -1,0 +1,740 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Revisão de vetores, matrizes, valores esperados e variâncias"
+fontsize: 10pt
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2022
+---
+
+# Vetores e matrizes
+
+## Introdução
+
+- Vetores e matrizes nos permitem realizar operações matemáticas comuns (por exemplo, adição, subtração e multiplicação) em uma __coleção de números__.
+    + Eles também facilitam a descrição de métodos estatísticos para dados multivariados.
+    + Aproveitaremos esta aula para introduzirmos algumas funções do `R` para vetores e matrizes.
+- Nossa principal motivação para usá-los é a maneira concisa e compacta com as quais técnicas estatísticas para __análise de dados longitudinais__ podem ser apresentadas quando expressas em termos de __vetores__ e __matrizes__.
+    <!-- + Faremos largo uso de vetores e matrizes ao longo do curso para simplificar a __notação__. -->
+
+## Definições e conceitos básicos
+
+- Uma __matriz__ é um arranjo retangular de elementos ordenados por linhas e colunas.
+
+$$
+A = \left(\begin{array}{cccc}
+2 & 7 & 11 & 5 \\
+4 & 9 & 3 & 1 \\
+13 & 8 & 2 & 6 
+\end{array}\right).
+$$
+
+- $A$ é uma matriz com três linhas e quatro colunas.
+
+## Definições e conceitos básicos
+
+- O __elemento__ ou __entrada__ na $i$-ésima linha e $j$-ésima coluna da matriz é referido como $(i,j)$-ésimo elemento da matriz.
+- Se denotarmos $a_{ij}$ como o elemento da $i$-ésima linha e $j$-ésima coluna da matriz $A$, então
+
+$$
+\begin{array}{cccc}
+a_{11} = 2, & a_{12} = 7, & a_{13} = 11, & a_{14} = 5;\\
+a_{21} = 4, & a_{22} = 9, & a_{23} = 3, & a_{24} = 1;\\
+a_{31} = 13, & a_{32} = 8, & a_{33} = 2, & a_{34} = 6.\\
+\end{array}
+$$
+
+## Definições e conceitos básicos
+
+- A __dimensão__ de uma matriz é o número de linhas e colunas na matriz.
+- Por convenção, o número de linhas é apresentado primeiro, e depois o número de colunas.
+    + A matriz $A$ é uma matriz $3\times 4$ ("3 por 4").
+
+## Definições e conceitos básicos
+
+- Um __vetor__ é um caso especial de matriz, contendo ou uma única linha ou uma única coluna.
+
+$$
+V = \left(\begin{array}{c}
+2\\
+4\\
+9\\
+7\\
+3
+\end{array}\right).
+$$
+
+- $V$ é um vetor (coluna) $5\times 1$.
+- A dimensão de um vetor é o seu __comprimento__ (o número de elementos).
+- Por fim, um __escalar__ é um único elemento (um vetor com um elemento ou uma matriz $1\times 1$).
+
+## Escalares, vetores e matrizes no `R`
+
+__Um escalar__
+
+- Basta criar um novo objeto com um único valor.
+
+```{r escalar}
+b <- 5
+b
+```
+
+## Escalares, vetores e matrizes no `R`
+
+__Um vetor__
+
+- A forma mais simples de se criar um vetor no `R` é utilizando a função `c()` (concatenar).
+
+\begin{table}
+\centering
+\begin{tabular}{|llll|}
+\hline
+& \multicolumn{2}{c}{\ttfamily \large \structure{c(a, b, c, ...)}} & \\
+\cline{2-3}
+&&&\\
+& \multicolumn{2}{l}{\ttfamily \structure{a, b, c, ...}} & \\
+& & Um ou mais objetos a serem combinados em um vetor. & \\
+\hline
+\end{tabular}
+\end{table}
+
+## Escalares, vetores e matrizes no `R`
+
+__Um vetor__
+
+```{r vetor}
+V <- c(2, 4, 9, 7, 3)
+V
+length(V)
+```
+
+## Escalares, vetores e matrizes no `R`
+
+__Uma matriz__
+
+- Podemos pensar em uma matriz como uma combinação de $p$ vetores, em que cada vetor tenha comprimento igual a $n$.
+- Por serem uma combinação de vetores, cada função terá um ou mais vetores como inputs e retornará uma matriz.
+
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{|l|l|}
+\hline
+{\ttfamily \large \structure{Função}} & {\ttfamily \large \structure{Descrição}} \\
+\hline
+{\ttfamily \structure{cbind()}} & Combina vetores em \emph{colunas} em uma matriz/dataframe.  \\
+{\ttfamily \structure{rbind()}} & Combina vetores em \emph{linhas} em uma matriz/dataframe. \\
+\hline
+{\ttfamily \structure{matrix()}} & Cria uma matriz com o número desejado de linhas e colunas \\ 
+& a partir de um único vetor. \\
+\hline
+\end{tabular}
+\end{table}
+
+## Escalares, vetores e matrizes no `R`
+
+__Uma matriz__
+
+```{r matriz}
+A <- matrix(data = c(2, 7, 11, 5,
+                     4, 9, 3, 1,
+                     13, 8, 2, 6),
+            nrow = 3, byrow = TRUE)
+A
+dim(A)
+```
+
+## Vetor resposta e matriz de covariáveis
+
+- Exemplos de vetores e matrizes que desempenham papéis-chave na análise de dados longitudinais são o __vetor resposta__, $Y$, e a __matriz de covariáveis__, $X$.
+
+```{r, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, purl=FALSE}
+library(here)
+library(haven)
+library(tidyr)
+
+chumbo.df <- read_dta(file = here::here("data", "tlc.dta"))
+chumbo.df.longo <- gather(data = chumbo.df, key = "tempo", value = "chumbo", -id, -trt)
+chumbo.df.longo$tempo <- factor(chumbo.df.longo$tempo, labels = c("0", "1", "4", "6"))
+
+chumbo1 <- chumbo.df.longo[chumbo.df.longo$id == 1, ]
+chumbo1 <- chumbo1[,-1]
+chumbo1 <- chumbo1[c(3,1,2)]
+
+knitr::kable(chumbo1, col.names = c("Chumbo no sangue", "Grupo de tratamento", "Semana"), caption = "Dados de um indivíduo participante do estudo do Chumbo.")
+```
+
+## Vetor resposta e matriz de covariáveis
+
+```{r, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, purl=FALSE}
+library(mat2tex)
+
+y <- chumbo1$chumbo
+```
+
+- $Y$ denota o vetor de medidas repetidas da variável resposta, então
+
+```{r, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis', purl=FALSE}
+"$$ Y  = \\left(\\begin{array}{c}
+Y_1\\\\
+Y_2\\\\
+Y_3\\\\
+Y_4
+\\end{array}\\right) = " %_% xm(t(t(y)), 1) %_% ".$$"
+```
+
+## Vetor resposta e matriz de covariáveis
+
+```{r, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE}
+x <- cbind(rep(1, 4), chumbo1[c(2,3)])
+```
+
+- $X$ denota a matriz de covariáveis associadas ao vetor de medidas repetidas
+
+```{r, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis', purl=FALSE}
+"$$ X  = \\left(\\begin{array}{ccc}
+X_{11} & X_{12} & X_{13} \\\\
+X_{21} & X_{22} & X_{23} \\\\
+X_{31} & X_{32} & X_{33} \\\\
+X_{41} & X_{42} & X_{43} 
+\\end{array}\\right) = " %_% xm(x, 1) %_% ".$$"
+```
+
+## Matriz transposta
+
+- A __transposta__ é a função que troca as linhas e as colunas de uma matrix.
+    + A primeira linha se torna a primeira coluna, a segunda linha se torna a segunda coluna, e assim por diante.
+- Iremos denotar a transposta de uma matriz $A$ por $A'$ ("$A$ linha").
+    + Alguns livros denotam a transposta de $A$ por $A^T$.
+
+## Matriz transposta
+
+- Considere novamente a matriz $3\times 4$ $A$
+
+$$
+A = \left(\begin{array}{cccc}
+2 & 7 & 11 & 5 \\
+4 & 9 & 3 & 1 \\
+13 & 8 & 2 & 6 
+\end{array}\right).
+$$
+
+- A matriz transposta de $A$ é
+
+$$
+A' = \left(\begin{array}{ccc}
+2 & 4 & 13 \\
+7 & 9 & 8 \\
+11 & 3 & 2\\
+5 & 1 & 6
+\end{array}\right).
+$$
+
+que é uma matriz $4\times 3$.
+
+## Matriz transposta
+
+- Como um vetor é uma matriz com uma única linha ou única coluna, se
+$$
+V = \left(\begin{array}{c}
+2\\
+4\\
+9\\
+7\\
+3
+\end{array}\right),\quad \mbox{então}\quad V' = (2\ 4\ 9\ 7\ 3).
+$$
+
+## Matriz transposta no `R`
+
+```{r matriz_transposta}
+A
+t(A)
+```
+
+## Matrizes quadradas e simétricas
+
+- Uma matriz é dita __quadrada__ se esta tem o mesmo número de linhas e colunas.
+- Uma matriz quadrada é __simétrica__ se esta é igual à sua matriz transposta.
+
+$$
+S = \left(\begin{array}{cccc}
+2 & 3 & 7 & 11 \\
+3 & 9 & 1 & 2 \\
+7 & 1 & 5 & 8 \\
+11 & 2 & 8 & 4 
+\end{array}\right).
+$$
+
+- $S$ é uma matriz simétrica, pois a é igual à sua matriz transposta
+
+$$
+S' = \left(\begin{array}{cccc}
+2 & 3 & 7 & 11 \\
+3 & 9 & 1 & 2 \\
+7 & 1 & 5 & 8 \\
+11 & 2 & 8 & 4 
+\end{array}\right).
+$$
+
+## Matrizes quadradas e simétricas
+
+```{r matriz_quadrada}
+S <- matrix(data = c(2, 3, 7, 11,
+                     3, 9, 1, 2,
+                     7, 1, 5, 8,
+                     11, 2, 8, 4),
+            nrow = 4, ncol = 4,
+            byrow = TRUE)
+all.equal(S, t(S))
+```
+
+## Matrizes quadradas e simétricas
+
+- Exemplos de matrizes simétricas que desempenham papel importante na análise de dados longitudinais são as matrizes de __covariância__ e __correlação__ para as correspondentes medidas repetidas nos mesmos indivíduos.
+- Por fim, uma matriz __diagonal__ é um caso especial de uma matriz quadrada simétrica que tem entradas não nulas (diferentes de zero) somente para as posições da __diagonal principal__.
+    + Os elementos da diagonal principal são aqueles na mesma linha e coluna ($a_{ii}$), da parte superior esquerda para a parte inferior direita da matriz.
+
+$$
+D = \left(\begin{array}{cccc}
+2 & 0 & 0 & 0 \\
+0 & 9 & 0 & 0 \\
+0 & 0 & 5 & 0 \\
+0 & 0 & 0 & 4 
+\end{array}\right).
+$$
+
+## Matrizes quadradas e simétricas
+
+- A matriz diagonal contendo apenas 1s na diagonal principal é conhecida como a matriz __identidade__ e é denotada por $I$ ou $I_n$, em que $n$ denota a dimensão da matriz identidade.
+
+$$
+I_4 = \left(\begin{array}{cccc}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 
+\end{array}\right).
+$$
+
+## Matrizes quadradas e simétricas
+
+```{r matriz_diagonal}
+# cria matriz diagonal 
+I <- diag(x = rep(1, 4))
+I
+# retorna os elementos da diagonal principal da matriz
+diag(x = S)
+```
+
+## Operações aritméticas
+
+- A adição e subtração de matrizes são definidas apenas para matrizes com a mesma dimensão.
+    + Matrizes devem ter o mesmo número de linhas e colunas.
+- A soma de duas matrizes é obtida por adicionar os seus elementos correspondentes.
+
+## Operações aritméticas
+
+### Soma
+
+\begin{eqnarray*}
+\left(\begin{array}{ccc}
+2 & 7 & 11 \\
+4 & 9 & 3 \\
+13 & 8 & 2
+\end{array}\right) + \left(\begin{array}{ccc}
+3 & 2 & 14 \\
+7 & 8 & 4 \\
+6 & 5 & 9
+\end{array}\right) &=& \left(\begin{array}{ccc}
+2 + 3 & 7 + 2 & 11 + 14 \\
+4 + 7 & 9 + 8 & 3 + 4 \\
+13 + 6 & 8 + 5 & 2 + 9
+\end{array}\right)\\
+&=& \left(\begin{array}{ccc}
+5 & 9 & 25 \\
+11 & 17 & 7 \\
+19 & 13 & 11
+\end{array}\right).
+\end{eqnarray*}
+
+## Operações aritméticas
+
+### Subtração
+
+\begin{eqnarray*}
+\left(\begin{array}{ccc}
+2 & 7 & 11 \\
+4 & 9 & 3 \\
+13 & 8 & 2
+\end{array}\right) - \left(\begin{array}{ccc}
+3 & 2 & 14 \\
+7 & 8 & 4 \\
+6 & 5 & 9
+\end{array}\right) &=& \left(\begin{array}{ccc}
+2 - 3 & 7 - 2 & 11 - 14 \\
+4 - 7 & 9 - 8 & 3 - 4 \\
+13 - 6 & 8 - 5 & 2 - 9
+\end{array}\right)\\
+&=& \left(\begin{array}{ccc}
+-1 & 5 & -3 \\
+-3 & 1 & -1 \\
+7 & 3 & -7
+\end{array}\right).
+\end{eqnarray*}
+
+## Operações aritméticas
+
+```{r soma_matriz}
+G <- matrix(data = c(2, 7, 11, 4, 9, 3, 13, 8, 2),
+            nrow = 3, byrow = TRUE)
+J <- matrix(data = c(3, 2, 14, 7, 8, 4, 6, 5, 9),
+            nrow = 3, byrow = TRUE)
+G + J
+G - J
+```
+
+## Multiplicação de matriz por um escalar
+
+- A multiplicação de uma matriz por um escalar é formada pela multiplicação de cada elemento da matriz pelo escalar
+
+$$
+A = \left(\begin{array}{cccc}
+2 & 7 & 11 & 5 \\
+4 & 9 & 3 & 1 \\
+13 & 8 & 2 & 6 
+\end{array}\right),\quad \mbox{então}\quad 2A = \left(\begin{array}{cccc}
+4 & 14 & 22 & 10 \\
+8 & 18 & 6 & 2 \\
+26 & 16 & 4 & 12 
+\end{array}\right).
+$$
+
+## Multiplicação de matriz por um escalar
+
+```{r escalar_matriz}
+2 * A
+```
+
+## Multiplicação de matrizes
+
+A multiplicação de duas matrizes $A$ e $B$, denotada por $AB$, é definida somente se o número de colunas de $A$ é igual ao número de linhas de $B$.
+
+- Se $A$ é uma matriz $p\times q$ e $B$ é uma matriz $q\times r$, então o produto das duas matrizes $AB$ é uma matriz $p\times r$.
+
+Seja $C$ o produto de $A$ e $B$,
+
+$$
+C = AB,
+$$
+
+o $(i,j)$-ésimo elemento de $C$ é a soma dos produtos dos correspondentes na $i$-ésima linha de $A$ e $j$-ésima coluna de $B$.
+
+- Por exemplo,
+
+$$
+c_{ij} = \sum_{k=1}^q{a_{ik}b_{kj}} = a_{i1}b_{1j} + a_{i2}b_{2j} + \ldots + a_{iq}b_{qj}, i = 1, \ldots, p, j = 1,\ldots, r.
+$$
+
+## Multiplicação de matrizes
+
+\begin{block}{Exemplo}
+$$
+A = \left(\begin{array}{ccc}
+2 & 7 & 11\\
+4 & 9 & 3\\
+13 & 8 & 2 
+\end{array}\right)\quad \mbox{e}\quad B = \left(\begin{array}{cc}
+1 & 2\\
+3 & 1\\
+2 & 4 
+\end{array}\right)
+$$
+
+\begin{eqnarray*}
+AB &=& \left(\begin{array}{cc}
+(2\times 1) + (7\times 3) + (11\times 2) & (2\times 2) + (7\times 1) + (11\times 4) \\
+(4\times 1) + (9\times 3) + (3\times 2) & (4\times 2) + (9\times 1) + (3\times 4) \\
+(13\times 1) + (8\times 3) + (2\times 2) & (13\times 2) + (8\times 1) + (2\times 4) \\
+\end{array}\right)\\
+ &=& \left(\begin{array}{cc}
+45 & 55\\
+37 & 29\\
+41 & 42
+\end{array}\right)
+\end{eqnarray*}
+\end{block}
+
+- Note que a ordem da multiplicação é muito importante. Se $A$ e $B$ são matrizes quadradas de mesma dimensão, então, em geral, $AB$ não é igual a $BA$.
+
+## Multiplicação de matrizes
+
+```{r multiplica_matriz, error=TRUE}
+A <- matrix(data = c(2, 7, 11, 4, 9, 3, 13, 8, 2),
+            nrow = 3, byrow = TRUE)
+B <- matrix(data = c(1, 2, 3, 1, 2, 4),
+            nrow = 3, byrow = TRUE)
+A %*% B
+```
+
+## Multiplicação de matrizes
+
+```{r multiplica_matriz2, error=TRUE}
+G %*% J
+J %*% G
+
+```
+
+## Multiplicação de matrizes
+
+```{r multiplica_matriz3, error=TRUE}
+# CUIDADO!
+G * J
+```
+
+## Multiplicação de matrizes
+
+- A multiplicação de um vetor por uma matriz é uma operação particularmente importante que desempenha um papel chave na análise longitudinal.
+- Seja $B$ um vetor $p\times 1$ e $X$ uma matriz $n\times p$.
+
+Então, o produto
+
+$$
+C = XB,
+$$
+
+é um vetor $n\times 1$ com
+
+$$
+c_{i} = \sum_{k=1}^p{x_{ik}b_k}, i = 1, \ldots, n.
+$$
+
+## Multiplicação de matrizes
+
+- Retornando ao exemplo do __chumbo no sangue__: seja $Y$ o vetor de medidas repetidas da variável resposta, e $X$ uma matriz de covariáveis associadas a $Y$,
+
+$$
+Y  = \left(\begin{array}{c}
+Y_1\\
+Y_2\\
+Y_3\\
+Y_4
+\end{array}\right)\quad \mbox{e}\quad X  = \left(\begin{array}{ccc}
+X_{11} & X_{12} & X_{13} \\
+X_{21} & X_{22} & X_{23} \\
+X_{31} & X_{32} & X_{33} \\
+X_{41} & X_{42} & X_{43} 
+\end{array}\right).
+$$
+
+## Multiplicação de matrizes
+
+- Um modelo de regressão linear para a média de cada resposta pode ser expresso na notação de vetor e matriz como
+
+$$
+\E(Y) = X\beta,
+$$
+
+em que $E(Y)$ denota o valor esperado de $Y$ e $\beta$ é um vetor $3\times 1$ de coeficientes de regressão,
+
+$$
+\beta  = \left(\begin{array}{c}
+\beta_1\\
+\beta_2\\
+\beta_3
+\end{array}\right).
+$$
+
+## Multiplicação de matrizes
+
+Especificamente, o produto
+
+$$
+\E(Y) = X\beta,
+$$
+é um vetor $4\times 1$
+
+\footnotesize
+$$
+\left(\begin{array}{c}
+\E(Y_1)\\
+\E(Y_2)\\
+\E(Y_3)\\
+\E(Y_4)
+\end{array}\right) = \left(\begin{array}{ccc}
+X_{11} & X_{12} & X_{13} \\
+X_{21} & X_{22} & X_{23} \\
+X_{31} & X_{32} & X_{33} \\
+X_{41} & X_{42} & X_{43} 
+\end{array}\right) \left(\begin{array}{c}
+\beta_1\\
+\beta_2\\
+\beta_3
+\end{array}\right) = \left(\begin{array}{ccc}
+\beta_1 X_{11} + \beta_2 X_{12} + \beta_3 X_{13} \\
+\beta_1 X_{21} + \beta_2 X_{22} + \beta_3 X_{23} \\
+\beta_1 X_{31} + \beta_2 X_{32} + \beta_3 X_{33} \\
+\beta_1 X_{41} + \beta_2 X_{42} + \beta_3 X_{43} 
+\end{array}\right).
+$$
+
+## Matriz inversa
+
+A __inversa__ de uma matriz quadrada $A$, denotada por $A^{-1}$, é definida como uma matriz quadrada cujo os elementos são tais que
+
+$$
+AA^{-1} = A^{-1}A = I,
+$$
+
+em que $I$ é a matriz identidade.
+
+- __Observação:__ a inversa de uma matriz nem sempre existe. A inversa de uma matriz somente existe se a matriz é __não-singular__.
+
+## Matriz inversa
+
+- Por fim, o __determinante__ de uma matriz quadrada é um escalar denotado por $|A|$.
+    + Para uma matriz $2\times 2$ $A$, o determinante é
+
+$$
+|A| = a_{11}a_{22} - a_{12}a_{21}.
+$$
+
+- Uma propriedade interessante do determinante é que ele fornece um teste da existência da matriz inversa.
+    + Se $|A| \neq 0$, então a inversa de $A$ existe; se $|A| = 0$, então a matriz é dita ser __singular__ e a inversa de $A$ não existe.
+- O determinante também tem um papel importante na definição da __distribuição normal multivariada__ (determinante da matriz de covariância).
+
+## Matriz inversa
+
+```{r inversa_det, error=TRUE}
+# determinante de G
+det(G)
+
+# G é singular?
+det(G) != 0
+
+# inversa de G
+solve(G)
+```
+
+# Propriedades de valores esperados e variâncias
+
+## Introdução
+
+Seja $Y$ uma variável aleatória que assume valores de acordo com uma função densidade se $Y$ é contínua ou uma função massa de probabilidade se $Y$ é discreta.
+
+- O __valor esperado__ (esperança, ou média) de $Y$ é denotado por
+
+$$
+\mu = \E(Y) = \int{ydF_Y(y)}.
+$$
+
+- A __variância__ de $Y$, denotada por $\sigma^2 = \Var(Y)$, é uma medida de variabilidade em torno da média de $Y$, e definida por
+
+$$
+\sigma^2 = \Var(Y) = \E\{Y - \E(Y)\}^2.
+$$
+
+## Introdução
+
+- O __desvio padrão__ de $Y$ é uma medida de variabilidade expressa na unidade (de medida) original de $Y$, e definido como $\sigma = \sqrt{\Var(Y)}$.
+- Por fim, a covariância entre duas variáveis aleatórias, $X$ e $Y$, é definida como
+
+$$
+\Cov(X,Y) = \E[\{X - \E(X)\}\{Y - \E(Y)\}].
+$$
+
+- A covariância é uma medida de __dependência linear__ entre $X$ e $Y$.
+    + Se $X$ e $Y$ são __independentes__, então $\Cov(X,Y) = 0$.
+- Note que a covariância de uma variável com ela mesma é a variância, $\Cov(Y,Y) = \Var(Y)$.
+
+## Propriedades de valores esperados e variâncias
+
+Sejam $X$ e $Y$ duas variáveis aleatórias (possivelmente dependentes) e $a$ e $b$ duas constantes. O valor esperado tem as seguintes propriedades:
+
+1. $\E(a) = a$
+2. $\E(bX) = b\E(X)$
+3. $\E(a + bX) = a + b\E(X)$
+4. $\E(aX + bY) = a\E(X) + b\E(Y)$
+5. $\E(XY) \neq \E(X)\E(Y)$ (a menos que $X$ e $Y$ sejam __independentes__)
+
+- Se $g(\cdot)$ é função linear, então $\E[g(Y)] = g(E[Y])$.
+
+## Propriedades de valores esperados e variâncias
+
+A variância tem as seguintes propriedades:
+
+1. $\Var(a) = 0$
+2. $\Var(bY) = b^2\Var(Y)$
+3. $\Var(a + bY) = b^2\Var(Y)$
+4. $\Var(aX + bY) = a^2\Var(X) + b^2\Var(Y) + 2ab\Cov(X,Y)$
+5. $\Var(aX - bY) = a^2\Var(X) + b^2\Var(Y) - 2ab\Cov(X,Y)$
+
+## Propriedades de valores esperados e variâncias
+
+Em particular, se $X$ e $Y$ são __dependentes__, então
+
+$$
+\Var(X + Y) = \Var(X) + \Var(Y) + 2\Cov(X,Y),
+$$
+
+e
+
+$$
+\Var(X - Y) = \Var(X) + \Var(Y) - 2\Cov(X,Y).
+$$
+
+## Propriedades de valores esperados e variâncias
+
+- Por fim, notamos que o valor esperado e a variância podem ser aplicados para um vetor aleatório. Seja $Y$ um vetor resposta $n\times 1$ (portanto, um vetor coluna; medidas repetidas em $n$ ocasiões distintas),
+
+$$
+Y  = \left(\begin{array}{c}
+Y_1\\
+Y_2\\
+\vdots\\
+Y_n
+\end{array}\right).
+$$
+
+## Propriedades de valores esperados e variâncias
+
+Então,
+
+$$
+\E(Y)  = \left(\begin{array}{c}
+\E(Y_1)\\
+\E(Y_2)\\
+\vdots\\
+\E(Y_n)
+\end{array}\right),
+$$
+
+e
+
+$$
+\Cov(Y)  = \left(\begin{array}{cccc}
+\Var(Y_1) & \Cov(Y_1, Y_2) & \ldots & \Cov(Y_1, Y_n)\\
+\Cov(Y_2, Y_1) & \Var(Y_2) &  \ldots & \Cov(Y_2, Y_n)\\
+\vdots & \vdots & \ddots & \vdots\\
+\Cov(Y_n, Y_1) & \Cov(Y_n, Y_2) & \hdots & \Var(Y_n)
+\end{array}\right).
+$$
+
+## Avisos
+
+- __Para casa:__ 
+    + Demonstre as propriedades de valores esperados e variâncias listadas nos slides 46 e 47.
+    + Ler o Capítulo 1 do livro "__Applied Longitudinal Analysis__". Caso já tenha lido o Cap. 1, leia o Capítulo 2.
+- __Próxima aula:__ Dados longitudinais: conceitos básicos.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='60%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'matrix.jpg'))
+```
