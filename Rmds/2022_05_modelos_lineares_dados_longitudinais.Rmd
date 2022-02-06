@@ -1,0 +1,581 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Visão geral de modelos lineares para dados longitudinais"
+fontsize: 10pt
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2022
+---
+
+# Introdução
+
+## Introdução
+
+- Neste primeiro momento, o nosso foco será exclusivamente nos __modelos lineares__ para __dados longitudinais__ com __variáveis resposta contínuas__ e __com distribuições aproximadamente simétricas__, __sem caudas excessivamente longas__ (__ou assimetria__) __ou outliers__.
+- Estes modelos fornecem as bases para modelos mais gerais para dados longitudinais quando a variável resposta é discreta ou é uma contagem.
+- Nesta aula introduzimos a notação de vetores e matrizes e apresentamos um \structure{modelo de regressão linear geral} para dados longitudinais.
+
+<!-- ## Introdução -->
+
+<!-- - Nas próximas duas aulas: -->
+<!--     1. Apresentamos uma ampla visão geral de diferentes abordagens para modelar a resposta média ao longo do tempo e para contabilizar a correlação entre medidas repetidas no mesmo indivíduo.  -->
+<!--     2. Consideramos alguns métodos descritivos elementares para explorar dados longitudinais, especialmente tendências na resposta média ao longo do tempo. -->
+<!--     3. Concluímos nossa discussão com uma pesquisa histórica de alguns dos primeiros desenvolvimentos em métodos para analisar dados de medidas longitudinais e repetidas. -->
+
+<!-- ## Introdução -->
+
+<!-- - Devemos enfatizar desde o início que os métodos estatísticos apresentados nesta primeira parte usam a suposição de que as respostas longitudinais têm uma __distribuição normal multivariada _aproximada___ para derivar estimativas e testes estatísticos, mas não exigem isso. -->
+
+<!-- ### -->
+
+<!-- Normalidade $\rightsquigarrow$ Máxima verossimilhança  $\rightsquigarrow$ Estimação intervalar $\rightsquigarrow$ Testes de hipóteses $\rightsquigarrow$ Avaliação da adequabilidade dos modelos. -->
+
+# Notação
+
+## Notação
+
+- Assumimos que uma amostra de $N$ indivíduos são medidos repetidamente ao longo do tempo.
+- Denotamos $Y_{ij}$ a variável resposta do $i$-ésimo indivíduo na $j$-ésima ocasião de medição.
+- Como mencionado anteriormente, os indivíduos podem não ter o mesmo número de medidas e podem não ser medidos nas mesmas ocasiões.
+
+###
+
+- Para tal, utilizamos $n_i$ para representar o número de medidas repetidas e $t_{ij}$ os tempos de medida do $i$-ésimo indivíduo.
+    + Se $n$ é o número de __ocasiões planejadas__ do estudo, então $n_i \leq n$.
+
+## O vetor de respostas
+
+- É conveniente __agrupar__ $n_i$ medidas repetidas da variável resposta do $i$-ésimo indivíduo em um vetor $n_i \times 1$ 
+
+$$
+Y_i = \left(\begin{array}{c}
+Y_{i1}\\
+Y_{i2}\\
+\vdots\\
+Y_{in_{i}}
+\end{array}\right),\ i = 1, \ldots, N.
+$$
+
+
+## O vetor de repostas
+
+- Presume-se que os vetores respostas $Y_{i}$, para os $N$ indivíduos, sejam __independentes__ uns dos outros.
+
+### Observação
+
+Embora os vetores de respostas obtidas em diferentes indivíduos possam geralmente ser considerados independentes uns dos outros (por exemplo, __não se espera que medidas repetidas de um resultado de saúde para um paciente em um estudo clínico prevejam ou influenciem os resultados de saúde para outro paciente no mesmo estudo__), as medidas repetidas sobre o mesmo indivíduo não são assumidas observações independentes.
+
+## Notação em dados balanceados
+
+- Quando o número de medidas repetidas é o mesmo para todos os indivíduos do estudo (e não há dados ausentes), não é necessário incluir o índice $i$ em $n_i$ (já que $n_i = n$ para $i = 1, \ldots, N$).
+- Da mesma forma, se as medidas repetidas forem observadas no mesmo conjunto de ocasiões, não é necessário incluir o índice $i$ em $t_{ij}$ (já que $t_{ij} = t_j$ para $i = 1, \ldots, N$).
+
+## Vetor de covariáveis
+
+- Associado a cada resposta, $Y_{ij}$, há um vetor $p \times 1$ de covariáveis 
+
+$$
+X_{ij} = \left(\begin{array}{c}
+X_{ij1}\\
+X_{ij2}\\
+\vdots\\
+X_{ijp}
+\end{array}\right),\ i = 1, \ldots, N,\ j = 1, \ldots, n_i.
+$$
+
+- Observe que $X_{ij}$ é um vetor de covariáveis associadas a $Y_{ij}$, a variável resposta para o $i$-ésimo indivíduo na $j$-ésima ocasião.
+- As $p$ linhas de $X_{ij}$ correspondem a __diferentes covariáveis__.
+
+## Vetor de covariáveis
+
+- Existe um vetor correspondente de covariáveis associado a cada uma das $n_i$ medidas repetidas no $i$-ésimo indivíduo.
+    + $X_{i1}$ é o vetor $p \times 1$ cujos elementos são os valores das covariáveis associadas à variável resposta do $i$-ésimo indivíduo na 1ª ocasião de medição;
+    + $X_{i2}$ é o vetor $p \times 1$ cujos elementos são os valores das covariáveis associadas à variável resposta do $i$-ésimo indivíduo na 2ª ocasião de medição e assim por diante.
+
+## Vetor de covariáveis
+
+O vetor $X_{ij}$ pode incluir dois tipos principais de covariáveis:
+
+i. Covariáveis cujos valores não mudam ao longo da duração do estudo. \structure{Exemplo:} tratamentos experimentais fixos.
+ii. covariáveis cujos valores mudam ao longo do tempo. \structure{Exemplo:} o tempo desde a linha de base, idade do indivíduo, o status atual do tabagismo e as exposições ambientais.
+
+## Vetor de covariáveis
+
+- No primeiro caso, __os mesmos valores das covariáveis são replicados nas linhas__ correspondentes de $X_{ij}$ para $j = 1, \ldots, n_i$.
+- Já para no segundo caso, os valores obtidos pelas covariáveis podem variar ao longo do tempo (para pelo menos alguns indivíduos) e os valores nas linhas correspondentes de $X_{ij}$ podem ser diferentes a cada ocasião da medição. 
+
+## Matriz de covariáveis
+
+- Podemos __agrupar__ os vetores de covariáveis em matrizes $n_i \times p$ de covariáveis:
+
+$$
+X_i = \left(\begin{array}{c}
+X_{i1}'\\
+X_{i2}'\\
+\vdots\\
+X_{in_i}'
+\end{array}\right) = \left(\begin{array}{cccc}
+X_{i11} & X_{i12} & \cdots & X_{i1p} \\
+X_{i21} & X_{i22} & \cdots & X_{i2p} \\
+\vdots & \vdots & \ddots & \vdots \\
+X_{in_i1} & X_{in_i2} & \cdots & X_{in_ip} \\
+\end{array}\right),\ i = 1, \ldots, N.
+$$
+
+- As linhas de $X_i$ correspondem às covariáveis associadas às respostas nas $n_i$ diferentes ocasiões de medição;
+- As colunas de $X_i$ correspondem às $p$ covariáveis distintas.
+
+## Modelo de regressão linear
+
+- Consideramos um \structure{modelo de regressão linear} para alterações na resposta média ao longo do tempo e para relacionar estas mudanças às covariáveis,
+
+\begin{equation}
+\label{mod1}
+Y_{ij} = \beta_1X_{ij1} + \beta_2X_{ij2} + \ldots + \beta_pX_{ijp} + e_{ij},\ j = 1, \ldots, n_i,
+\end{equation}
+em que $\beta_1, \ldots, \beta_p$ são __coeficientes de regressão desconhecidos__ relacionando a média de $Y_{ij}$ às suas correspondentes covariáveis.
+
+- Este modelo descreve como as respostas em cada ocasião são relacionadas com as covariáveis.
+
+## Modelo de regressão linear
+
+- Ou seja, há $n_i$ equações de regressão separadas para a variável resposta em cada uma das $n_i$ ocasiões
+
+\begin{equation}
+\label{mod1.longo}
+\begin{array}{ccccc}
+Y_{i1} & = & \beta_1X_{i11} + \beta_2X_{i12} + \ldots + \beta_pX_{i1p} + e_{i1} & = & X_{i1}'\beta + e_{i1},\\
+Y_{i2} & = & \beta_1X_{i21} + \beta_2X_{i22} + \ldots + \beta_pX_{i2p} + e_{i2} & = & X_{i2}'\beta + e_{i2},\\
+\vdots & \vdots & \vdots & \vdots & \vdots \\
+Y_{in_i} & = & \beta_1X_{in_i1} + \beta_2X_{in_i2} + \ldots + \beta_pX_{in_ip} + e_{in_i} & = & X_{in_i}'\beta + e_{in_i},
+\end{array}
+\end{equation}
+em que $\beta = (\beta_1, \beta_2, \ldots, \beta_p)'$ é um vetor $p \times 1$.
+
+## Modelo de regressão linear
+
+- No modelo da Equação \eqref{mod1} os $e_{ij}$ são erros aleatórios, com __média zero__, representando desvios das respostas a partir de suas respectivas médias preditas
+
+$$
+\E(Y_{ij}|X_{ij}) = \beta_1X_{ij1} + \beta_2X_{ij2} + \ldots + \beta_pX_{ijp}.
+$$
+
+- Tipicamente, mas não sempre, $X_{ij1} = 1$ para todo $i$ e $j$, e então $\beta_1$ é o termo de \structure{intercepto} do modelo.
+    + \structure{Observação:} não utilizaremos $\beta_0$ nem $\alpha$.
+    
+## Modelo de regressão linear
+
+- Por fim, usando a notação de vetores e matrizes, o modelo de regressão dado pelas Equações \eqref{mod1} ou \eqref{mod1.longo} pode ser expresso de uma forma ainda mais compacta,
+
+\begin{equation}
+\label{mod1.curto}
+Y_i = X_i\beta + e_i,
+\end{equation}
+em que $e_i = (e_{i1}, e_{i2}, \ldots, e_{in_i})'$ é um vetor $n_i \times 1$ de \structure{erros aleatórios}.
+
+- O modelo de regressão dado pela Equação \eqref{mod1.curto} é simplesmente uma representação abreviada para
+
+$$
+\left(\begin{array}{c}
+Y_{i1}\\
+Y_{i2}\\
+\vdots\\
+Y_{in_{i}}
+\end{array}\right) = \left(\begin{array}{cccc}
+X_{i11} & X_{i12} & \cdots & X_{i1p} \\
+X_{i21} & X_{i22} & \cdots & X_{i2p} \\
+\vdots & \vdots & \ddots & \vdots \\
+X_{in_i1} & X_{in_i2} & \cdots & X_{in_ip} \\
+\end{array}\right) \left(\begin{array}{c}
+\beta_{1}\\
+\beta_{2}\\
+\vdots\\
+\beta_{p}
+\end{array}\right) + \left(\begin{array}{c}
+e_{i1}\\
+e_{i2}\\
+\vdots\\
+e_{in_i}
+\end{array}\right).
+$$
+
+# Exemplo: Tratamento de crianças expostas ao chumbo (estudo TLC)
+
+## Estudo TLC
+
+- Lembre-se de que no __estudo sobre tratamento de crianças expostas ao chumbo__, há 100 participantes do estudo que têm níveis de chumbo no sangue medidos no mesmo conjunto de quatro ocasiões: linha de base (ou semana 0), semana 1, semana 4 e semana 6.
+- Como todos os indivíduos tem o mesmo número de medidas repetidas observadas no mesmo conjunto de ocasiões, o índice $i$ pode ser retirado de $n_i$ e $t_{ij}$.
+    + Ou seja, $n_1 = n_2 = \ldots = n_N = n$ e da mesma forma $t_{1j} = t_{2j} = \ldots = t_{Nj} = t_j$ para $j = 1, \ldots, 4$.
+- No estudo TLC, o vetor de resposta tem comprimento $4\ (n = 4)$ e todos os indivíduos são medidos no mesmo conjunto de ocasiões: $t_1 = 0, t_2 = 1, t_3 = 4\ \mbox{e}\ t_4 = 6$.
+
+## Estudo TLC {.allowframebreaks}
+
+- Suponha que seja interessante ajustar um modelo à resposta média que pressupõe que o nível médio de chumbo no sangue mude linearmente ao longo do tempo, mas a uma taxa que pode ser diferente para os dois grupos de tratamento.
+- Em particular, podemos querer ajustar um modelo em que __os dois grupos de tratamento tenham o mesmo intercepto__ (ou sejam, a mesma resposta média na linha de base), __mas inclinações diferentes__.
+
+\framebreak
+
++ Isso pode ser representado no seguinte modelo de regressão
+
+\begin{eqnarray*}
+Y_{ij} &=& \beta_1X_{ij1} + \beta_2X_{ij2} + \beta_3X_{ij3} + e_{ij}\\
+&=& X_{ij}'\beta + e_{ij}.
+\end{eqnarray*}
+
+- A primeira covariável $X_{ij1} = 1$ para todo $i$ e $j$ ($\beta_1$ é um termo de \structure{intercepto}).
+- A segunda covariável, $X_{ij2} = t_j$, representa a semana em que o nível de chumbo no sangue foi obtido.
+- Por fim, $X_{ij3} = t_j \times\ \mbox{Grupo}_i$, em que $\mbox{Grupo}_i = 1$ se o $i$-ésimo indivíduo é designado ao grupo succimer e $\mbox{Grupo}_i = 0$ se o $i$-ésimo indivíduo é designado ao grupo placebo.
+
+## Estudo TLC
+
+- __Essa codificação__ de $X_{ij2}$ e $X_{ij3}$ __permite que as inclinações do tempo sejam diferentes__ para os dois grupos de tratamento.
+- As três covariáveis podem ser agrupadas em um vetor $3 \times 1$ das covariáveis $X_{ij}$.
+- Assim, para \structure{crianças do grupo placebo}
+
+$$
+\E(Y_{ij}|X_{ij}) = \beta_1 + \beta_2t_j.
+$$
+
+- $\beta_1$ representa o nível de chumbo no sangue médio na linha de base (semana 0);
+- $\beta_2$ tem interpretação como uma mudança no nível médio de chumbo no sangue (em $\mu g/dL$) por semana.
+
+## Estudo TLC
+
+- Similarmente para as \structure{crianças no grupo succimer}
+
+$$
+\E(Y_{ij}|X_{ij}) = \beta_1 + (\beta_2 + \beta_3)t_j.
+$$
+
+- $\beta_1$ representa o nível de chumbo no sangue médio na linha de base __(assumido ser o mesmo como no grupo placebo, pois o ensaio aleatorizou indivíduos para dois grupos)__;
+- $\beta_2 + \beta_3$ tem interpretação como uma mudança no nível médio de chumbo no sangue (em $\mu g/dL$) por semana.
+
+###
+
+Assim, se os dois grupos de tratamentos diferem em suas taxas de declínio nos níveis de chumbo no sangue, então $\beta_3 \neq 0$.
+
+## Estudo TLC
+
+- Os parâmetros de regressão têm interpretações úteis que se relacionam diretamente com questões de interesse científico.
+- Além disso, hipóteses de interesse podem ser expressas em termos da ausência de certos parâmetros de regressão.
+- Por exemplo, a hipótese de que os dois tratamentos são igualmente eficazes na redução dos níveis de chumbo no sangue corresponde a uma hipótese que $\beta_3 = 0$.
+
+## Estudo TLC
+
+- Os valores das respostas para os indivíduos 79 (do grupo placebo) e 8 (do grupo succimer) são apresentados
+
+$$
+y_{79} = \left(\begin{array}{c}
+30.8 \\
+26.9 \\
+25.8 \\
+23.8 
+\end{array}\right)\ \mbox{e}\ y_{8} = \left(\begin{array}{c}
+26.5 \\
+14.8 \\
+19.5 \\
+21.0 
+\end{array}\right).
+$$
+
+## Estudo TLC
+
+- Associados aos vetores de repostas, temos as matrizes de covariáveis
+
+$$
+X_{79} = \left(\begin{array}{ccc}
+1 & 0 & 0 \\
+1 & 1 & 0 \\
+1 & 4 & 0 \\
+1 & 6 & 0 
+\end{array}\right)\ \mbox{e}\ X_{8} = \left(\begin{array}{ccc}
+1 & 0 & 0 \\
+1 & 1 & 1 \\
+1 & 4 & 4 \\
+1 & 6 & 6
+\end{array}\right).
+$$
+
+## Estudo TLC
+
+\footnotesize
+
+- O modelo para a média dos níveis de chumbo no sangue pode ser representado
+
+$$
+\E(Y_i|X_i) = X_i\beta,
+$$
+
+$$
+\E(Y_i|X_i) = \left(\begin{array}{c}
+\E(Y_{i1}|X_{i1}) \\
+\E(Y_{i2}|X_{i2}) \\
+\E(Y_{i3}|X_{i3}) \\
+\E(Y_{i4}|X_{i4}) 
+\end{array}\right) = \left(\begin{array}{ccc}
+1 & 0 & 0 \\
+1 & 1 & 0 \\
+1 & 4 & 0 \\
+1 & 6 & 0 
+\end{array}\right) \left(\begin{array}{c}
+\beta_1\\
+\beta_2\\
+\beta_3
+\end{array}\right) = \left(\begin{array}{c}
+\beta_1\\
+\beta_1 + \beta_2\\
+\beta_1 + 4\beta_2\\
+\beta_1 + 6\beta_2
+\end{array}\right) 
+$$
+
+para crianças no grupo placebo, e
+
+$$
+\E(Y_i|X_i) = \left(\begin{array}{c}
+\E(Y_{i1}|X_{i1}) \\
+\E(Y_{i2}|X_{i2}) \\
+\E(Y_{i3}|X_{i3}) \\
+\E(Y_{i4}|X_{i4}) 
+\end{array}\right) = \left(\begin{array}{ccc}
+1 & 0 & 0 \\
+1 & 1 & 1 \\
+1 & 4 & 4 \\
+1 & 6 & 6 
+\end{array}\right) \left(\begin{array}{c}
+\beta_1\\
+\beta_2\\
+\beta_3
+\end{array}\right) = \left(\begin{array}{c}
+\beta_1\\
+\beta_1 + (\beta_2 + \beta_3)\\
+\beta_1 + 4(\beta_2 + \beta_3)\\
+\beta_1 + 6(\beta_2 + \beta_3)
+\end{array}\right) 
+$$
+
+para crianças no grupo succimer.
+
+# Suposições distribucionais
+
+## Suposições distribucionais
+
+- Até agora, as únicas suposições feitas diziam respeito a padrões de mudança na resposta média ao longo do tempo e sua relação com covariáveis.
+- Especificamente, dado que o vetor de erros aleatórios, $e_i$, é assumido como tendo média zero, o modelo de regressão dado por \eqref{mod1.curto} implica que 
+
+\begin{equation}
+\label{mod1.media}
+\E(Y_i|X_i) = \mu_i = X_i\beta,
+\end{equation}
+em que $\mu_i = (\mu_{i1}, \ldots, \mu_{in_i})'$ é o vetor $n_i \times 1$ de médias condicionais para o $i$-ésimo indivíduo, com $\mu_{ij} = \E(Y_{ij}|X_i) = \E(Y_{ij}|X_{ij})$.
+
+## Componente sistemático e distribuição dos erros
+
+- Em seguida, consideramos as suposições distribucionais relativas ao vetor de erros aleatórios, $e_i$.
+- O vetor de resposta $Y_i$ em \eqref{mod1.curto} é assumido como sendo composto por dois componentes:
+    1. um __"componente sistemático"__, $X_i\beta$;
+    2. um __"componente aleatório"__, $e_i$.
+- A variabilidade aleatória de $Y_i$ decorre da adição de $e_i$.
+    + Isso implica que suposições feitas sobre a forma da distribuição dos erros aleatórios se traduzem em suposições sobre a forma da __distribuição condicional__ de $Y_i$ dado $X_i$.
+    + Podemos quase indistintamente nos referir à distribuição dos erros, $e_i$, ou das respostas, $Y_i$; suas respectivas distribuições diferem apenas em termos de mudança de locação.
+
+## Distribuição condicional da resposta {.allowframebreaks}
+
+- $Y_i$, o vetor de respostas contínuas, é assumido como tendo uma distribuição condicional que é __normal multivariada__, com vetor de resposta médio
+
+$$
+\E(Y_i|X_i) = \mu_i = X_i\beta
+$$
+
+e matriz de covariância
+
+$$
+\Sigma_i = \Cov(Y_i|X_i).
+$$
+
+\framebreak
+
+::: {.block}
+### Normal multivariada
+
+- É completamente especificada pelo vetor de médias, $\mu_i$, e a matriz de covariância,$\Sigma_i$.
+- Pode ser considerada o análogo multivariado da distribuição normal univariada.
+    - Se $Y_i$ tem uma distribuição condicional que é normal multivariada, então cada um de seus componentes, $Y_{ij}$, tem uma distribuição normal univariada correspondente, com média condicional $\mu_{ij}$ e variância condicional $\sigma^2_j$.
+:::
+
+## A matriz de covariância
+
+- Lembre que, embora as observações de diferentes indivíduos sejam consideradas independentes umas das outras, as medidas repetidas do mesmo indivíduo não são consideradas independentes.
+    + Essa dependência entre as medidas repetidas do mesmo indivíduo é capturada pelos elementos fora da diagonal da matriz de covariância $\Sigma_i$.
+- A matriz de covariância foi indexada por $i$, e __isso permite__, em princípio, __que a matriz de covariância dependa das covariáveis__, $X_i$ (por exemplo, nos tempos das medidas repetidas).
+- Quando $n_i = n$ e $t_{ij} = t_j$ ($i = 1, \ldots, N$), e onde não há dependência da matriz de covariância nas covariáveis, podemos descartar o índice $i$ e simplesmente denotar a matriz de covariância por $\Sigma$.
+    + __Homogeneidade de covariância:__ análogo à suposição de homogeneidade de variância na regressão linear para uma resposta univariada.
+
+## A matriz de covariância
+
+- No entanto, quando os indivíduos têm números desiguais de medidas repetidas e/ou quando as medidas repetidas são obtidas em ocasiões diferentes, a matriz de covariância normalmente dependerá do número e do tempo das medidas.
+    + Em princípio, a covariância também pode depender de outras covariáveis além do tempo; por exemplo, a covariância pode depender do grupo de tratamento.
+    + No entanto, na prática, esse tipo de dependência da covariância nas covariáveis raramente é assumido.
+
+# A distribuição normal multivariada
+
+## Distribuições de probabilidade
+
+- A base formal para muitos métodos estatísticos é uma distribuição de probabilidade assumida para a variável resposta.
+- Em termos gerais, uma distribuição de probabilidade descreve a frequência relativa de ocorrência de valores particulares da variável resposta.
+- Em particular, a função de densidade de probabilidade para $Y$, denotada por $f(y)$, descreve a frequência relativa de ocorrência de valores particulares de $Y$.
+- Antes de descrever algumas das propriedades da distribuição normal multivariada, primeiro revisamos a distribuição normal univariada.
+
+## A distribuição normal univariada
+
+- Considere uma única resposta univariada de um estudo longitudinal em uma ocasião particular, digamos $Y_{ij}$.
+- Assumimos que a média de $Y_{ij}$ está relacionada com as covariáveis pelo seguinte modelo de regressão linear:
+
+$$
+Y_{ij} = X'_{ij}\beta + e_{ij},
+$$
+em que $e_{ij}\sim N(0,\sigma^2_j)$.
+
+- Isto implica que a distribuição condicional de $Y_{ij}$ (dado as covariáveis) também é normal, porém com média $\mu_{ij} = X'_{ij}\beta$ (e variância constante $\sigma^2_j$). Ou seja,
+
+$$
+f(y_{ij}) = (2\pi\sigma^2_j)^{-1/2}\exp\left\{-\frac{1}{2}(y_{ij} - \mu_{ij})^2/\sigma^2_j\right\},
+$$
+em que $-\infty < y < \infty$.
+
+## A distribuição normal univariada
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE}
+
+library(ggplot2)
+library(cowplot)
+
+p1 <- ggplot(data.frame(y = c(-4, 4)), aes(x = y)) +
+  stat_function(fun = dnorm, args = list(0, 1), aes(colour = "N(0,1)"),  size = 1.5) +
+  stat_function(fun = dnorm, args = list(1, 1), aes(colour = "N(1,1)"),  size = 1.5) +
+  stat_function(fun = dnorm, args = list(-1, 2), aes(colour = "N(-1,2)"),  size = 1.5) +
+  scale_y_continuous(name = "f(y)") +
+  scale_colour_brewer(palette="Accent") +
+  labs(colour = "Distribuições") +
+  theme_bw() +
+  theme(legend.position = c(0.2,0.8))
+
+funcShaded <- function(x) {
+    y <- dnorm(x, mean = 0, sd = 1)
+    y[x < 0 | x > (0 + 2 * 1)] <- NA
+    return(y)
+}
+
+p2 <- ggplot(data.frame(y = c(-4, 4)), aes(x = y)) +
+  stat_function(fun = dnorm, args = list(0, 1), colour = "#BEAED4", size = 1.5) +
+  scale_y_continuous(name = "f(y)") +
+  theme_bw() +
+  stat_function(fun = funcShaded, geom = "area", fill = "#BEAED4", alpha = 0.2) +
+  annotate(geom = 'text', x = 0.025, y = 0.05, color = 'black', label = 'Pr(0 < Y < 2)', hjust = -0.1)
+
+plot_grid(p1, p2)
+```
+
+## A distribuição normal univariada
+
+- Observe também que a expressão para a densidade de probabilidade normal depende em grande medida de
+
+$$
+\frac{(y_{ij} - \mu_{ij})^2}{\sigma^2_j} = (y_{ij} - \mu_{ij})(\sigma^2_j)^{-1}(y_{ij} - \mu_{ij}).
+$$
+
+- Esta é a distância ao quadrado entre $y_{ij}$ e $\mu_{ij}$, mas expressa em unidades de desvio padrão.
+    + Assim, pode ser interpretado como a distância padronizada de $y_{ij}$ para sua média condicional, em relação à variabilidade ou dispersão de valores em torno da média condicional, $\mu_{ij}$.
+
+## A distribuição normal multivariada
+
+- No contexto de um estudo longitudinal, com $n_i$ medidas repetidas no $i$-ésimo indivíduo, temos um vetor de respostas e precisamos considerar sua __distribuição de probabilidade conjunta__.
+    - Enquanto uma função de densidade de probabilidade univariada descreve a probabilidade ou frequência relativa de ocorrência de valores particulares de uma única variável aleatória, uma função de densidade de probabilidade conjunta descreve a probabilidade ou frequência relativa com a qual o vetor de respostas assume um determinado conjunto de valores.
+
+## A distribuição normal multivariada
+
+- A distribuição normal multivariada é uma generalização natural da distribuição normal univariada.
+- A função densidade de probabilidade conjunta normal multivariada para $Y_i$ dado $X_i$ pode ser expressa como
+
+\begin{eqnarray*}
+f(y_i) &=& f(y_{i1}, y_{i2}, \ldots, y_{in_i}) \\
+ &=& (2\pi)^{-n_i/2}|\Sigma_i|^{-1/2}\exp\left\{-\frac{1}{2}(y_i - \mu_i)'\Sigma_i^{-1}(y_i - \mu_i)\right\},
+\end{eqnarray*}
+
+em que $-\infty < y_{ij} < \infty$ para $j = 1, \ldots, n_i$, $\mu_i = \E(Y_i|X_i) = (\mu_{i1}, \ldots, \mu_{in_i})'$, $\Sigma_i = \Cov(Y_i|X_i)$ e $|\Sigma_i|$ denota o __determinante__ de $\Sigma_i$.
+
+## A distribuição normal multivariada
+
+Exemplo de uma distirbuição normal bivariada
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'bivariate_gaussian.png'))
+```
+
+## A distribuição normal multivariada
+
+- A distribuição normal multivariada também e completamente determinada pelo vetor de respostas médias, $\mu_i$, e pela matriz de covariância $\Sigma_i$.
+- O determinante de $\Sigma_i$ também é conhecido como a __variância generalizada__. 
+    + Resume as características salientes da variação expressa por $\Sigma_i$ em um único número.
+- A falta de independência entre as medidas repetidas do vetor $y_i$ é contemplada pelos elementos fora da diagonal principal da matriz de covariância $\Sigma_i$.
+
+## A distribuição normal multivariada
+
+\structure{Semelhança entre $f(y_{ij})$ e $f(y_i)$}
+
+- Em certo sentido, a função de densidade de probabilidade conjunta normal multivariada simplesmente substitui a expressão para a distância padronizada entre $y_{ij}$ e $\mu_{ij}$,
+
+$$
+(y_{ij} - \mu_{ij})(\sigma^2_j)^{-1}(y_{ij} - \mu_{ij}),
+$$
+com um análogo multivariado para a distância padronizada do vetor $y_{i}$ para $\mu_{i}$,
+
+$$
+(y_i - \mu_i)'\Sigma_i^{-1}(y_i - \mu_i),
+$$
+em que $\Sigma_i^{-1}$ denota a inversa da matriz $\Sigma_i$.
+
+## Comentários
+
+- A suposição de normalidade multivariada é muito mais difícil de ser verificada a partir dos dados.
+- Talvez a avaliação mais útil da validade da suposição de normalidade multivariada seja através do uso de gráficos.
+    + Histogramas e diagramas de caixa (_boxplot_) dos __resíduos em cada ocasião__ podem ser usados para __detectar grandes desvios de__ $e_{ij}$ __da normalidade univariada__.
+    + __Lembrando que__ $e_i\sim N(0,\Sigma_i)$ implica $e_{ij}\sim N(0,\sigma^2_j), j = 1, \ldots, n_i$; mas o contrário não é verdadeiro.
+
+## Comentários
+
+- Outra __propriedade da distribuição normal multivariada__ para $Y_i$ dado $X_i$ é que a __associação__ entre qualquer par de respostas é __linear__.
+- Consequentemente, se a distribuição condicional de $Y_i$  é normal multivariada, então gráficos de dispersão dos __resíduos__ em todos os pares de ocasiões possíveis __não devem fornecer nenhuma evidência de desvios discerníveis de uma tendência linear__ entre os pares de variáveis.
+    + Mais uma vez, uma ressalva desta técnica gráfica simples é que ela não pode ser usada para estabelecer que a distribuição condicional de $Y_i$ é normal multivariada; ele só pode fornecer evidências de desvios discerníveis da normalidade multivariada.
+
+## Comentários
+
+- A __suposição__ de normalidade multivariada __não é crucial__ para __estimação__ e __validade das inferências__ com respeito a $\beta$ __quando os dados são completos__ (sem ausência de dados).
+    + Além disso, essa propriedade se estende à configuração de dados incompletos se os dados observados puderem ser considerados como uma amostra aleatória dos dados completos.
+- Os desvios da normalidade, a menos que sejam muito extremos (por exemplo, dados de resposta altamente assimétricos), não são tão críticos.
+
+## Comentários
+
+- No cenário de dados longitudinais existem resultados muito semelhantes, que sugerem que são as suposições sobre a dependência entre os erros e as suposições sobre as variâncias e covariâncias que têm maior impacto na inferência estatística.
+    + Desvios da normalidade multivariada, a menos que sejam muito extremas, não são tão críticos.
+- Na prática, não se espera que os dados longitudinais tenham uma distribuição conjunta que seja __exatamente__ normal multivariada.
+    + A distribuição normal multivariada é adotada como uma __aproximação__, mas possui muitas propriedades estatísticas convenientes.
+
+## Avisos
+
+- __Para casa:__ ler o Capítulo 3 do livro "__Applied Longitudinal Analysis__". Caso ainda não tenha lido, leia também os Caps. 1 e 2.
+- __Próxima aula:__ Métodos de análise descritiva para dados longitudinais.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.height='70%', out.width='50%', paged.print=FALSE, purl=FALSE}
+
+knitr::include_graphics(here::here('images', 'voltamos_ja.jpg'))
+
+```
