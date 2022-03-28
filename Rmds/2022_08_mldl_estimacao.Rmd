@@ -1,0 +1,446 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Estimação e inferência estatística"
+fontsize: 10pt
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2022
+---
+
+# Introdução
+
+## Introdução
+
+- Até agora, nossa discussão de modelos para dados longitudinais tem sido muito geral, sem menção de métodos para estimar os coeficientes de regressão ou a covariância entre as medidas repetidas.
+- __Relembrando:__ o modelo de regressão linear geral para o vetor de respostas médias
+
+$$
+\E(Y_i|X_i) = X_i{{\beta}}.
+$$
+
+- Assumimos que o vetor de respostas, $Y_i$, tem uma distribuição condicional que é __normal multivariada__ com matriz de covariância
+
+$$
+\Cov(Y_i|X_i) = \Sigma_i = \Sigma_i({{\theta}}).
+$$
+
+- Note que $\theta$ é um vetor $q \times 1$ de __parâmetros de covariância__.
+
+## Introdução
+
+- Com dados balanceados ($n_i = n$), em que uma matriz de covariância __"não estruturada"__ é assumida, temos $n$ variâncias e $\frac{n(n - 1)}{2}$ covariâncias como elementos do vetor $\theta$ (ou seja, $q = \frac{n(n + 1)}{2}$).
+- Se a covariância é assumida ter um padrão de "simetria composta"\footnote{O padrão de simetria composta assume variância constante e mesma covariância para os pares de medidas repetidas.}, então $q = 2$ e $\theta$ tem dois elementos.
+- Nesta aula, consideramos um método de estimação para os parâmetros desconhecidos, ${\beta}$ e ${\theta}$ (ou equivalentemente, $\Sigma_i$).
+    
+# Estimação: máxima verossimilhança
+
+## O método da máxima verossimilhança
+
+- Dado que foram feitas suposições completas sobre a distribuição do vetor de respostas, $Y_i$ (${Y_i\sim N(X_i\beta, \Sigma_i(\theta))}$), uma abordagem bem  geral de estimação é o __método da máxima verossimilhança__ \structure{(MV)}.
+
+###
++ A ideia fundamental por trás da estimativa de MV é realmente bastante simples e é transmitida por seu nome: use como estimativas de $\beta$ e $\theta$ os valores que são mais prováveis \structure{(ou mais "verossímeis")} para os dados que foram realmente observados.
++ As estimativas de máxima verossimilhança de $\beta$ e $\theta$ são aqueles valores de $\beta$ e $\theta$ que maximizam a probabilidade conjunta das variáveis resposta __avaliadas em seus valores observados__.
+
+## Estimação: máxima verossimilhança
+
+- A probabilidade das variáveis resposta avaliadas no conjunto fixo de valores observados e consideradas como função de $\beta$ e $\Sigma_i(\theta)$ é conhecida como __função de verossimilhança__.
+    + Assim, a estimativa de $\beta$ e $\theta$ provém __por maximizar__ a função de verossimilhança.
+- Os valores de $\beta$ e $\theta$ que maximizam a função de verossimilhança são chamados de __estimativas de máxima verossimilhança__ de $\beta$ e $\theta$, e geralmente são indicados por $\hat{\beta}$ e $\hat{\theta}$ (ou $\widehat{\Sigma}_i$, $\Sigma_i(\hat{\theta})$).
+
+## Observações independentes
+
+- Suponha que os dados provém de uma série de estudos transversais que são repetidos em $n$ ocasiões diferentes.
+- Em cada ocasião, os dados são obtidos em uma amostra de $N$ indivíduos.
+    + Aqui é razoável supor que as observações sejam __independentes__ umas das outras, uma vez que cada indivíduo é medido em apenas uma ocasião.
+- Além disso, para facilitar a exposição, __assumimos que a variância é constante__, digamos $\sigma^2$.
+- A resposta média está relacionada às covariáveis através do seguinte modelo de regressão linear:
+
+$$
+\E(Y_{ij}|X_{ij}) = X_{ij}'\beta.
+$$
+
+## Observações independentes
+
+- Para obter estimativas de máxima verossimilhança de $\beta$, devemos encontrar os valores dos parâmetros de regressão que maximizem a __função de densidade de probabilidade normal conjunta__\footnote{Aqui, implicitamente, estamos assumindo $e_{ij}\stackrel{iid}\sim N(0,\sigma^2)$.} de todas as observações, avaliados nos valores observados da resposta e considerados como uma função de $\beta$ (e $\sigma^2$).
+- __Lembrando__ que a função de densidade de probabilidade normal (ou gaussiana) univariada para $Y_{ij}$, dado $X_{ij}$, pode ser expressa como
+
+$$
+f(y_{ij}) = (2\pi\sigma^2)^{-1/2}\exp\left\{-\frac{1}{2}(y_{ij} - \mu_{ij})^2/\sigma^2\right\},\ -\infty < y_{ij} < \infty.
+$$
+
+## Observações independentes
+
+- Quando todas as respostas são independentes umas das outras, a função de verossimilhança é simplesmente o produto das funções individuais de densidade de probabilidade normal univariada para $Y_{ij}$ dado $X_{ij}$,
+
+\begin{equation*}
+\tikz[baseline]{
+      \node[fill=blue!30,anchor=base] (t1)
+{$\displaystyle L = \prod_{i=1}^N{\prod_{j=1}^n{f(y_{ij})}}$.
+};
+}
+\end{equation*}
+
+## Observações independentes
+
+- É mais comum trabalhar com a função __log-verossimilhança__, que envolverá somas, em vez de produtos, das funções individuais de densidade de probabilidade normal univariada para $Y_{ij}$.
+    + Observe que maximizar a verossimilhança é equivalente a maximizar o logaritmo da verossimilhança (indicado por $\ell$).
+- Portanto, o objetivo é maximizar
+
+\begin{equation*}
+\ell = \log\left\{\prod_{i=1}^N{\prod_{j=1}^n{f(y_{ij})}}\right\} = -\frac{K}{2} \log(2\pi\sigma^2) \tikz[baseline]{
+      \node[fill=blue!30,anchor=base] (t1)
+{$\displaystyle- \frac{1}{2}\sum_{i=1}^N{\sum_{j=1}^n{(y_{ij} - X_{ij}'\beta)^2/\sigma^2}}$
+};
+}
+\end{equation*}
+
+avaliado nos valores numéricos observados dos dados, em relação aos parâmetros de regressão, $\beta$.
+
+- Aqui $K = n \times N$, o __número total de observações__.
+
+## Observações independentes
+
+- Observe que $\beta$ não aparece no primeiro termo da log-verossimilhança.
+    + Como resultado, esse termo pode ser ignorado ao maximizar a log-verossimilhança em relação a $\beta$.
+- Além disso, como o segundo termo tem um sinal negativo, maximizar a log-verossimilhança em relação a $\beta$ é equivalente a minimizar a seguinte função:
+
+\begin{equation*}
+\tikz[baseline]{
+      \node[fill=blue!30,anchor=base] (t1)
+{$\displaystyle \sum_{i=1}^N{\sum_{j=1}^n{(y_{ij} - X_{ij}'\beta)^2}}$.
+};
+}
+\end{equation*}
+
+## Observações independentes
+
+### Comentários
+
+- Maximizar ou minimizar uma função é um problema matemático comum que pode ser resolvido usando o cálculo.
+- Especificamente, a estimativa de máxima verossimilhança de $\beta$ pode ser obtida igualando a derivada da log-verossimilhança, frequentemente chamada de __função escore__, a zero e encontrando a solução para a equação resultante.
+- No entanto, no exemplo considerado aqui, não há necessidade real de recorrer ao cálculo.
+- A obtenção da estimativa de máxima verossimilhança de $\beta$ é equivalente a encontrar a estimativa de __mínimos quadrados ordinários__ \structure{(MQO)} de $\beta$, ou seja, o valor de $\beta$ que minimiza a soma dos quadrados dos resíduos.
+
+## Observações independentes
+
+- Usando a notação vetorial, a solução dos mínimos quadrados pode ser escrita como
+
+\begin{equation*}
+\tikz[baseline]{
+      \node[fill=blue!30,anchor=base] (t1)
+{$\displaystyle \hat{\beta} = \left\{\sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}X_{ij}')}}\right\}^{-1}\sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}y_{ij})}}$.
+};
+}
+\end{equation*}
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'perguntas.png'))
+```
+
+## Observações independentes ($\hat{\beta}$)
+
+- Dado $K$ observações $(X_{ij}, y_{ij})$, queremos encontrar:
+
+$$
+\hat{\beta} = \argmin_{\beta}{\sum_{i=1}^N{\sum_{j=1}^n{(y_{ij} - X_{ij}'\beta)^2}}}.
+$$
+
+- Lembrando que $y_{ij}$ é um escalar, $X_{ij}'$ é um vetor $1\times p$ e $\beta$ um vetor $p\times 1$.
+- Assim, queremos encontrar $\hat{\beta}$ para o qual
+
+$$
+\frac{\partial}{\partial\beta}{\sum_{i=1}^N{\sum_{j=1}^n{(y_{ij} - X_{ij}'\beta)^2}}} = 0.
+$$
+
+## Observações independentes ($\hat{\beta}$)
+
+\begin{align*} 
+\frac{\partial}{\partial\beta}{\sum_{i=1}^N{\sum_{j=1}^n{(y_{ij} - X_{ij}'\beta)^2}}} &= \sum_{i=1}^N{\sum_{j=1}^n{\frac{\partial}{\partial\beta}{(y_{ij} - X_{ij}'\beta)^2}}} \\ 
+&= \sum_{i=1}^N{\sum_{j=1}^n{2\times (y_{ij} - X_{ij}'\beta)\times (- X_{ij}')}} \\ 
+&= 2\times\left[\sum_{i=1}^N{\sum_{j=1}^n{X_{ij}'\beta X_{ij}'}} - \sum_{i=1}^N{\sum_{j=1}^n{y_{ij}X_{ij}'}}\right] \\ 
+&= 2\times\left[\sum_{i=1}^N{\sum_{j=1}^n{\tikz[baseline]{
+      \node[fill=blue!30,anchor=base] (t1)
+{$\displaystyle (X_{ij}X_{ij}')\beta$
+};} }} - \sum_{i=1}^N{\sum_{j=1}^n{\tikz[baseline]{
+      \node[fill=blue!30,anchor=base] (t1)
+{$\displaystyle (X_{ij}y_{ij})$
+};}}}\right],
+\end{align*}
+
+pois $(X_{ij}'\beta) X_{ij}' = (\beta'X_{ij})X_{ij}' = X_{ij}(\beta'X_{ij})' = X_{ij}X_{ij}'\beta$ e $y_{ij}X_{ij}' = X_{ij}y_{ij}$.
+
+## Observações independentes ($\hat{\beta}$)
+
+\scriptsize
+
+\begin{align*} 
+& \frac{\partial}{\partial\beta}{\sum_{i=1}^N{\sum_{j=1}^n{(y_{ij} - X_{ij}'\beta)^2}}} = 0 \\
+&\Rightarrow \sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}X_{ij}')}}\hat{\beta} = \sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}y_{ij})}} \\
+&\Rightarrow \left\{\sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}X_{ij}')}}\right\}^{-1}\sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}X_{ij}')}}\hat{\beta} = \left\{\sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}X_{ij}')}}\right\}^{-1}\sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}y_{ij})}} \\
+&\Rightarrow \hat{\beta} = \left\{\sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}X_{ij}')}}\right\}^{-1}\sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}y_{ij})}},
+\end{align*}
+
+
+pois $\displaystyle \sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}X_{ij}')}}$ é matriz $p\times p$, e portanto $\displaystyle \left\{\sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}X_{ij}')}}\right\}^{-1}\sum_{i=1}^N{\sum_{j=1}^n{(X_{ij}X_{ij}')}} = I_p$.
+
+## Observações independentes
+
+### Comentários
+
+- Essa estimativa de mínimos quadrados é o valor produzido por qualquer _software_ estatístico padrão para regressão linear (por exemplo, `PROC GLM` ou `PROC REG` no `SAS`, a função `lm` no `R` e  o comando `regress` no `Stata`).
+    + __Exercício:__ considere o modelo dos dados de nível de chumbo no sangue __(considerando observações independentes)__; compare as estimativas através de uma __implementação sua__ de $\hat{\beta}$ com a função `lm`; poste no fórum geral do Moodle.
+- Além disso, note que até agora apenas focamos na estimativa de $\beta$, ignorando a estimativa de $\sigma^2$; a seguir, também consideramos a estimativa da matriz de covariância.
+
+## Observações correlacionadas
+
+- Quando há $n_i$ medidas repetidas no mesmo indivíduo, __não se pode assumir que essas medidas repetidas são independentes__.
+    + Como resultado, precisamos considerar a função de densidade de probabilidade conjunta para o __vetor de medidas repetidas__.
+- Observe, no entanto, que os vetores de medidas repetidas são assumidos como __independentes__ uns dos outros.
+    + Assim, a função log-verossimilhança, $\ell$, pode ser expressa como uma __soma das funções multivariadas individuais__ da densidade de probabilidade normal para $Y_i$ dado $X_i$.
+
+\scriptsize
+
+$$
+\ell = \log{\left\{\prod_{i=1}^N{f(y_i)}\right\}} = \sum_{i=1}^N{\log{f(y_i)}},
+$$
+
+em que 
+
+$$
+f(y_i) = (2\pi)^{-n_i/2}|\Sigma_i|^{-1/2}\exp\left\{-\frac{1}{2}(y_i - \mu_i)'\Sigma_i^{-1}(y_i - \mu_i)\right\}.
+$$
+
+## Observações correlacionadas
+
+- Primeiro __assumimos que__ $\Sigma_i$ (ou $\theta$) __é conhecido__ (e, portanto, não precisa ser estimado); depois, relaxaremos essa suposição muito irrealista.
+- Dado que assumimos que o vetor de respostas $Y_i = (Y_{i1}, Y_{i2}, \ldots, Y_{in_i})'$ segue uma distribuição condicional que é normal multivariada, devemos maximizar a seguinte função de log-verossimilhança:
+
+\begin{equation*}
+\ell = -\frac{K}{2} \log(2\pi) - \frac{1}{2}\sum_{i=1}^N{\log|\Sigma_i|} \tikz[baseline]{
+      \node[fill=blue!30,anchor=base] (t1)
+{$\displaystyle- \frac{1}{2}\left\{\sum_{i=1}^N{(y_i - X_i\beta)'\Sigma_i^{-1}(y_i - X_i\beta)}\right\}$
+};
+}
+\end{equation*}    
+
+em que $K = \sum_{i=1}^N{n_i}$ é o __número total de observações__.
+
+## Observações correlacionadas
+
+- Note que $\beta$ não aparece nos dois primeiros termos na log-verossimilhança.
+    + Esses dois termos podem ser ignorados ao maximizar a log-verossimilhança em relação a $\beta$.
+- Além disso, como o terceiro termo tem um sinal negativo, maximizar a log-verossimilhança em relação a $\beta$ é equivalente a minimizar
+
+\begin{equation*}
+\tikz[baseline]{
+      \node[fill=blue!30,anchor=base] (t1)
+{$\displaystyle \sum_{i=1}^N{(y_i - X_i\beta)'\Sigma_i^{-1}(y_i - X_i\beta)}$.
+};
+}
+\end{equation*}
+
+## Observações correlacionadas
+
+- O estimador de $\beta$ que minimiza essa expressão é conhecido como estimador de __mínimos quadrados generalizados__ \structure{(MQG)} de $\beta$ e pode ser expresso como
+
+\begin{equation*}
+\tikz[baseline]{
+      \node[fill=blue!30,anchor=base] (t1)
+{$\displaystyle \hat{\beta} = \left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{(X_i'\Sigma_i^{-1}y_i)}$.
+};
+}
+\end{equation*}
+
+###
+
+- Veja a função `gls` do pacote `nlme` do `R`.
+
+## Observações correlacionadas ($\hat{\beta}$)
+
+\footnotesize
+
+\begin{align*}
+\frac{\partial}{\partial\beta}{\sum_{i=1}^N{(y_i - X_i\beta)'\Sigma_i^{-1}(y_i - X_i\beta)}} &= \sum_{i=1}^N{\frac{\partial}{\partial\beta}{\left[(y_i - X_i\beta)'\Sigma_i^{-1}(y_i - X_i\beta)\right]}} \\
+&=\sum_{i=1}^N{(y_i - X_i\beta)'\times\left[\Sigma_i^{-1} + (\Sigma_i^{-1})'\right]\times(- X_i)} \\
+&= \sum_{i=1}^N{\left[y_i' - (X_i\beta)'\right]\times}\tikz[baseline]{
+      \node[fill=red!30,anchor=base] (t1)
+{$\displaystyle (2\Sigma_i^{-1})$
+};}{\times(- X_i)} \\
+&= 2\times\left\{\sum_{i=1}^N{\left[(X_i\beta)'\Sigma_i^{-1}X_i\right]} - \sum_{i=1}^N{\left(y_i'\Sigma_i^{-1}X_i\right)}\right\}\\
+&= 2\times\left[\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)\beta} - \sum_{i=1}^N{(X_i'\Sigma_i^{-1}y_i)}\right].
+\end{align*}
+
+- Note que $\Sigma_i$ é simétrica, e portanto, $\Sigma_i^{-1}$ também é simétrica; ou seja, \tikz[baseline]{
+      \node[fill=red!30,anchor=base] (t1){$(\Sigma_i^{-1})' = \Sigma_i^{-1}$};}.
+
+## Observações correlacionadas ($\hat{\beta}$)
+
+\begin{align*} 
+& \frac{\partial}{\partial\beta}{\sum_{i=1}^N{(y_i - X_i\beta)'\Sigma_i^{-1}(y_i - X_i\beta)}} = 0 \\
+&\Rightarrow \sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)\hat{\beta}} = \sum_{i=1}^N{(X_i'\Sigma_i^{-1}y_i)} \\
+&\Rightarrow \hat{\beta} = \left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{(X_i'\Sigma_i^{-1}y_i)}.
+\end{align*}
+
+## Propriedades do estimador MQG ($\Sigma_i$ conhecida)
+
+- A primeira propriedade muito notável é que, para __qualquer escolha__ de $\Sigma_i$, a estimativa MQG de $\beta$ é __não enviesada__. Ou seja,
+
+$$
+\E[\hat{\beta}] = \beta.
+$$
+
+###
+
+\scriptsize
+\begin{align*} 
+\E[\hat{\beta}] &= \E\left[\left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{(X_i'\Sigma_i^{-1}Y_i)}\right] \\
+&= \left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{(X_i'\Sigma_i^{-1}\E[Y_i])} \\
+&= \left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)\beta} \\
+&= I_{p}\beta = \beta.
+\end{align*}
+
+## Propriedades do estimador MQG ($\Sigma_i$ conhecida)
+
+- Além disso, __em grandes amostras__ (ou assintoticamente), pode se mostrar que a distribuição amostral de $\hat{\beta}$ é uma \structure{distribuição normal multivariada} com \structure{média} $\beta$ e \structure{covariância}
+
+$$
+\Cov(\hat{\beta}) = \left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}.
+$$
+
+## Propriedades do estimador MQG ($\Sigma_i$ conhecida)
+
+###
+
+\scriptsize
+\begin{align*} 
+\Cov[\hat{\beta}] &= \Var\left[\left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{(X_i'\Sigma_i^{-1}Y_i)}\right] \\
+&= \left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\Var\left[\sum_{i=1}^N{(X_i'\Sigma_i^{-1}Y_i)}\right]\left[\left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\right]' \\
+&= \left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{\left[X_i'\Sigma_i^{-1}\Var(Y_i)(X_i'\Sigma_i^{-1})'\right]}\left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1} \\
+&= \underbrace{\left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{\left(X_i'\overbrace{\Sigma_i^{-1}\Sigma_i}^{I_{n_i}}\Sigma_i^{-1}X_i\right)}}_{I_p}\left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1} \\
+&= \left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}.
+\end{align*}
+
+## Propriedades do estimador MQG ($\Sigma_i$ conhecida)
+
+- Isso é verdade exatamente quando $Y_i$ tem uma distribuição condicional que é multivariada normal e verdadeiro em __grandes amostras__, mesmo quando a distribuição condicional de $Y_i$ não é normal multivariada.
+    + Por "grandes amostras", entendemos que o tamanho da amostra, $N$, aumenta quando o número de medidas repetidas e parâmetros do modelo permanece fixo.
+- Observe também que se $\Sigma_i$ for assumido como uma matriz diagonal, com variância constante $\sigma^2$ ao longo da diagonal, o estimador MQG reduz-se ao estimador MQO considerado mais cedo.
+    + __Exercício:__ demonstre este resultado.
+- Finalmente, embora o estimador MQG de $\beta$ seja não enviesado para qualquer escolha de $\Sigma_i$, pode ser mostrado que o estimador MQG mais eficiente de $\beta$ (ou seja, o estimador com menor variância ou maior precisão) é aquele que usa o valor verdadeiro de $\Sigma_i$.
+
+## MQG ($\Sigma_i$ desconhecida)
+
+- Vamos abordar o caso que geralmente ocorre na prática: não conhecemos $\Sigma_i$ (ou $\theta$).
+    + Neste caso precisamos estimar $\Sigma_i(\theta)$ a partir dos dados disponíveis.
+- A estimativa da máxima verossimilhança de $\theta$ prossegue da mesma maneira que a estimativa de $\beta$, maximizando a log-verossimilhança em relação a $\theta$.
+-  Especificamente, a estimativa de máxima verossimilhança de $\theta$ pode ser obtida igualando a derivada da log-verossimilhança em relação a $\theta$ (função escore) a zero e encontrando a solução para a equação resultante.
+- Entretanto, em geral, essa __equação é não linear__ e não é possível escrever expressões simples, de forma fechada, para o estimador de MV de $\theta$.
+    + A estimativa de MV deve ser encontrada resolvendo-se essa equação usando uma técnica __iterativa__.
+
+## MQG ($\Sigma_i$ desconhecida)
+
+- Felizmente, algoritmos computacionais foram desenvolvidos para encontrar a solução.
+- Uma vez obtida a estimativa de MV de $\theta$, simplesmente substituímos a estimativa de $\Sigma_i(\theta)$, digamos $\widehat{\Sigma}_i = \Sigma_i(\hat{\theta})$, no estimador de mínimos quadrados generalizados de $\beta$ para obter a estimativa de MV de $\beta$:
+
+\begin{equation*}
+\tikz[baseline]{
+      \node[fill=blue!30,anchor=base] (t1)
+{$\displaystyle \hat{\beta} = \left\{\sum_{i=1}^N{(X_i'\widehat{\Sigma}_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{(X_i'\widehat{\Sigma}_i^{-1}y_i)}$.
+};
+}
+\end{equation*}
+
+## Propriedades do estimador MQG ($\Sigma_i$ desconhecida)
+
+- Curiosamente, __em grandes amostras__ (ou assintoticamente), o estimador de $\beta$ resultante que substitui a estimativa de MV de $\Sigma_i$ tem todas as __mesmas propriedades__ de quando $\Sigma_i$ é realmente conhecido.
+
+- Assim, em termos de propriedades da distribuição amostral de $\hat{\beta}$, não há penalidade por realmente ter que estimar $\Sigma_i$ a partir dos dados longitudinais em questão.
+- No entanto, por mais reconfortante que esse resultado possa parecer, deve-se ter em mente que esta é uma propriedade de grande amostra (ou seja, quando $N$ se aproxima do infinito) de $\hat{\beta}$.
+    + Com tamanhos de amostra da magnitude frequentemente encontrados em muitas áreas de aplicação, pode-se esperar que as propriedades da distribuição amostral de $\hat{\beta}$ sejam adversamente influenciadas pela estimativa de um número muito grande de parâmetros de covariância.
+
+# Questões de dados ausentes
+
+## Questões de dados ausentes
+
+Embora a maioria dos estudos longitudinais seja projetada para coletar dados de cada indivíduo da amostra a cada momento do acompanhamento, __muitos estudos têm algumas observações ausentes__.
+
+Dados ausentes têm três implicações importantes para a análise longitudinal:
+
+1. O __conjunto de dados é__ necessariamente __desbalanceado__ ao longo do tempo, pois nem todos os indivíduos têm o mesmo número de medições repetidas em um conjunto comum de ocasiões.
+    + Como resultado, os métodos de análise precisam ser capazes de lidar com os dados desbalanceados __sem precisar descartar dados de indivíduos com dados ausentes__.
+
+## Questões de dados ausentes
+
+2. __Haverá__ perda de informações e __redução na precisão__ com que mudanças na resposta média ao longo do tempo pode ser estimado.
+    + Essa redução na precisão está diretamente relacionada à quantidade de dados ausentes e também será influenciada em certa medida pela maneira como a análise lida com os dados ausentes.
+    + Por exemplo, usar apenas os casos completos (ou seja, aqueles indivíduos sem dados ausentes) geralmente __será o método menos eficiente__.
+3. A validade de qualquer método de análise exigirá que certas suposições sobre os motivos de qualquer perda, geralmente chamadas de __mecanismo de perda de dados__, sejam sustentáveis.
+    + Consequentemente, quando há perda de dados, devemos considerar cuidadosamente os motivos da perda.
+
+## Mecanismo de perda de dados
+
+- O mecanismo de perda de dados pode ser pensado como __um modelo__ que descreve a probabilidade de uma resposta ser observada ou não (estar ausente) em qualquer ocasião.
+- Fazemos uma distinção importante entre mecanismos de dados ausentes que são referidos como __ausentes completamente ao acaso__ (_missing completely at random_ - MCAR) e __ausentes ao acaso__ (_missing at random_ - MAR).
+- A distinção entre esses dois mecanismos determina a adequação da estimativa de máxima verossimilhança sob o pressuposto de uma distribuição normal multivariada para as respostas, e o MQG sem exigir suposições sobre o formato da distribuição.
+
+## MCAR
+
+- Diz-se que os dados são MCAR quando a probabilidade de perda de respostas não está relacionada aos valores específicos que, em princípio, deveriam ter sido obtidos (as respostas ausentes) ou ao conjunto de respostas observadas.
+- Ou seja, dados longitudinais são MCAR quando a perda em $Y_i$ é simplesmente o resultado de um mecanismo aleatório que não depende de componentes observados ou não observados de $Y_i$.
+
+###
+- __A característica essencial do MCAR é que os dados observados podem ser considerados uma amostra aleatória dos dados completos.__
+    + Como resultado, os momentos (por exemplo, médias, variâncias e covariâncias) e, de fato, a distribuição dos dados observados __não diferem__ dos momentos correspondentes ou da distribuição dos dados completos.
+    
+## MCAR: consequências para a análise de dados longitudinais
+
+- Qualquer método de análise que produza __inferências válidas na ausência de dados ausentes__ também produzirá inferências válidas quando o mecanismo de perda de dados for MCAR e a análise for baseada em todos os dados disponíveis, ou mesmo quando estiver restrito aos "completadores" (ou seja, aqueles sem dados ausentes).
+- Dado que estimativas válidas das médias, variâncias e covariâncias podem ser obtidas, o MQG fornece estimativas válidas de $\beta$ sem exigir nenhuma premissa de distribuição para $Y_i$.
+- O estimador MQG de $\beta$ é válido, desde que o modelo para a resposta média tenha sido especificado corretamente; não requer nenhuma suposição sobre a distribuição conjunta das respostas longitudinais.
+
+## MCAR: consequências para a análise de dados longitudinais
+
+- O estimador de MV de $\beta$, pressupondo que as respostas tenham uma distribuição normal multivariada, é também o estimador MQG (com a estimativa MV de $\Sigma_i(\theta)$, por exemplo, $\widehat{\Sigma}_i = \Sigma_i(\hat{\theta})$, substituída).
+- Assim, nessa configuração, os estimadores MV e MQG têm exatamente as mesmas propriedades, independentemente da verdadeira distribuição de $Y_i$.
+
+## MAR
+
+- Ao contrário do MCAR, diz-se que os dados são MAR quando a probabilidade de perda de respostas depende do conjunto de respostas observadas, mas não está relacionada aos valores ausentes específicos que, em princípio, deveriam ter sido obtidos.
+- Em outras palavras, se os indivíduos são estratificados com base em valores semelhantes para as respostas observadas, a perda é simplesmente o resultado de um mecanismo aleatório que não depende dos valores das respostas não observadas.
+- No entanto, como o mecanismo de perda agora depende das respostas observadas, a distribuição de $Y_i$ em cada um dos estratos distintos definidos pelos padrões de perda não é o mesmo que a distribuição de $Y_i$ na população alvo.
+- Isso tem consequências importantes para a análise.
+
+## MAR: consequências para a análise de dados longitudinais
+
+- Uma destas consequências é que uma __análise restrita aos "completadores" não é válida__.
+    + Em outras palavras, os "completadores" são uma amostra tendenciosa da população alvo.
+- Além disso, a distribuição dos componentes observados de $Y_i$, em cada um dos estratos distintos definidos pelos padrões de perda, não coincide com a distribuição dos mesmos componentes de $Y_i$ na população alvo.
+    + __Portanto, as médias amostrais, variâncias e covariâncias com base nos "completadores" ou nos dados disponíveis são estimativas tendenciosas dos parâmetros correspondentes na população-alvo__.
+
+## MAR: consequências para a análise de dados longitudinais
+
+- Como resultado, o MQG não mais fornece estimativas válidas de $\beta$ sem fazer suposições corretas sobre a distribuição conjunta das respostas longitudinais.
+- Por outro lado, a estimativa de MV de $\beta$ é válida quando os dados são MAR, desde que a distribuição normal multivariada tenha sido especificada corretamente.
+    + __Isso requer a especificação correta não apenas do modelo para a resposta média, mas também do modelo para a covariância entre as respostas.__
+- Em certo sentido, a estimativa de MV permite que os valores ausentes sejam validamente "previstos" ou "imputados" usando os dados observados e um modelo correto para a distribuição conjunta das respostas.
+
+## Avisos
+
+- __Exercício:__ (Re)fazer as provas dos resultados discutidos na aula de hoje.
+- __Para casa:__ ler o Capítulo 4 do livro "__Applied Longitudinal Analysis__".
+    + Caso ainda não tenha lido, leia também os Caps. 1, 2 e 3.
+    + Ver também as referências com respeito à derivadas de vetores, matrizes, etc (pasta no Moodle).
+- __Próxima aula:__ Inferência estatística, máxima verossimilhança restrita.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='60%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'estimation_icon.jpg'))
+```

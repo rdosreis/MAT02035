@@ -1,10 +1,10 @@
 ## ----carrega_dados, echo=TRUE, eval=FALSE, message=FALSE, warning=FALSE----------------
 ## 
 ## # install.packages("haven")
-## library(haven)
-## 
-## chumbo <- read_dta(file = "tlc.dta")
-## 
+library(haven)
+
+chumbo <- read_dta(file = here::here("data","tlc.dta"))
+
 
 
 ## ----largo, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------------------
@@ -22,6 +22,9 @@ chumbo.longo <- gather(data = chumbo,
                         key = "tempo",
                         value = "chumbo", -id, -trt)
 
+chumbo.longo2 <- pivot_longer(data = chumbo,
+                              cols = c(-id, -trt),
+                              names_to = "tempo", values_to = "chumbo")
 
 
 ## ----reshape2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------

@@ -1,0 +1,356 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Modelos lineares de efeitos mistos: exemplo"
+fontsize: 10pt
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2022
+---
+
+# Six Cities Study of Air Pollution and Health {.allowframebreaks}
+
+- Dados longitudinais sobre o crescimento da função pulmonar em crianças e adolescentes do _Six Cities Study of Air Pollution and Health_. 
+- Os dados são de uma coorte de 300 meninas em idade escolar que moram em Topeka, Kansas, que, na maioria dos casos, estavam matriculadas na primeira ou segunda série (com idades entre seis e sete anos).
+- As meninas foram medidas anualmente até a formatura do ensino médio (aproximadamente aos dezoito anos) ou perda de acompanhamento, e cada menina forneceu no mínimo uma e no máximo 12 observações.
+
+\framebreak
+
+- A cada exame, as medidas da função pulmonar foram obtidas a partir da espirometria simples.
+- Uma medida amplamente utilizada, calculada a partir da espirometria simples, é o volume de ar expirado no primeiro segundo da manobra, $\mbox{FEV}_1$ \structure{(variável resposta de interesse)}.
+- As variáveis \structure{idade (anos)} e \structure{altura (metros)} também foram registradas em cada uma das visitas.
+
+## Estudo Six Cities {.allowframebreaks}
+
+\footnotesize
+
+```{r fev_carrega_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+library(haven)
+
+fev <- read_dta(file = here::here("data", "fev1.dta"))
+
+# cria variável log(fev1/ht)
+fev$fev1 <- exp(fev$logfev1)
+fev$logfh <- log(fev$fev1/fev$ht)
+
+# uma observação atípica (?)
+fev <- fev[- which(fev$logfh < -0.5), ]
+
+names(fev) <- c("id", "altura", "idade", "altura_basal",
+                "idade_basal", "logFEV_1", "FEV_1", "logfh")
+
+```
+
+\framebreak
+
+```{r fev, echo=FALSE, eval=TRUE, results='asis', message=FALSE, warning=FALSE}
+
+knitr::kable(x = fev[which(fev$id %in% 13:16),],
+             align = "c")
+
+```
+
+\framebreak
+
+\normalsize
+
+- Observe que, embora as meninas com apenas uma única observação não forneçam diretamente informações sobre mudanças longitudinais ou intraindividuais ao longo do tempo, suas observações em uma única ocasião contribuem para a análise.
+    + Por exemplo, essas observações contribuem com informações para a estimativa de variâncias e efeitos entre-indivíduos.
+- A tabela anterior revela que esses dados são inerentemente desbalanceados ao longo do tempo, e o grau de desequilíbrio é ainda mais acentuado quando a idade da criança é usada como a variável de tempo.
+    + Ou seja, neste conjunto de dados, as crianças entram no estudo em diferentes idades e também têm diferentes ocasiões de medição.
+
+\framebreak
+
+\footnotesize
+
+```{r fev3, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="80%"}
+
+library(ggplot2)
+
+set.seed(5)
+id.s <- sample(x = unique(fev$id), size = 50,
+               replace = FALSE)
+
+p <- ggplot(data = fev[which(fev$id %in% id.s),],
+            mapping = aes(x = idade, y = logfh,
+                          group = id)) +
+  geom_point(alpha = 0.3) +
+  geom_line(alpha = 0.3) +
+  labs(x = "Idade (anos)",
+       y = "Log(FEV1/Altura)") +
+  theme_bw()
+p
+
+```
+
+## Estudo Six Cities: modelagem {.allowframebreaks}
+
+\normalsize
+
+Quando a idade é usada como a variável de tempo, existem \structure{duas fontes de informação} sobre a relação entre $\mbox{FEV}_1$ e idade.
+
+1. Há \structure{informações ``transversais''} ou entre indivíduos que surgem porque as crianças entram no estudo em idades diferentes.
+    + Por exemplo, há informações sobre como o $\mbox{FEV}_1$ muda com a idade nas observações da linha de base (ou $\mbox{tempo} = 0$).
+2. Há \structure{informações ``longitudinais''} ou intra-indivíduo que surgem porque as crianças são medidas repetidamente ao longo do tempo, produzindo medições de $\mbox{FEV}_1$ em diferentes idades.
+
+\framebreak
+
+- É importante modelar esses dados de uma forma que permita a estimativa separada dos efeitos "transversais" e "longitudinais" da idade do $\mbox{FEV}_1$. 
+- É então possível testar se existem diferenças entre os efeitos transversais e longitudinais da idade na $\mbox{FEV}_1$ e relatar efeitos separados quando necessário ou estimar um efeito combinado, com base em ambas as fontes de informação, se apropriado.
+- Observe que os mesmos problemas surgem ao examinar a relação entre $\mbox{FEV}_1$ e altura.
+
+\framebreak
+
+- O __objetivo da análise__ foi determinar como as mudanças na função pulmonar ($\mbox{FEV}_1$) ao longo do tempo estão relacionadas à idade e altura da criança.
+- Pesquisas anteriores indicaram que $\log(\mbox{FEV}_1)$ tem uma relação aproximadamente linear com idade e $\log(\mbox{altura})$ em crianças e adolescentes.
+- Para distinguir entre os efeitos transversais e longitudinais de idade e $\log(\mbox{altura})$ em $\log(\mbox{FEV}_1)$, os valores basais e atuais dessas covariáveis foram incluídos no modelo para a média.
+- Como esses dados são inerentemente desbalanceados, explicar a covariância entre as observações repetidas na mesma criança por meio de uma estrutura de efeitos aleatórios é muito adequado.
+
+\framebreak
+
+- Neste examplo, vamos considerar que o intercepto e a inclinação para a idade variem aleatoriamente de uma criança para outra.
+- Especificamente, consideramos o seguinte modelo para $\log(\mbox{FEV}_1)$:
+
+\begin{eqnarray*}
+\E(Y_{ij}|b_i) &=& \beta_1 + \beta_2\mbox{idade}_{ij} + \beta_3\log(\mbox{altura})_{ij} + \beta_4\mbox{idade}_{i1} + \beta_5\log(\mbox{altura})_{i1}\\
+&&\quad + b_{i1} + b_{i2}\mbox{idade}_{ij},
+\end{eqnarray*}
+
+em que $Y_{ij}$ é o $\log(\mbox{FEV}_1)$ para o $i$-ésima chiança na $j$-ésima ocasião, e $\mbox{idade}_{i1}$ e $\log(\mbox{altura})_{i1}$ são a $\mbox{idade}$ e $\log(\mbox{altura})$  basal para a $i$-ésima criança.
+
+\framebreak
+
+- Neste modelo, $\beta_2$ e $\beta_3$ são os efeitos longitudinais da $\mbox{idade}$ e $\log(\mbox{altura})$, respectivamente, enquanto $(\beta_2 + \beta_4)$ e $(\beta_3 + \beta_5)$ são os efeitos transversais correspondentes.
++ Ou seja, $\beta_4$ e $\beta_5$ representam as diferenças entre os efeitos longitudinal e transversal da $\mbox{idade}$ e $\log(\mbox{altura})$, respectivamente.
+
+## Estudo Six Cities: ajuste {.allowframebreaks}
+
+```{r lme, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+library(nlme)
+
+mod1 <- lme(fixed = logFEV_1 ~ idade + log(altura) +
+              idade_basal + log(altura_basal),
+            random = ~ idade | id,
+            # method = "REML",
+            data = fev,
+            na.action = na.omit)
+
+```
+
+\framebreak
+
+```{r lmer, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+# library(lme4)
+# 
+# mod <- lmer(formula = logFEV_1 ~ idade + log(altura) +
+#               idade_basal + log(altura_basal) +
+#               (1 + idade | id),
+#             REML = TRUE,
+#             data = fev,
+#             na.action = na.omit)
+
+```
+
+## Estudo Six Cities: estimativas {.allowframebreaks}
+
+As estimativas REML dos efeitos fixos são exibidas na tabela a seguir.
+
+```{r coef, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+
+knitr::kable(
+  summary(mod1)$tTable[,-c(3,5)],
+  digits = c(4, 4, 2),
+  col.names = c("Estimativa", "EP", "Z"))
+
+```
+
+\framebreak
+
+- Com base na magnitude das estimativas de $\beta_4$ e $\beta_4$, em relação aos seus erros padrão, há evidências de uma diferença significativa entre os efeitos longitudinais e transversais da $\mbox{idade}$, mas não de $\log(\mbox{altura})$.
+- As magnitudes dos efeitos longitudinais e transversais de $\log(\mbox{altura})$ são bastante semelhantes ($2.24$ versus $2.46$), enquanto as magnitudes dos efeitos longitudinais e transversais da $\mbox{idade}$ são notavelmente diferentes ($0.024$ versus $0.007$).
+- Ou seja, os efeitos longitudinais e transversais da $\mbox{idade}$ sobre as mudanças no $\mbox{FEV}_1$ ($e^{0.024} \approx 1.025$ versus $e^{0.007} \approx 1.007$) são discerníveis diferentes.
+- Isso pode ser devido, em parte, à quantidade relativamente pequena de variabilidade nas idades na linha de base (em relação à variabilidade nas idades ao longo da duração do estudo).
+- A partir dos efeitos longitudinais da $\mbox{idade}$ e $\log(\mbox{altura})$, há evidências claras de que as mudanças no $\log(\mbox{FEV}_1)$ estão relacionadas tanto com a idade quanto com a altura.
+
+## Estudo Six Cities: interpretação das estimativas dos efeitos fixos {.allowframebreaks}
+
+O modelo para a média, calculado sobre a distribuição dos efeitos aleatórios indivíduo-específico, é dado por
+
+$$
+\E(Y_{ij}) = \beta_1 + \beta_2\mbox{idade}_{ij} + \beta_3\log(\mbox{altura})_{ij} + \beta_4\mbox{idade}_{i1} + \beta_5\log(\mbox{altura})_{i1}.
+$$
+
+Além disso, este modelo pode ser __reexpresso em__ termos de __dois modelos__, um __modelo transversal__ e um __modelo longitudinal__. 
+
+\framebreak
+
+O primeiro é dada por
+
+\begin{eqnarray*}
+\E(Y_{i1}) &=& \beta_1 + \beta_2\mbox{idade}_{i1} + \beta_3\log(\mbox{altura})_{i1} + \beta_4\mbox{idade}_{i1} + \beta_5\log(\mbox{altura})_{i1}\\
+&=& \beta_1 + (\beta_2 + \beta_4)\mbox{idade}_{i1} + (\beta_3 + \beta_5)\log(\mbox{altura})_{i1},
+\end{eqnarray*}
+
+enquanto o segundo é dado por
+
+\footnotesize
+
+\begin{eqnarray*}
+\E(Y_{ij} - Y_{i1}) &=& \beta_1 + \beta_2\mbox{idade}_{ij} + \beta_3\log(\mbox{altura})_{ij} + \beta_4\mbox{idade}_{i1} + \beta_5\log(\mbox{altura})_{i1}\\
+&& - \{\beta_1 + \beta_2\mbox{idade}_{i1} + \beta_3\log(\mbox{altura})_{i1} + \beta_4\mbox{idade}_{i1} + \beta_5\log(\mbox{altura})_{i1}\}\\
+&=& \beta_2(\mbox{idade}_{ij} - \mbox{idade}_{i1}) + \beta_3[\log(\mbox{altura})_{ij} - \log(\mbox{altura})_{i1}].
+\end{eqnarray*}
+
+\normalsize
+
+\framebreak
+
+- O efeito longitudinal de $\log(\mbox{altura})$, $\beta_3$, tem interpretação em termos de mudanças na média do $\log(\mbox{FEV}_1)$ para um aumento de uma unidade em $\log(\mbox{altura})$, para qualquer mudança na idade (por exemplo, durante um intervalo de dois anos).
+- Da mesma forma, o efeito longitudinal da $\mbox{idade}$, $\beta_2$, tem interpretação em termos das mudanças a média do $\log(\mbox{FEV}_1)$ para um aumento de um ano na idade, para qualquer mudança no $\log(\mbox{altura})$.
+
+\framebreak
+
+- O coeficiente para $\log(\mbox{altura})$, $2.24$, não é diretamente interpretável porque uma mudança de uma única unidade em $\log(\mbox{altura})$ corresponde a um aumento de quase três vezes (ou $e^{1.0} \approx 2.7$) na altura.
+- Em vez disso, provavelmente é mais significativo considerar o efeito de um aumento de 10% na altura.
+- Na escala logarítmica isso corresponde a um aumento de $0.1$ na $\log(\mbox{altura})$, já que $e^{0.1} \approx 1.1$.
+- Portanto, um aumento de 10% na altura está associado a um aumento de $0.224$ no $\log(\mbox{FEV}_1)$.
+    - Observe que um aumento de $0.224$ no $\log(\mbox{FEV}_1)$ corresponde a um aumento de 25% no $\mbox{FEV}_1$ (já que $e^{0.224} = 1.25$).
+
+\framebreak
+
+- Por outro lado, o coeficiente para a $\mbox{idade}$, $0.024$, é mais diretamente interpretável.
+- A estimativa do efeito longitudinal da idade indica que um aumento de um ano na idade está associado a um aumento de $0.024$ no $\log(\mbox{FEV}_1)$ ou um aumento de aproximadamente 2,5% ($e^{0.024}\approx 1.025$) no $\mbox{FEV}_1$, para qualquer mudança fixa na altura.
+
+## Estudo Six Cities: estimativas dos componentes de variância {.allowframebreaks}
+
+\footnotesize
+
+```{r cov_est, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+getVarCov(mod1, type = "random.effects")
+summary(mod1)$sigma^2
+VarCorr(mod1)
+ 
+
+```
+
+\normalsize
+
+- A __covariância marginal__ ($\Cov(Y_i) = \Sigma_i$) entre as observações repetidas é uma função desses parâmetros de variância e covariância (e $\sigma^2$) e das idades da criança quando as observações foram obtidas.
+
+\framebreak
+
+\footnotesize
+
+- As correlações estimadas para medições anuais de 7 a 18 anos são exibidas na tabela a seguir
+
+```{r corr_marginal, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+
+knitr::kable(
+  x = cov2cor(getVarCov(mod1, type = "marginal", individuals = 18)[[1]]),
+  row.names = F, col.names = 7:18,
+  digits = 2)
+
+```
+
+
+\framebreak
+
+\normalsize
+
+- Esse padrão de correlação reforça a observação que fizemos nas aulas anteriores: a correlação entre medições repetidas de muitos desfechos de saúde raramente decai a zero, mesmo quando estão separados por muitos anos.
+
+## Estudo Six Cities: modelagem alternativa {.allowframebreaks}
+
+\begin{eqnarray*}
+\E(Y_{ij}|b_i) &=& \beta_1 + \beta_2\mbox{idade}_{ij} + \beta_3\log(\mbox{altura})_{ij} + \beta_4\mbox{idade}_{i1} + \beta_5\log(\mbox{altura})_{i1}\\
+&&\quad + b_{i1} + b_{i2}\log(\mbox{altura})_{ij},
+\end{eqnarray*}
+
+```{r lme_mod2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+mod2 <- lme(fixed = logFEV_1 ~ idade + log(altura) +
+              idade_basal + log(altura_basal),
+            random = ~ log(altura) | id,
+            # method = "REML",
+            data = fev,
+            na.action = na.omit)
+
+```
+
+\framebreak
+
+```{r coef_mod2, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+
+knitr::kable(
+  summary(mod2)$tTable[,-c(3,5)],
+  digits = c(4, 4, 2),
+  col.names = c("Estimativa", "EP", "Z"))
+
+```
+
+\framebreak
+
+Qual o modelo mais apropriado?
+
+- Como ambos os modelos têm o mesmo número de parâmetros de covariância, podemos fazer esse julgamento com base em uma comparação direta de suas log-verossimilhanças REML maximizadas.
+
+```{r mod1_vs_mod2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+logLik(mod1)
+logLik(mod2)
+
+```
+
+- A comparação das log-verossimilhanças maximizadas indica que o modelo com inclinações aleatórias para $\log(\mbox{altura})$ deve ser preferido.
+
+\framebreak
+
+Um modelo com inclinações aleatórias para $\mbox{idade}$ e $\log(\mbox{altura})$.
+
+```{r lme_mod3, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+mod3 <- lme(fixed = logFEV_1 ~ idade + log(altura) +
+              idade_basal + log(altura_basal),
+            random = ~ idade + log(altura) | id,
+            # method = "REML",
+            data = fev,
+            na.action = na.omit)
+ 
+logLik(mod3)
+
+```
+
+\framebreak
+
+\footnotesize
+
+```{r mod2_vs_mod3, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+library(varTestnlme)
+
+vt <- varCompTest(m1 = mod3, m0 = mod2)
+
+library(EnvStats)
+
+print(vt)
+
+summary(vt)
+
+```
+
+\normalsize
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'cropped-logo-60-tranparente.png'))
+```

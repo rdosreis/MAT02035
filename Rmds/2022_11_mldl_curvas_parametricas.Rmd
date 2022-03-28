@@ -1,0 +1,700 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Modelando a média: curvas paramétricas"
+fontsize: 10pt
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2022
+---
+
+# Introdução
+
+## Introdução
+
+- Na aula anterior descrevemos uma abordagem para modelar dados longitudinais que efetivamente não impôs nenhuma estrutura na __tendência no tempo__ da resposta média. 
+    + Esta abordagem tem algum apelo quando todos os indivíduos foram medidos nas mesmas ocasiões e o número de ocasiões é relativamente pequeno.
+
+- Mas, conforme o número de ocasiões aumenta e as medidas repetidas são irregulares no tempo, analisar perfis de resposta se torna menos atraente.
+    + Ainda, o teste da hipótese nula de __ausência de interação__ $grupo \times tempo$ é um teste global e (a rejeição desta hipótese nula) não fornece nenhum indicativo de um padrão de mudança da média ao longo do tempo.
+- A resposta média ao longo tempo pode, em geral, ser descrita por curvas paramétricas (__lineares__ ou __quadráticas__) ou semiparamétricas (__splines lineares__) relativamente simples.
+
+## Introdução
+
+- De um ponto de vista puramente substantivo, é improvável que o padrão de mudança na resposta média ao longo de um estudo longitudinal seja tão complicado que sua descrição exija tantos parâmetros quanto as ocasiões de medição.
+- A análise dos perfis de resposta usa um modelo __saturado__ para a resposta média ao longo do tempo e, portanto, produz um ajuste perfeito ao perfil de resposta média observado.
+    <!-- + Isso pode parecer uma característica desejável de qualquer abordagem analítica; isto é, ele se ajusta bem nas respostas médias observadas. (De fato, não apenas bem, mas perfeitamente!)  -->
+    + Ao fazer isso, o método falha em descrever os aspectos mais importantes das mudanças na resposta média ao longo do tempo em termos de algum padrão que pode ser interpretado de maneira substantiva ou teórica.
+- Ou seja, na análise dos perfis de resposta, __não há redução na complexidade__.
+
+## Introdução
+
+- Por outro lado, o ajuste de curvas paramétricas ou semiparamétricas a dados longitudinais pode ser justificado em bases substantivas e estatísticas.
+- Substancialmente, em muitos estudos longitudinais, o verdadeiro __processo de resposta média subjacente__ provavelmente __mudará ao longo do tempo__ em um __padrão__ relativamente __suave__, monotonicamente crescente ou decrescente, pelo menos durante a duração do estudo.
+    + Como resultado, curvas paramétricas ou semiparamétricas simples podem ser usadas para descrever como a resposta média muda com o tempo.
+- De uma perspectiva estatística, o ajuste de modelos parcimoniosos para a resposta média resultará em testes estatísticos de efeitos de covariáveis (por exemplo, interações $tratamento \times tempo$) que têm __maior poder__ do que em uma análise de perfis de resposta.
+
+<!-- A razão para o poder maior é que os testes de efeitos covariáveis se concentram apenas em uma gama relativamente estreita de hipóteses alternativas. Por outro lado, as estatísticas de teste na análise dos perfis de resposta dispersam seu poder sobre uma gama de hipóteses alternativas muito mais ampla, mas em muitos casos menos substancialmente plausível ou relevante. -->
+
+## Introdução
+
+- Finalmente, curvas paramétricas simples fornecem uma __descrição parcimoniosa__ das mudanças na resposta média ao longo do tempo em termos de um número relativamente pequeno de parâmetros. 
+- Os resultados podem ser comunicados facilmente a pesquisadores.
+
+# Tendências polinomiais no tempo
+
+## Tendências lineares no tempo
+
+- A curva mais simples possível para descrever mudanças na resposta média ao longo do tempo é uma __linha reta__.
+    + Neste modelo, a inclinação do tempo tem interpretação direta em termos de uma __mudança constante__ na resposta média para uma mudança unitária no tempo\footnote{Se $\E(Y_{ij}) = \beta_1 + \beta_2 t_{ij}$, então $\frac{d}{dt_{ij}}\E(Y_{ij}) = \beta_2$.}.
+- Considere o estudo hipotético de __dois grupos__ comparando um __novo tratamento__ e um __controle__.
+
+## Tendências lineares no tempo
+
+- Se a resposta média mudar de uma maneira aproximadamente linear ao longo da duração do estudo, podemos adotar o seguinte modelo de tendência linear:
+
+$$
+\E(Y_{ij}) = \beta_1 + \beta_2 Tempo_{ij} + \beta_3 Grupo_i + \beta_4 (Tempo_{ij} \times Grupo_i),
+$$
+em que $Grupo_i = 1$ se o $i$-ésimo indivíduo foi designado ao novo tratamento, e $Grupo_i = 0$ caso contrário; $Tempo_{ij}$ denota o tempo de medição para a $j$-ésima ocasião no $i$-ésimo indivíduo.
+
+- No modelo linear acima, a média dos indivíduos designados ao grupo controle é
+
+$$
+\E(Y_{ij}) = \beta_1 + \beta_2 Tempo_{ij},
+$$
+enquanto que para os indivíduos do grupo tratamento é
+
+$$
+\E(Y_{ij}) = (\beta_1 + \beta_3) + (\beta_2 + \beta_4)Tempo_{ij}.
+$$
+
+## Tendências lineares no tempo
+
+- Presume-se que a resposta média de cada grupo muda linearmente ao longo do tempo.
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.height='70%', out.width='70%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'fig6_1.png'))
+```
+
+## Tendências lineares no tempo
+
+- Aqui $\color{darkviolet}\beta_1$ é o intercepto no grupo de controle (o grupo de "referência"), enquanto $\color{darkviolet}(\beta_1 + \beta_2)$ é o intercepto no grupo de tratamento.
+- Os interceptos para cada um dos dois grupos têm interpretação em termos da resposta média quando $Tempo_{ij} = 0$.
+- A menos que algum cuidado seja tomado com como as covariáveis são padronizadas (por exemplo, centralizando todas as covariáveis quantitativas antes da inclusão no modelo), $\beta_1$ nem sempre é prontamente interpretável e pode representar uma extrapolação para além dos dados em mãos.
+
+## Tendências lineares no tempo
+
+-  Finalmente, a inclinação, ou taxa constante de mudança na resposta média por unidade de mudança no tempo, é $\color{darkviolet}{\beta_2}$ no grupo controle, enquanto a inclinação correspondente no grupo de tratamento é $\color{darkviolet}{(\beta_2 + \beta_4)}$.
+- Normalmente, em um estudo longitudinal a questão de interesse primário diz respeito a uma comparação das mudanças na resposta média ao longo do tempo; isso pode ser traduzido em uma comparação das inclinações.
+- Assim, se $\color{darkviolet}{\beta_4 = 0}$, então os dois grupos não diferem em termos de mudanças na resposta média ao longo do tempo.
+
+## Tendências quadráticas no tempo
+
+- Quando mudanças na resposta média ao longo do tempo não são lineares, __tendências polinomiais de ordem mais alta__ podem ser consideradas.
+- Por exemplo, se as médias estão aumentando monotonicamente ou diminuindo ao longo do estudo, mas de forma curvilínea, um modelo com __tendências quadráticas__ pode ser considerado.
+- Em um modelo de tendência quadrática, as __mudanças na resposta média não são mais constantes__ (como no modelo de tendência linear) ao longo da duração do estudo.
+- Em vez disso, a taxa de mudança na resposta média depende do tempo\footnote{Se $\E(Y_{ij}) = \beta_1 + \beta_2 t_{ij} + \beta_3 t^2_{ij}$, então $\frac{d}{dt_{ij}}\E(Y_{ij}) = \beta_2 + 2\beta_3t_{ij}$.}.
+
+## Tendências quadráticas no tempo
+
+- Considere mais uma vez o estudo hipotético de __dois grupos__ comparando um __novo tratamento__ e um __controle__.
+- Assumindo que as mudanças nas respostas médias podem ser aproximadas por tendências quadráticas, o seguinte modelo pode ser adotado:
+
+\begin{eqnarray*}
+\E(Y_{ij}) &=& \beta_1 + \beta_2 Tempo_{ij} + \beta_3 Tempo_{ij}^2 + \beta_4 Grupo_i\\
+&& + \beta_5 (Tempo_{ij} \times Grupo_i) + \beta_6 (Tempo_{ij}^2 \times Grupo_i).
+\end{eqnarray*}
+
+## Tendências quadráticas no tempo
+
+- Neste modelo, a média dos indivíduos designados ao grupo controle é
+
+$$
+\E(Y_{ij}) = \beta_1 + \beta_2 Tempo_{ij} + \beta_3 Tempo_{ij}^2,
+$$
+enquanto a resposta média correspondente para os indivíduos do grupo tratamento é
+
+$$
+\E(Y_{ij}) = (\beta_1 + \beta_4) + (\beta_2 + \beta_5)Tempo_{ij} + (\beta_3 + \beta_6)Tempo^2_{ij}.
+$$
+
+## Tendências quadráticas no tempo
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.height='70%', out.width='70%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'fig6_2.png'))
+```
+
+## Tendências quadráticas no tempo
+
+- Observe que no modelo de tendências quadráticas, a resposta média muda a uma taxa diferente, dependendo do $Tempo_{ij}$.
+- Por exemplo, a taxa de mudança no grupo controle é dada por $\color{darkviolet}{\beta_2 + 2\beta_3 Tempo_{ij}}$. 
+    + Assim, no início do estudo, quando $\color{darkviolet}{Tempo_{ij} = 1}$, a taxa de mudança na resposta média é $\color{darkviolet}{\beta_2 + 2\beta_3}$, enquanto mais tarde no estudo, digamos $\color{darkviolet}{Tempo_{ij} = 4}$, a taxa de mudança na resposta média é $\color{darkviolet}{\beta_2 + 8\beta_3}$.
+
+## Tendências quadráticas no tempo
+
+-  A taxa de mudança é diferente nas duas ocasiões e a magnitude e o sinal dos coeficientes de regressão $\beta_2$ e $\beta_3$ determinam se a resposta média está aumentando ou diminuindo ao longo do tempo e como a taxa de mudança depende no tempo.
+- Os coeficientes de regressão, $\color{darkviolet}{(\beta_2 + \beta_5)}$ e $\color{darkviolet}{(\beta_3 + \beta_6)}$, têm interpretações semelhantes para o grupo de tratamento.
+
+## Tendências quadráticas no tempo
+
+- Nos modelos de tendência polinomial, existe uma __hierarquia natural__ de efeitos que tem implicações para testar hipóteses sobre tendências polinomiais lineares, quadráticas e de ordem superior.
+- Termos de ordem superior devem ser testados (e, se apropriado, removidos do modelo) antes que os termos de ordem inferior sejam avaliados.
+
+## Tendências quadráticas no tempo
+
+- Assim, no modelo quadrático, não é  apropriado testar o coeficiente para a tendência linear, $\beta_2$, em um modelo que também inclui um coeficiente para a tendência quadrática, $\beta_3$.
+- Em vez disso, um teste para a tendência quadrática (versus tendência linear) pode ser executada testando a hipótese nula de que $\color{darkviolet}{\beta_3 = 0}$.
+    + __Se essa hipótese nula não puder ser rejeitada__, é apropriado remover o termo quadrático do modelo e considerar o modelo apenas com tendência linear.
+    + O teste para tendência linear é realizada testando a hipótese nula de que $\color{darkviolet}{\beta_2 = 0}$ no modelo que inclui __apenas__ o termo linear.
+
+# Splines lineares
+
+## Splines lineares
+
+- Em algumas aplicações, as tendências longitudinais na resposta média não podem ser caracterizadas por polinômios de primeiro e segundo graus no tempo.
+- Além disso, existem outras aplicações em que tendências não lineares na resposta média não podem ser bem aproximadas por polinômios de qualquer ordem.
+- Isso ocorre com mais frequência quando a resposta média aumenta (ou diminui) rapidamente por algum tempo e depois mais lentamente depois (ou vice-versa).
+- Quando esse tipo de padrão de alteração ocorre, muitas vezes pode ser tratado usando __modelos de splines lineares__.
+
+## Splines lineares
+
+- Se o modelo mais simples possível para a resposta média for uma linha reta, uma maneira de estender este modelo é ter uma __sequência de segmentos de retas__  conectados que produzam um __padrão linear por partes__.
+- Os modelos de spline linear fornecem uma maneira muito útil e flexível de acomodar muitas das tendências não lineares que não podem ser aproximadas por polinômios simples no tempo.
+- A ideia básica por trás dos modelos de splines lineares é notavelmente simples:
+    + Divida o eixo do tempo em uma série de segmentos e considere um modelo para a tendência ao longo do tempo, composta por tendências lineares por partes, com __diferentes inclinações__ em cada segmento, mas unidas em tempos fixos.
+
+## Splines lineares
+
+- Os locais em que as retas são interligadas são conhecidos como __"nós"__.
+- Este modelo permite que a resposta média aumente ou diminua à medida que o tempo avança, dependendo do sinal e da magnitude das inclinações de regressão para os segmentos de retas.
+- A curva linear por partes resultante é chamada de __spline__.
+
+## Splines lineares
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.height='70%', out.width='70%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'fig6_3.png'))
+```
+
+## Splines lineares
+
+\footnotesize
+
+- O modelo de spline mais simples possível __possui apenas um nó__ e pode ser parametrizado de __várias maneiras diferentes__.
+- Voltando ao estudo hipotético de dois grupos, comparando um __novo tratamento__ e um __controle__, se a resposta média mudar ao longo do tempo de maneira linear por partes, podemos ajustar o seguinte modelo de spline linear com o nó em $\color{darkviolet}{t^{*}}$:
+
+\begin{eqnarray*}
+\E(Y_{ij}) &=& \beta_1 + \beta_2 Tempo_{ij} + \beta_3 (Tempo_{ij} - t^{*})_{+} + \beta_4 Grupo_i\\
+&& + \beta_5 (Tempo_{ij} \times Grupo_i) + \beta_6 \{(Tempo_{ij} - t^{*})_{+} \times Grupo_i\},
+\end{eqnarray*}
+
+em que $\color{darkviolet}{(x)_{+}}$, é conhecida como a __função de reta truncada__, e é definida como uma função que é \structure{igual a $x$ quando $x$ é positivo} e é __igual a zero caso contrário__. Assim,
+
+$$
+(Tempo_{ij} - t^{*})_{+} = \left\{\begin{array}{l}
+(Tempo_{ij} - t^{*}),\quad \mbox{se}\quad Tempo_{ij} > t^{*};\\
+0,\quad  \mbox{se}\quad Tempo_{ij} \leq t^{*}.
+\end{array}\right.
+$$
+
+## Splines lineares
+
+- No modelo acima, as médias para os indivíduos no grupo controle são
+
+\footnotesize
+
+$$
+\E(Y_{ij}) = \beta_1 + \beta_2 Tempo_{ij} + \beta_3 (Tempo_{ij} - t^{*})_{+}.
+$$
+
+- Quando expressa em termos da reposta média antes e após $t^{*}$,
+
+$$
+\begin{array}{cclr}
+\E(Y_{ij}) & = & \beta_1 + \beta_2 Tempo_{ij}, & Tempo_{ij} \leq t^{*};\\
+\E(Y_{ij}) & = & (\beta_1 - \beta_3t^{*}) + (\beta_2 + \beta_3)Tempo_{ij}, & Tempo_{ij} > t^{*}.\\
+\end{array}
+$$
+
+- No grupo controle, a inclinação antes de $t^{*}$ é $\beta_2$ e após $t^{*}$ é $(\beta_2 + \beta_3)$.
+
+## Splines lineares
+
+- De maneira similar para os indivíduos do grupo tratamento são dadas por
+
+\footnotesize
+
+$$
+\E(Y_{ij}) = (\beta_1 + \beta_4) + (\beta_2 + \beta_5) Tempo_{ij} + (\beta_3 + \beta_6)(Tempo_{ij} - t^{*})_{+}.
+$$
+
+- Quando expressa em termos da reposta média antes e após $t^{*}$,
+
+$$
+\begin{array}{cclr}
+\E(Y_{ij}) & = & (\beta_1 + \beta_4) + (\beta_2 + \beta_5) Tempo_{ij}, & Tempo_{ij} \leq t^{*};\\
+\E(Y_{ij}) & = & \{(\beta_1 + \beta_4) - (\beta_3 + \beta_6)t^{*})\} + (\beta_2 + \beta_3 + \beta_5 + \beta_6)Tempo_{ij}, & Tempo_{ij} > t^{*}.\\
+\end{array}
+$$
+
+## Splines lineares
+
+- Então, em termos de comparações entre grupos, a hipótese nula de não haver diferenças entre os grupos nos padrões de mudança ao longo do tempo pode ser expressa como $\color{darkviolet}{H_0: \beta_5 = \beta_6 = 0}$.
+- Também são possíveis comparações dos grupos antes e depois de $t^{*}$.
+    + Por exemplo, a hipótese nula de não haver diferenças de grupo nos padrões de mudança anteriores a $t^{*}$ pode ser expressa como $\color{darkviolet}{H_0: \beta_5 = 0}$.
+
+## Splines lineares
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'perguntas.png'))
+```
+
+- Como fazer a escolha da quantidade e localização de nós? Existe uma escolha ótima?
+- É possível o ajuste de modelos de splines não-lineares (__polinômios por partes__; __splines quadráticos__; __splines cúbicos__)?
+
+>- Cenas de um capítulo futuro!
+>- No momento, vamos nos restringir aos splines lineares, especificando o número e a localização dos nós de acordo com o comportamento das respostas médias observadas.
+
+# Formulação do modelo linear geral
+
+## Curvas paramétricas e o modelo linear geral
+
+- A seguir, demonstramos como os modelos de tendência polinomial e spline podem ser expressos em termos do modelo linear geral
+
+$$
+\E(Y_i|X_i) = \mu_i = X_i\beta,
+$$
+
+para uma escolha apropriada de $X_i$.
+
+<!-- - Também descreveremos como as principais hipóteses de nenhum efeito de interação $grupo \times tempo$ em termos de $\beta$. -->
+- Considere $n_i$ o número de medidas repetidas no $i$-ésimo indivíduo ($i = 1, \ldots, N$).
+<!-- - Para expressar o modelo para o delineamento longitudinal com $G$ grupos e $n$ ocasiões de medições, precisaremos de $G \times n$ parâmetros para $G$ perfis de respostas médias. -->
+- Para ilustrar como o modelo de tendência polinomial pode ser expresso em termos do modelo linear geral, considere o estudo hipotético de dois grupos comparando um __novo tratamento__ e um __controle__ discutido anteriormente.
+
+## Curvas paramétricas e o modelo linear geral
+
+- Vamos supor que a resposta média mude ao longo do tempo em uma __tendência quadrática__.
+- Assim, a matriz de delineamento $X_i$ tem a seguinte forma para o __grupo de controle__:
+
+$$
+X_i = \left(\begin{array}{cccccc}
+1 & t_{i1} & t_{i1}^2 & 0 & 0 & 0 \\
+1 & t_{i2} & t_{i2}^2 & 0 & 0 & 0 \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+1 & t_{in_i} & t_{in_i}^2 & 0 & 0 & 0 \\
+\end{array}
+\right),
+$$
+
+## Curvas paramétricas e o modelo linear geral
+
+enquanto que para o __grupo tratamento__ a matriz de delineamento é dada por
+
+$$
+X_i = \left(\begin{array}{cccccc}
+1 & t_{i1} & t_{i1}^2 & 1 & t_{i1} & t_{i1}^2 \\
+1 & t_{i2} & t_{i2}^2 & 1 & t_{i2} & t_{i2}^2 \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+1 & t_{in_i} & t_{in_i}^2 & 1 & t_{in_i} & t_{in_i}^2 \\
+\end{array}
+\right).
+$$
+
+- __Exercício:__ como fica o vetor $\mu_i$ em função de $X_i$ e $\beta = (\beta_1,\ldots, \beta_6)'$ para cada um dos grupos?
+
+## Curvas paramétricas e o modelo linear geral
+
+- Para o __modelo de spline__, suponhamos que a resposta média mude ao longo do tempo de maneira linear por partes, com nó em $t^{*} = 4$.
+- Assim, a matriz de delineamento $X_i$ tem a seguinte forma para o __grupo de controle__:
+
+$$
+X_i = \left(\begin{array}{cccccc}
+1 & t_{i1} & (t_{i1} - 4)_{+} & 0 & 0 & 0 \\
+1 & t_{i2} & (t_{i2} - 4)_{+} & 0 & 0 & 0 \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+1 & t_{in_i} & (t_{in_i} - 4)_{+} & 0 & 0 & 0 \\
+\end{array}
+\right),
+$$
+
+## Curvas paramétricas e o modelo linear geral
+
+enquanto que para o __grupo tratamento__ a matriz de delineamento é dada por
+
+$$
+X_i = \left(\begin{array}{cccccc}
+1 & t_{i1} & (t_{i1} - 4)_{+} & 1 & t_{i1} & (t_{i1} - 4)_{+} \\
+1 & t_{i2} & (t_{i2} - 4)_{+} & 1 & t_{i2} & (t_{i2} - 4)_{+} \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+1 & t_{in_i} & (t_{in_i} - 4)_{+} & 1 & t_{in_i} & (t_{in_i} - 4)_{+} \\
+\end{array}
+\right).
+$$
+
+## Curvas paramétricas e o modelo linear geral
+
+- Como os modelos de tendência polinomial e spline podem ser expressos em termos do modelo de regressão linear geral,
+
+$$
+\E(Y_i|X_i) = \mu_i = X_i\beta,
+$$
+
+a estimativa de máxima verossimilhança restrita de $\beta$, e a construção de intervalos de confiança e testes de hipóteses, são possíveis quando a __covariância__ de $Y_i$ foi __especificada__.
+
+- Diferentemente da análise dos perfis de resposta, modelos mais parcimoniosos para a covariância podem ser adotados.
+
+## Curvas paramétricas e o modelo linear geral
+
+- De fato, o uso de curvas paramétricas para a resposta média é mais atraente em configurações em que os dados longitudinais são inerentemente desbalanceados ao longo do tempo.
+    + Como resultado, uma matriz de covariância não estruturada pode não estar bem definida, muito menos estimada quando, em princípio, cada indivíduo pode ter uma sequência única de tempos de medição.
+
+## Curvas paramétricas e o modelo linear geral
+
+- No entanto, a discussão de modelos para a covariância é adiada para a próxima aula!
+- Aqui assumimos simplesmente que algum modelo apropriado para a covariância foi adotado.
+- Dados os modelos para a média e a covariância, as estimativas REML e seus erros padrão (com base na covariância estimada de $\hat{\beta}$), podem ser obtidos usando o método de estimação apresentado na Aula 09.
+
+# Exemplo
+
+## Estudo de tratamento de crianças expostas ao chumbo
+
+- Lembre-se de que o estudo TLC foi um estudo aleatorizado, controlado por placebo, de um agente quelante administrado por via oral, _succimer_, em crianças com níveis confirmados de chumbo no sangue de 20 a 44 $\mu$g/dL.
+- As crianças do estudo tinham idades entre 12 e 33 meses e viviam em moradias deterioradas no centro da cidade.
+- A análise a seguir é baseada em dados sobre os níveis de chumbo no sangue na linha de base (ou semana 0), semana 1, semana 4 e semana 6 durante o primeiro período de tratamento.
+
+## Estudo de tratamento de crianças expostas ao chumbo
+
+```{r tlc_p, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, fig.align='center', out.width="80%"}
+# ----------------------------------------------------
+# Carregando pacotes do R
+
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+
+chumbo.df <- read_dta(file = here::here("data", "tlc.dta"))
+
+chumbo.df$trt <- factor(chumbo.df$trt, labels = c("Placebo", "Succimer"))
+
+# ----------------------------------------------------
+# Reformando o objeto: de "largo" para "longo"
+
+chumbo.df.longo <- gather(data = chumbo.df, key = "tempo", value = "chumbo", -id, -trt)
+
+# ----------------------------------------------------
+# Formata variáveis
+
+chumbo.df.longo$semana <- factor(chumbo.df.longo$tempo, labels = c("0", "1", "4", "6"))
+chumbo.df.longo$semana <- as.numeric(as.character(chumbo.df.longo$semana))
+chumbo.df.longo$tempo <- as.numeric(factor(chumbo.df.longo$semana))
+
+# ----------------------------------------------------
+
+library(plyr)
+
+chumbo.resumo <- ddply(chumbo.df.longo, ~ trt + semana, summarize, chumbo.m = mean(chumbo))
+
+p <- ggplot(data = chumbo.resumo,
+            mapping = aes(x = semana, y = chumbo.m, group = trt, colour = trt)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(breaks = c(0, 1, 4, 6)) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(x = "Semana",
+       y = expression("Média nível de chumbo no sangue"~(mu*g/dL)),
+       colour = "Grupo de tratamento") +
+  theme_bw() +
+  theme(legend.position = "bottom")
+p
+```
+
+
+## Um modelo spline linear (velha guarda) {.allowframebreaks}
+
+\footnotesize
+
+- Observe que, a partir do gráfico das médias, nos parece que apenas os níveis médios de chumbo no sangue no grupo placebo podem ser descritos por uma tendência linear; a média no grupo succimer diminui da linha de base até a semana 1, mas depois aumenta.
+- Dado que existem não linearidades nas tendências ao longo do tempo, modelos polinomiais de ordem superior (por exemplo, um modelo de tendência quadrática) podem ser ajustados aos dados.
+- No entanto, para ilustrar a aplicação de modelos spline, acomodamos a não linearidade com um modelo linear por partes com nó comum na semana 1 ($t^{*} = 1$),
+
+\begin{eqnarray*}
+\E(Y_{ij}) &=& \beta_1 + \beta_2 Semana_{ij} + \beta_3 (Semana_{ij} - 1)_{+}\\
+&& + \beta_4 (Semana_{ij} \times Grupo_i) + \beta_5 \{(Semana_{ij} - 1)_{+} \times Grupo_i\},
+\end{eqnarray*}
+em que $Grupo_i = 1$ se o $i$-ésimo indivíduo foi designado ao novo tratamento, e $Grupo_i = 0$ caso contrário.
+
+## Um modelo spline linear {.allowframebreaks}
+
+```{r df, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+chumbo.df.longo
+
+```
+
+## Um modelo spline linear {.allowframebreaks}
+
+\footnotesize
+
+```{r spline_mod, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+library(nlme)
+
+# modelo de curvas paramétricas
+#     splines lineares
+# com matriz de covariância não estruturada
+mod.spline <- gls(chumbo ~ semana + I( (semana - 1) * (semana > 1) ) +
+                    semana:trt + I( (semana - 1) * (semana > 1) ):trt,
+                  corr = corSymm(form = ~ tempo | id),
+                  weights = varIdent(form = ~ 1 | tempo),
+                  method = "REML",
+                  data = chumbo.df.longo)
+
+```
+
+## Um modelo spline linear {.allowframebreaks}
+
+\scriptsize
+
+```{r summary_spline, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+summary(mod.spline)
+
+```
+
+## Um modelo spline linear {.allowframebreaks}
+
+- Uma forma mais moderna de especificar o mesmo modelo é utilizando a função `lspline` do pacote de mesmo nome.
+
+\footnotesize
+
+```{r spline_mod2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+library(lspline)
+
+# modelo de curvas paramétricas
+#     splines lineares
+# com matriz de covariância não estruturada
+mod.spline2 <- gls(chumbo ~ lspline(x = semana,
+                                    knots = 1,
+                                    marginal = TRUE) +
+                     lspline(x = semana,
+                             knots = 1,
+                             marginal = TRUE):trt,
+                   corr = corSymm(form = ~ tempo | id),
+                   weights = varIdent(form = ~ 1 | tempo),
+                   method = "REML",
+                   data = chumbo.df.longo)
+
+```
+
+## Um modelo spline linear {.allowframebreaks}
+
+\tiny
+
+```{r summary_spline2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+summary(mod.spline2)
+
+```
+
+## Um modelo spline linear 
+
+- Neste modelo linear por partes, as médias dos indivíduos do __grupo placebo__ são dadas por
+
+$$
+\E(Y_{ij}) = \beta_1 + \beta_2 Semana_{ij} + \beta_3 (Semana_{ij} - 1)_{+},
+$$
+e para o __grupo succimer__ as médias são dadas por
+
+$$
+\E(Y_{ij}) = \beta_1 + (\beta_2 + \beta_4)Semana_{ij} + (\beta_3 + \beta_5)(Semana_{ij} - 1)_{+}.
+$$
+
+## Um modelo spline linear: coeficientes estimados {.allowframebreaks}
+
+\footnotesize
+
+- As estimativas REML dos coeficientes de regressão para o modelo linear por partes são apresentadas na tabela a seguir.
+
+```{r coef, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+knitr::kable(
+  summary(mod.spline)$tTable[,-4],
+  digits = c(4, 4, 2),
+  col.names = c("Estimativa", "EP", "Z"))
+
+```
+
+## Um modelo spline linear: médias estimados {.allowframebreaks}
+
+\footnotesize
+
+- Quando expressas em termos da resposta média antes e depois da semana 1, as médias estimadas no __grupo placebo__ são
+
+$$
+\begin{array}{cclr}
+\hat{\mu}_{ij} & = & \hat{\beta}_1 + \hat{\beta}_2 Semana_{ij}, & Semana_{ij} \leq 1;\\
+\hat{\mu}_{ij} & = & (\hat{\beta}_1 - \hat{\beta}_3) + (\hat{\beta}_2 + \hat{\beta}_3)Semana_{ij}, & Semana_{ij} > 1.\\
+\end{array}
+$$
+
+- Então, no grupo placebo a inclinação antes da semana 1 é $\hat{\beta}_2 = - 1.63$ e, após a semana 1, é $(\hat{\beta}_2 + \hat{\beta}_3) = -1.63 + 1.43 = -0.20$.
+
+## Um modelo spline linear: médias estimados {.allowframebreaks}
+
+\footnotesize
+
+- Similarmente, quando expressas em termos da resposta média antes e depois da semana 1, as médias estimadas no __grupo succimer__ são
+
+$$
+\begin{array}{cclr}
+\hat{\mu}_{ij} & = & \hat{\beta}_1 + (\hat{\beta}_2 + \hat{\beta}_4)Semana_{ij}, & Semana_{ij} \leq 1;\\
+\hat{\mu}_{ij} & = & \hat{\beta}_1 - (\hat{\beta}_3 + \hat{\beta}_5) + (\hat{\beta}_2 + \hat{\beta}_3 + \hat{\beta}_4 + \hat{\beta}_5)Semana_{ij}, & Semana_{ij} > 1.\\
+\end{array}
+$$
+
+## Um modelo spline linear: médias estimados {.allowframebreaks}
+
+\footnotesize
+
+- Uma maneira direta de se obter as médias estimadas a partir do objeto do modelo é utilizando a função `ggppredict` do pacote `ggeffects`.
+
+```{r media_estimada, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+library(ggeffects)
+
+media_chap_df <- ggpredict(mod.spline, terms = c("semana", "trt"))
+media_chap_df
+
+```
+
+## Um modelo spline linear: médias estimados {.allowframebreaks}
+
+- As estimativas das médias dos níveis de chumbo no sangue para os grupos placebo e succimer podem ser apresentadas em um gráfico.
+
+```{r media_estimada2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+df_aux <- as.data.frame(media_chap_df)[c(6, 2, 1)]
+names(df_aux) <- c("trt", "chumbo.m", "semana")
+
+p2 <- p + geom_line(data = df_aux,
+              linetype = "dashed")
+
+```
+
+## Um modelo spline linear: médias estimados {.allowframebreaks}
+
+\footnotesize
+
+- As médias estimadas (linhas tracejadas) do modelo linear por partes parece adequadamente ajustar os perfis de respostas médias observadas (linhas sólidas) para os dois grupos de tratamento.
+
+```{r media_estimada3, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width="70%", out.height="60%"}
+
+p2
+
+```
+
+## Comparando modelos: linear vs. linear por partes
+
+\footnotesize
+
+- Note que o modelo de __tendências lineares__ é um caso particular (encaixado) do modelo linear por partes, quando fazemos $\beta_3 = \beta_5 = 0$.
++ Podemos utilizar o __teste da razão de verossimilhanças__ para comparar os dois modelos.
+- __Importante:__ a construção de testes de razão de verossimilhanças comparando modelos encaixados para a média deve sempre ser baseada na log-verossimilhança MV, e não no REML.
+
+```{r trv, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+# modelo linear por partes
+mod.comp <- gls(chumbo ~ semana + I( (semana - 1) * (semana > 1) ) +
+                    semana:trt + I( (semana - 1) * (semana > 1) ):trt,
+                  corr = corSymm(form = ~ tempo | id),
+                  weights = varIdent(form = ~ 1 | tempo),
+                  method = "ML",
+                  data = chumbo.df.longo)
+
+# modelo de tendências lineares
+mod.red <- gls(chumbo ~ semana +
+                    semana:trt,
+                  corr = corSymm(form = ~ tempo | id),
+                  weights = varIdent(form = ~ 1 | tempo),
+                  method = "ML",
+                  data = chumbo.df.longo)
+
+```
+
+## Comparando modelos: linear vs. linear por partes
+
+\footnotesize
+
+```{r trv2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+anova(mod.comp, mod.red)
+
+```
+
+- O teste indica que o modelo linear por partes significativamente melhora o ajuste global da resposta média ao longo do tempo quando comparado com o modelo linear.
+
+
+## Comparando modelos: linear por partes vs. quadrático {.allowframebreaks}
+
+\footnotesize
+
+- Embora os modelos __linear por partes__ e __de tendência quadrática__ (com intercepto comum para os dois grupos de tratamento) __não sejam encaixados__, ambos têm o mesmo número de parâmetros e, portanto, suas respectivas log-verossimilhanças podem ser comparadas diretamente.
+
+```{r quadratica, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+# modelo linear por partes
+mod.linpartes <- mod.comp
+
+# modelo de tendências lineares
+mod.lin <- mod.red
+
+# modelo de tendência biquadrática
+mod.quad <- gls(chumbo ~ semana + I(semana^2) +
+                    semana:trt + I(semana^2):trt,
+                  corr = corSymm(form = ~ tempo | id),
+                  weights = varIdent(form = ~ 1 | tempo),
+                  method = "ML",
+                  data = chumbo.df.longo)
+```
+
+\framebreak
+
+```{r quadratica2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+logLik(mod.linpartes)
+logLik(mod.quad)
+logLik(mod.lin)
+```
+
+# Exercícios
+
+## Exercícios
+
+1. Resolva os exercícios do Capítulo 6 do livro "__Applied Longitudinal Analysis__" (páginas 163 e 164).
+    + O arquivo de dados (`rat.dta`) está no Moodle.  
+2. Com a ajuda do computador realize a análise do exemplo do Estudo Vlagtwedd-Vlaardingen (arquivo de dados FEV1) (páginas 154 à 157).
+
+# Avisos
+
+## Avisos
+
+- __Próxima aula:__ Modelando a estrutura de covariância.
+- __Para casa:__ ler o Capítulo 6 do livro "__Applied Longitudinal Analysis__".
+    + Caso ainda não tenha lido, leia também os Caps. 1, 2, 3, 4 e 5.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'georgeepboxmodels.jpg'))
+```
