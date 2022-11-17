@@ -1,0 +1,297 @@
+---
+title:   |
+  | \normalsize UNIVERSIDADE FEDERAL DO RIO GRANDE DO SUL
+  | \normalsize INSTITUTO DE MATEMÁTICA E ESTATÍSTICA
+  | \normalsize DEPARTAMENTO DE ESTATÍSTICA
+  | \normalsize MAT02035 - Modelos para dados correlacionados
+  |
+  | \bf{\normalsize Avaliação pontual 02}
+fontsize: 12pt
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+__Exercício 1.__ (10 pontos) Em um ensaio clínico de pacientes com doenças respiratórias, 111 pacientes de duas clínicas diferentes foram aleatorizados para receber placebo ou um tratamento ativo. Os pacientes foram examinados na linha de base e em quatro visitas durante o tratamento. Em cada exame, o estado respiratório (categorizado como 1 = bom, 0 = ruim) foi determinado. O principal objetivo das análises é compreender os efeitos conjuntos do tratamento e do tempo na probabilidade de que o estado respiratório seja classificado como bom. Também é de interesse determinar se o efeito do tratamento é o mesmo para os pacientes das duas clínicas.
+
+Os dados brutos são armazenados em um arquivo externo: `respir.dta`.
+
+Cada linha do conjunto de dados contém as oito variáveis a seguir:
+
+- `yd`, `clinic`, `trt`, `y0`, `y1`, `y2`, `y3`, `y4`.
+
+Nota: A variável resposta "estado respiratório", $Y_j$, é codificada como `1 = bom` e `0 = ruim`, na $j$-ésima ocasião. A variável categórica Tratamento (`trt`) é codificada `A = Droga ativa`, `P = Placebo`. A variável categórica Clínica (`clinic`) é codificada `1 = clínica 1`, `2 = clínica 2`.
+
+1. Ignorando a variável clínica, considere um modelo para o $\log$-chances de que o estado respiratório seja classificado como bom (modelo logístico), incluindo os principais efeitos do tratamento e tempo (em que o tempo é considerado uma variável categórica com cinco níveis) e sua interação.
+Use equações de estimativa generalizadas (GEE), assumindo $\log$-razões de chances separadas (__ou seja, _odds ratio_ não estruturado__; ou correlações duas-a-duas separadas, se o _software_ disponível não permitir que a associação dentro do indivíduo seja parametrizada em termos de $\log$-razões de chances) entre as cinco respostas binárias. Construa um teste da hipótese nula de nenhum efeito do tratamento sobre as mudanças na $log$-chances de que o estado respiratório seja classificado como bom com base nos erros padrão empíricos (__estimador sanduíche__).
+
+\color{blue}
+
+Vamos considerar o seguinte modelo
+
+\begin{eqnarray*}
+\mbox{logit}(\mu_{ij}) &=& \beta_0 + \beta_1I(tempo = 1) + \beta_2I(tempo = 2) + \beta_3I(tempo = 3) + \beta4I(tempo = 4)\\
+&&+ \beta_5I(trt = A) + \beta_6[I(tempo = 1)\times I(trt = A)] + \beta_7[I(tempo = 2)\times I(trt = A)] \\
+&&+ \beta_8[I(tempo = 3)\times I(trt = A)] + \beta_9[I(tempo = 4)\times I(trt = A)],
+\end{eqnarray*}
+em que, $\mbox{logit}(\mu_{ij}) = \log\left(\frac{\mu_{ij}}{1 - \mu_{ij}}\right)$, $\beta_0$ (excepcionalmente) é um termo de intercepto e $I(\cdot)$ representa uma variável indicadora. Além disso, vamos assumir que:
+a. $\mbox{Var}(Y_{ij}|X_{ij}) = \mu_{ij}(1 - \mu_{ij})$ (variância Bernoulli).
+b. $\mbox{OR}(Y_{ij}, Y_{ik}) = \alpha_{jk}$ (ou seja, _odds ratio_ não estruturado), em que
+
+$$
+\mbox{OR}(Y_j, Y_k) = \frac{\Pr(Y_j = 1, Y_k = 1) \Pr(Y_j = 0, Y_k = 0)}{\Pr(Y_j = 1, Y_k = 0) \Pr(Y_j = 0, Y_k = 1)}.
+$$
+
+
+```{r carrega-dados-ajusta-modelo, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+# ------------------------------------------
+# Carregando pacotes em R
+# ------------------------------------------
+
+library(haven)
+library(tidyr)
+library(dplyr)
+library(geepack)
+library(doBy)
+
+# ------------------------------------------
+# Carregando dados
+# ------------------------------------------
+
+df <- read_dta(file = here::here("data", "respir.dta"))
+df
+
+# ------------------------------------------
+# Reformatando dados: de largo para longo
+# ------------------------------------------
+
+df.longo <- df %>% 
+  gather(key = "tempo", value = "y", -id, -trt, -clinic)
+df.longo
+
+# ------------------------------------------
+# Formatando variáveis
+# ------------------------------------------
+
+df.longo$clinic <- factor(df.longo$clinic)
+
+df.longo$tempo.fac <- factor(df.longo$tempo,
+                             levels = paste0("y", 0:4),
+                             labels = 0:4)
+
+df.longo$trt <- factor(df.longo$trt)
+df.longo$trt <- relevel(df.longo$trt, ref = "P")
+
+# ------------------------------------------
+# Ordenando os dados
+# Este passo é importante para o correto
+# ajuste dos modelos marginais via função
+# geeglm (para mais informações veja a
+# vinheta e do pacote e o help da função)
+# ------------------------------------------
+
+df.longo <- df.longo %>% 
+  arrange(clinic, trt, id, tempo)
+df.longo
+
+# ------------------------------------------
+# Ajustando modelo marginal com efeitos
+# principais de tempo, tratamento e efeito
+# de interação (GEE)
+# ------------------------------------------
+
+fit1 <- geeglm(y ~ tempo.fac*trt,
+               id = id, 
+               family = binomial(link = "logit"),
+               data = df.longo,
+               corstr = "unstructured",
+               std.err = "san.se")
+summary(fit1)
+
+```
+
+Vamos avaliar a hipótese $H_0: \beta_6= \beta_7 = \beta_8 = \beta_9 = 0$. Esta pode ser reescrita como $H_0: L\beta = 0$, em que $\beta$ é o vetor de coeficientes de regressão e 
+
+$$
+L = \left[\begin{array}{cccccccccc}
+0&    0&    0&    0&    0&    0&    1&    0&    0&     0\\
+0&    0&    0&    0&    0&    0&    0&    1&    0&     0\\
+0&    0&    0&    0&    0&    0&    0&    0&    1&     0\\
+0&    0&    0&    0&    0&    0&    0&    0&    0&     1
+\end{array}\right].
+$$
+
+É possível utilizar uma estatística de Wald multivariada para testar $H_0$.
+
+```{r testa-modelo, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+L <- rbind(c(rep(0, 6), 1, 0, 0, 0),
+           c(rep(0, 6), 0, 1, 0, 0),
+           c(rep(0, 6), 0, 0, 1, 0),
+           c(rep(0, 6), 0, 0, 0, 1))
+
+esticon(fit1, L, joint.test = TRUE)
+
+```
+
+Este teste produz uma estatística Wald, $W^2 = 11.99$, com 4 graus de liberdade ($p < 0.05$), e a rejeita-se a hipótese nula ao nível de significância de 0.05. Assim, um modelo de regressão logística marginal sem as interações $tempo \times trt$ não é defensável.
+
+Este mesmo teste poderia ser realizado com a função `anova`. Para isso, é preciso ajustar um modelo sem interações e realizar uma comparação entre estes modelos.
+
+```{r testa-modelo2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+fit2 <- geeglm(y ~ tempo.fac + trt,
+               id = id, 
+               family = binomial(link = "logit"),
+               data = df.longo,
+               corstr = "unstructured",
+               std.err = "san.se")
+summary(fit2)
+
+anova(fit1, fit2)
+
+```
+
+Perceba que o resultado é identico ao resultado da função `esticon`.
+
+\color{black}
+
+2. Que conclusões você tira sobre o efeito do tratamento nas mudanças na $\log$-chances? Forneça resultados que suportem suas conclusões.
+
+\color{blue}
+
+Na tabela a seguir são apresentadas as razões de chances de que o estado respiratório seja classificado como bom (ao longo do tempo comprado com a linha de base) para os grupos de tratamento Droga Ativa (Droga A) e Placebo. O grupo que recebeu o tratamento com a Droga Ativa apresentou de 96.4% a 225% vezes as chances de que o estado respiratório seja classificado como bom em relação às chances na linha de base. O grupo placebo não apresenta mudanças significativas nas chances em comparação com a linha de base (OR $\approx 1$).
+
+```{r interpreta-modelo, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, results='asis'}
+
+OR.placebo <- exp(coef(fit1))[2:5]
+OR.drogaA <- exp(coef(fit1))[2:5]*exp(coef(fit1))[7:10]
+
+OR <- rbind(OR.placebo, OR.drogaA)
+rownames(OR) <- c("Placebo", "Droga A")
+colnames(OR) <- paste("Tempo", 1:4)
+
+knitr::kable(OR, digits = 2, align = 'c', caption = "Mudanças (ao longo do tempo em comparação com a linha de base) na razão de chances (odds ratio, OR) de que o estado respiratório seja classificado como bom.")
+
+```
+
+\color{black}
+
+3. Os pacientes neste estudo foram retirados de duas clínicas separadas. Repita a análise para o Item 1, permitindo que os efeitos do tratamento (e, possivelmente, o tempo) dependam da clínica.
+    a. O efeito do tratamento é o mesmo nas duas clínicas? Apresente resultados para apoiar sua conclusão.
+    b. Encontre um modelo parcimonioso que descreva os efeitos da clínica, do tratamento e do tempo nas $log$-chances de que o estado respiratório seja classificado como bom. Para o modelo selecionado, forneça uma interpretação clara dos parâmetros de regressão estimados para o modelo final selecionado.
+
+\color{blue}
+
+Foram ajustado diferentes modelos para avaliar o efeito de clínica. Estes modelos foram comparados utilizando o teste de Wald multivariado (função `anova`)
+
+```{r ajusta-modelo-clinica, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+# Modelo com efeitos principais de
+# tempo, tratamento e clínica, e
+# efeitos de interação duas-a-duas
+# e entre tempo, tratamento e clínica
+
+fit3 <- geeglm(y ~ tempo.fac*trt*clinic,
+               id = id, 
+               family = binomial(link = "logit"),
+               data = df.longo,
+               corstr = "unstructured",
+               std.err = "san.se")
+summary(fit3)
+
+# Modelo com efeitos principais de
+# tempo, tratamento e clínica, e
+# efeitos de interação duas-a-duas
+
+fit4 <- geeglm(y ~ tempo.fac*trt + clinic*tempo.fac + clinic*trt,
+               id = id, 
+               family = binomial(link = "logit"),
+               data = df.longo,
+               corstr = "unstructured",
+               std.err = "san.se")
+summary(fit4)
+
+# Modelo com efeitos principais de
+# tempo, tratamento e clínica, e
+# efeitos de interação 
+# tempo e tratamento 
+# e clínica e tratamento 
+
+fit5 <- geeglm(y ~ tempo.fac*trt + clinic*trt,
+               id = id, 
+               family = binomial(link = "logit"),
+               data = df.longo,
+               corstr = "unstructured",
+               std.err = "san.se")
+summary(fit5)
+
+# Modelo com efeitos principais de
+# tempo, tratamento e clínica, e
+# efeito de interação 
+# tempo e tratamento 
+
+fit6 <- geeglm(y ~ tempo.fac*trt + clinic,
+               id = id, 
+               family = binomial(link = "logit"),
+               data = df.longo,
+               corstr = "unstructured",
+               std.err = "san.se")
+summary(fit6)
+
+anova(fit1, fit3)
+anova(fit1, fit4)
+anova(fit4, fit5)
+anova(fit5, fit6)
+
+```
+
+Ao nível de significância de 0.05, utilizando um teste de Wald multivariado, é defensável um modelo com efeitos principais para tempo, tratamento e clínica e um efeito de interação entre tempo e tratamento. Ou seja, o efeito de tratamento é o mesmo nas duas clínicas. O efeito de clínica descreve a heterogeneidade dos participantes entre clínicas.
+
+```{r ajusta-modelo-clinica3, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+
+knitr::kable(summary(fit6)$coef[,-4], digits = c(2,3,4), col.names = c("Estimativa", "EP", "Z"))
+
+```
+
+\color{black}
+
+4. Para o modelo final selecionado no Item 3, construa uma tabela das probabilidades estimadas de que o estado respiratório seja classificado como bom em função do tempo e do grupo de tratamento (e, possivelmente, da clínica). O que você conclui dessa tabela?
+
+\color{blue}
+
+A gráfico a seguir (análogo a tabela) apresenta as probabilidades estimadas para cada tempo do estudo e clínica/tratamento. As probabilidades de classificação de estado respiratório bom se mantém a mesma ao longo do tempo para o grupo placebo ($\approx 0.33$ para os participantes da clínica 1, $\approx 0.57$ para os participantes da clínica 2). Já para o grupo que recebeu a Droga Ativa, as probabilidades de classificação de estado respiratório bom aumentam ao longo do tempo (tendência quadrática) em relação a linha de base. A diferença entre clínicas representa uma diferença (heterogeneidade) no estado respiratório dos participantes das duas clínicas.
+
+```{r ajusta-modelo-clinica4, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center'}
+
+pred.df <- data.frame(
+  expand.grid(tempo.fac = unique(df.longo$tempo.fac),
+              clinic = unique(df.longo$clinic),
+              trt = unique(df.longo$trt)))
+
+pred.df$probs <- stats::predict(fit6, newdata = pred.df, type = "response")
+
+pred.df <- pred.df[c("clinic", "trt", "tempo.fac", "probs")]
+pred.df <- pred.df %>% arrange(clinic, trt, tempo.fac)
+
+
+library(ggplot2)
+
+p <- ggplot(data = pred.df,
+            mapping = aes(x = tempo.fac, y = probs,
+                          color = interaction(clinic, trt),
+                          group = interaction(clinic, trt)
+                          )) +
+  geom_point() + geom_line() +
+  labs(x = "Tempo", y = "Probabilidade (Estado respiratório bom)",
+       color = "Clínica/Tratamento") +
+  theme_bw() + theme(legend.position = "bottom")
+p
+
+```   
+
+\color{black}

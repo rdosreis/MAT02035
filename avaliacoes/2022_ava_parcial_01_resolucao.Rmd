@@ -1,0 +1,394 @@
+---
+title:   |
+  | \normalsize UNIVERSIDADE FEDERAL DO RIO GRANDE DO SUL
+  | \normalsize INSTITUTO DE MATEMÁTICA E ESTATÍSTICA
+  | \normalsize DEPARTAMENTO DE ESTATÍSTICA
+  | \normalsize MAT02035 - Modelos para dados correlacionados
+  |
+  | \bf{\normalsize Avaliação parcial 01}
+fontsize: 12pt
+output:
+  pdf_document: default
+---
+
+__Exercício 1 (3 pontos)__ Mais uma vez, considere o estudo TLC, um estudo aleatorizado, controlado por placebo, de um agente quelante administrado por via oral, o _succimer_, em crianças com níveis confirmados de chumbo no sangue de 20 a 44 $\mu$g/dL. As crianças do estudo tinham idades entre 12 e 33 meses e viviam em moradias deterioradas no centro da cidade. Dados sobre os níveis de chumbo no sangue na linha de base (semana 0), e nas semanas 1, 4 e 6 do primeiro período de tratamento foram coletados. Na figura abaixo é apresentado o gráfico de médias de repostas por grupos de tratamento em cada ocasião de medição.
+
+```{r tlc_p, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, fig.align='center', out.width="50%"}
+# ----------------------------------------------------
+# Carregando pacotes do R
+
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+
+chumbo.df <- read_dta(file = here::here("data", "tlc.dta"))
+
+chumbo.df$trt <- factor(chumbo.df$trt, labels = c("Placebo", "Succimer"))
+
+# ----------------------------------------------------
+# Reformando o objeto: de "largo" para "longo"
+
+chumbo.df.longo <- gather(data = chumbo.df, key = "tempo", value = "chumbo", -id, -trt)
+
+# ----------------------------------------------------
+# Formata variáveis
+
+chumbo.df.longo$tempo <- factor(chumbo.df.longo$tempo, labels = c("0", "1", "4", "6"))
+chumbo.df.longo$tempo.num <- as.numeric(as.character(chumbo.df.longo$tempo))
+
+# ----------------------------------------------------
+
+library(plyr)
+
+chumbo.resumo <- ddply(chumbo.df.longo, ~ trt + tempo.num, summarize, chumbo.m = mean(chumbo))
+
+p <- ggplot(data = chumbo.resumo,
+            mapping = aes(x = tempo.num, y = chumbo.m, group = trt, colour = trt)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(breaks = c(0, 1, 4, 6)) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(x = "Tempo (em semanas)",
+       y = expression("Média nível de chumbo no sangue"~(mu*g/dL)),
+       colour = "Grupo de tratamento") +
+  theme_bw() +
+  theme(legend.position = "bottom")
+p
+```
+
+1. Sugira um modelo de regressão para a resposta média. Justifique a sua escolha. Como você classifica a abordagem do modelo escolhido: perfis de resposta ou curvas paramétricas?
+
+\color{blue}
+__(A resolução permite diferentes respostas. Aqui é apresentada uma destas respostas.)__
+
+- Observe que, a partir do gráfico das médias, nos parece que apenas os níveis médios de chumbo no sangue no grupo placebo podem ser descritos por uma tendência linear; a média no grupo _succimer_ diminui da linha de base até a semana 1, mas depois aumenta. Uma forma de acomodarmos tendências não lineares no modelo de regressão linear geral é por meio de tendências lineares por partes, neste caso, com inclusão de nó comum aos dois grupos de tratamento na semana 1 ($t^{*} = 1$),
+
+\begin{eqnarray*}
+\mbox{E}(Y_{ij}) &=& \beta_1 + \beta_2 Semana_{ij} + \beta_3 (Semana_{ij} - 1)_{+}\\
+&& + \beta_4 (Semana_{ij} \times Grupo_i) + \beta_5 \{(Semana_{ij} - 1)_{+} \times Grupo_i\},\\
+&&\ i = 1, \ldots, 100,\ j = 1, 2, 3, 4, 
+\end{eqnarray*}
+em que $Grupo_i = 1$ se o $i$-ésimo indivíduo foi designado ao novo tratamento, e $Grupo_i = 0$ caso contrário. A ausência de um efeito de grupo se justifica por se tratar de um estudo experimental aleatorizado, em que os indivíduos apresentam um comportamento semelhante na linha de base. O termo de interação permite capturar diferentes tendências para os dois grupos. A abordagem sugerida é a de curvas paramétricas.
+
+\color{black}
+
+2. Com base no modelo que você propôs no item anterior, apresente a matriz de delineamento $X_i$ para um indivíduo do grupo _succimer_ e para um indivíduo do grupo placebo.
+
+\color{blue}
+
+__(A resolução permite diferentes respostas. Aqui é apresentada uma destas respostas, com base no item anterior.)__
+
+- Para o grupo _succimer_, temos:
+
+$$
+X_i = \left(\begin{array}{ccccc}
+1 & 0 & (0 - 1)_{+} & 0 & (0 - 1)_{+} \\
+1 & 1 & (1 - 1)_{+} & 1 & (1 - 1)_{+} \\
+1 & 4 & (4 - 1)_{+} & 4 & (4 - 1)_{+} \\
+1 & 6 & (6 - 1)_{+} & 6 & (6 - 1)_{+} \\
+\end{array}
+\right) = 
+\left(\begin{array}{ccccc}
+1 & 0 & 0 & 0 & 0 \\
+1 & 1 & 0 & 1 & 0 \\
+1 & 4 & 3 & 4 & 3 \\
+1 & 6 & 5 & 6 & 5 \\
+\end{array}
+\right).
+$$
+
+- Para o grupo placebo, temos:
+
+$$
+X_i = \left(\begin{array}{ccccc}
+1 & 0 & (0 - 1)_{+} & 0 & 0 \\
+1 & 1 & (1 - 1)_{+} & 0 & 0 \\
+1 & 4 & (4 - 1)_{+} & 0 & 0 \\
+1 & 6 & (6 - 1)_{+} & 0 & 0 \\
+\end{array}
+\right) = 
+\left(\begin{array}{ccccc}
+1 & 0 & 0 & 0 & 0 \\
+1 & 1 & 0 & 0 & 0 \\
+1 & 4 & 3 & 0 & 0 \\
+1 & 6 & 5 & 0 & 0 \\
+\end{array}
+\right).
+$$
+
+\color{black}
+
+3. Com base no modelo que você propôs, apresente uma hipótese estatística para testar se o padrão de mudanças ao longo do tempo difere entre os grupos. Além disso, descreva o teste (Wald, Razão de Verossimilhanças, ou outro) e a distribuição de referência.
+
+\color{blue}
+
+__(A resolução permite diferentes respostas. Aqui é apresentada uma destas respostas, com base nos ítens anteriores.)__
+
+- Para testar se o padrão de mudanças ao longo do tempo difere entre os grupos, podemos testar a hipótese de ausência de efeito de intereção
+
+$$
+H_0: \beta_4 = \beta_5 = 0.
+$$
+Note que podemos reescrever a hipótese nula como $H_0: L\beta = 0$, em que $\beta = (\beta_1, \ldots, \beta_5)'$ é o vetor de coeficientes de regressão e
+
+$$
+L = \left(\begin{array}{ccccc}
+0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 0 & 1 \\
+\end{array}
+\right).
+$$
+
+O teste
+
+$$
+W^2 = (L\hat{\beta})'\{L\widehat{\mbox{Cov}}(\hat{\beta})L'\}^{-1}(L\hat{\beta}),
+$$
+
+que tem uma distribuição qui-quadrado com $2$ graus de liberdade ($\chi^2_{(2)}$) pode ser usado para avaliar $H_0: L\beta = 0$ versus $H_A: L\beta \neq 0$.
+
+\color{black}
+
+
+\newpage
+
+__Exercício 2 (3 pontos)__ Considere o estudo de crescimento dentário, as medidas da distância (mm) do centro da glândula pituitária à fissura pteromaxilar foram obtidas em 11 meninas e 16 meninos nas idades de 8, 10, 12 e 14 (Potthoff e Roy, 1964). Um modelo saturado (considerando efeitos de tempo, grupo [gênero], e interações $tempo \times grupo$) foi assumido para a resposta média, e os seguintes modelos para a covariância foram ajustados: (`mod.ne`) covariância não estruturada;  (`mod.sc`) simetria composta; (`mod.ar`) autorregressiva.
+
+1. Para este estudo acima, descreva $N$, o número de indivíduos, $n$, o número de medidas repetidas, e $t_{ij}$.
+
+\color{blue}
+
+- $N = 11 + 16 = 27;\ n = 4;\ t_{ij} = t_j$, em que $t_1 = 8,\ t_2 = 10,\ t_3 = 12,\ t_4 =14$.
+
+\color{black}
+
+2. Para cada um dos modelos de covariância, escreva a matriz $\mbox{Cov}(Y_i)$, em que $Y_i$ representa o vetor de respostas.
+
+\color{blue}
+
+__Matriz de covariância não estruturada__
+
+$$
+\mbox{Cov}(Y_i) = \left(\begin{array}{cccc}
+\sigma^2_1 & \sigma_{12} & \sigma_{13} & \sigma_{14} \\
+\sigma_{21} & \sigma^2_2 & \sigma^2_{23} & \sigma_{24} \\
+\sigma_{31} & \sigma_{32} & \sigma_3 & \sigma_{34} \\
+\sigma_{41} & \sigma_{42} & \sigma_{43} & \sigma^2_4 \\
+\end{array}
+\right),
+$$
+em que $\sigma^2_j = \mbox{Var}(Y_{ij}),\ j = 1,\ldots, 4$ e $\sigma_{kj} = \sigma_{jk} = \mbox{Cov}(Y_{ij}, Y_{ik}),\ j, k = 1, \ldots, 4,\ j \neq k$.
+
+__Matriz de covariância simetria composta__
+
+$$
+\mbox{Cov}(Y_i) = \sigma^2\left(\begin{array}{cccc}
+1 & \rho  & \rho & \rho \\
+\rho & 1  & \rho & \rho \\
+\rho & \rho & 1 &  \rho \\
+\rho & \rho & \rho  & 1
+\end{array}\right),
+$$
+em que $\rho = \mbox{Corr}(Y_{ij}, Y_{ik}),\ j, k = 1, \ldots, 4$. Note que no padrão de simetria composta é assumido que a variância e a correlação entre as medidas são constantes ao longo dos tempos de medição.
+
+__Matriz de covariância autoregressiva__
+
+$$
+\mbox{Cov}(Y_i) = \sigma^2\left(\begin{array}{cccc}
+1 & \rho  & \rho^2 & \rho^3 \\
+\rho & 1  & \rho & \rho^2 \\
+\rho^2 & \rho & 1 &  \rho \\
+\rho^3 & \rho^2 & \rho  & 1
+\end{array}\right),
+$$
+em que $\rho^k = \mbox{Corr}(Y_{ij}, Y_{i,j + k}),\ j, k = 1, \ldots, 4$. Note que no padrão autorregressivo é assumido que a variância é constante ao longo dos tempos de medição e que a correlação entre as medidas decai em função do espaçamento entre as medições.
+
+
+\color{black}
+
+3. Com base nas comparações abaixo ($gl$ representa os graus de liberdade, AIC é o Critério de Informação de Akaike, logVero é a log-verossimilhança maximizada, RV é a razão de verossimilhanças), escolha um modelo de covariância que se ajuste adequadamente aos dados. Justifique a sua resposta.
+
+|       | Modelo| $gl$|      AIC|    logVero|Teste   |  RV|   Valor $p$|
+|:------|-----:|--:|--------:|---------:|:------|--------:|--------:|
+|`mod.ne` |     1| 18| 450.0348| -207.0174|       |       |       |
+|`mod.ar` |     2| 10| 454.5472| -217.2736|1 vs 2 | 20.51237| 0.0086|
+
+\
+
+|       | Modelo| $gl$|      AIC|    logVero|Teste   |  RV|   Valor $p$|
+|:------|-----:|--:|--------:|---------:|:------|--------:|---------:|
+|`mod.ne` |     1| 18| 450.0348| -207.0174|       |       |        |
+|`mod.sc` |     2| 10| 443.4085| -211.7043|1 vs 2 | 9.373732| 0.3118|
+
+\
+
+|       | Modelo| $gl$|      AIC|    logVero|
+|:------|-----:|--:|--------:|---------:|
+|`mod.sc` |     1| 10| 443.4085| -211.7043|
+|`mod.ar` |     2| 10| 454.5472| -217.2736|
+
+\color{blue}
+
+- Com base no teste da razão de verossimilhanças, há evidências de que o modelo autorregressivo não fornece um ajuste adequado para a covariância, quando comparado à covariância não estruturada ($p = 0.0086$). Por outro lado, o teste da razão de verossimilhanças, comparando a covariância simetria composta e não estruturada, resulta em $G^2 = 9.374$ e $p = 0.3118$. Assim, a covariância simetria composta fornece um ajuste adequado aos dados. Por fim, vemos que o modelo de covariância simetria composta apresenta menor AIC na comparação com o modelo de covariância autorregressiva. Portanto, entre os três modelos ajustados, a covariância simetria composta apresenta ajuste mais adequado aos dados.
+
+\color{black}
+
+\newpage
+
+__Exercício 3 (4 pontos)__ Em um estudo de terapias de exercícios, 37 pacientes foram designados para um dos dois programas de levantamento de peso (Freund et al., 1986). No primeiro programa (tratamento 1), o número de repetições foi aumentado à medida que os indivíduos ficaram mais fortes. No segundo programa (tratamento 2), o número de repetições foi fixado, mas a quantidade de peso foi aumentada à medida que os indivíduos ficaram mais fortes. As medidas de força foram obtidas na linha de base (dia 0) e nos dias 2, 4, 6, 8, 10 e 12.
+
+Os dados brutos são armazenados em um arquivo externo: `exercise.dta`.
+
+Cada linha do conjunto de dados contém as nove variáveis a seguir:
+
+`id` `group` (programa/grupo de tratamento)  `y0` `y2` `y4` `y6` `y8` `y10` `y12`
+
+__Nota:__ A variável categórica `group` (tratamento) é codificada 1 = Programa 1 (aumento do número de repetições), 2 = Programa 2 (aumento da quantidade de peso).
+
+1. Construa um gráfico de tempo que exiba a força média versus tempo (em dias) para os dois grupos de tratamento. __Descreva as características gerais das tendências temporais__ para os dois programas de exercícios.
+
+\color{blue}
+
+Lendo e formatando os dados.
+
+```{r carrega-dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+# Carrega pacotes
+library(haven)
+library(tidyr)
+library(dplyr)
+
+# Carrega dados
+exercicio <- read_dta(file = here::here("data","exercise.dta"))
+
+# Largo para longo
+exercicio.longo <- gather(data = exercicio,
+                          key = "tempo",
+                          value = "forca", -id, -group)
+
+# Transforma dados
+exercicio.longo$tempo <- as.numeric(
+  as.character(factor(exercicio.longo$tempo,
+                      levels = paste0("y", seq(from = 0, to = 12, by = 2)),
+                      labels = seq(from = 0, to = 12, by = 2))))
+
+exercicio.longo$group <- factor(exercicio.longo$group)
+
+```
+
+```{r media.resumo, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+
+df.resumo <- exercicio.longo %>% 
+  group_by(tempo, group) %>% 
+  summarise(media = mean(forca, na.rm = TRUE))
+
+```
+
+```{r perfis-medios, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width='80%'}
+
+library(ggplot2)
+
+p <- ggplot(data = df.resumo,
+            mapping = aes(x = tempo, y = media, color = group)) +
+  geom_point() + geom_line() +
+  scale_x_continuous(breaks = seq(from = 0, to = 12, by = 2)) +
+  labs(x = "Tempo (dias)",
+       y = "Média de força",
+       color = "Grupo (Programa)") +
+  theme_bw() + theme(legend.position = "bottom")
+p
+
+```
+
+Para os dois grupos, é possível perceber um aumento no nível médio de força ao longo do tempo. Os grupos aparentemente possuem interceptos distintos, e a diferença entre grupos se mantém até o final do estudo, com um pequeno aumento aparente na diferença média entre os grupos a partir do sexto dia do estudo. O Programa 1 apresenta níveis médios de força menores em relação ao Programa 2.
+
+\color{black}
+
+2. Ajuste um modelo com interceptos e inclinações aleatórios e permita que os valores médios do intercepto e da inclinação dependam do grupo de tratamento (ou seja, inclua o efeito principal de tratamento, uma tendência de tempo linear e uma interação tratamento por tendência de tempo linear como efeitos fixos).
+    a. Qual é a variância estimada dos interceptos aleatórios?
+    b. Qual é a variância estimada das inclinações aleatórias?
+    c. Qual é a correlação estimada entre os interceptos e as inclinações aleatórios?
+
+\color{blue}
+
+Ajustando o modelo com interceptos e inclinações aleatórios:
+
+```{r lme, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+library(nlme)
+
+mod1 <- lme(fixed = forca ~ group*tempo,
+            random = ~ 1 + tempo | id,
+            data = exercicio.longo,
+            na.action = na.omit)
+
+```
+
+a. A variância estimada dos interceptos aleatórios é `r round(as.numeric(VarCorr(mod1)[1]), 3)`.
+b. A variância estimada das inclinações aleatórias é `r round(as.numeric(VarCorr(mod1)[2]), 3)`.
+c. A correlação estimada entre os interceptos e as inclinações aleatórios é `r round(as.numeric(VarCorr(mod1)[2,3]), 3)`.
+
+\color{black}
+
+3. Um modelo com apenas interceptos variando aleatoriamente é defensável? Explique/justifique?
+
+\color{blue}
+
+Não. Como pode ser visto a seguir, um modelo com apenas interceptos variando aleatoriamente foi ajustado (`mod2`). 
+
+```{r lme_mod2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+mod2 <- lme(fixed = forca ~ group*tempo,
+            random = ~ 1 | id,
+            data = exercicio.longo,
+            na.action = na.omit)
+
+```
+
+É possível notar que este modelo é um caso especial do modelo anterior (`mod1`). Assim, podemos realizar um teste da razão de verossimilhanças para avaliar a hipótese referente ao componente de variância das inclinações aleatórias ($H_0: \mbox{Var}(b_{2i}) = 0$).
+
+```{r mod1_vs_mod2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+library(varTestnlme)
+library(EnvStats)
+
+vt <- varCompTest(m1 = mod1, m0 = mod2)
+summary(vt)
+
+```
+
+Como indica o valor $p$ ($< 0.001$), rejeita-se $H_0: \mbox{Var}(b_{2i}) = 0$. Logo, o modelo com apenas interceptos variando aleatoriamente (`mod2`) não é defensável.
+
+\color{black}
+
+\newpage
+
+4. Quais são as médias do intercepto e inclinação nos dois programas de exercícios?
+
+\color{blue}
+Estas são dadas pelos coeficientes fixos do modelo:
+
+```{r coef, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+
+knitr::kable(
+  summary(mod1)$tTable[,-3],
+  digits = c(2, 3, 2, 4),
+  col.names = c("Estimativa", "EP", "Z", "Valor p"))
+
+```
+
+- Para o __Grupo 1__, temos o intercepto médio dado por $\widehat{\beta}_1 = 80.13$ e inclinação média dada por $\widehat{\beta}_3 = 0.12$.
+- Para o __Grupo 2__, temos o intercepto médio dado por $\widehat{\beta}_1 + \widehat{\beta}_2 = 80.13 + 1.13 = 81.26$ e inclinação média dada por $\widehat{\beta}_3 + \widehat{\beta}_4 = 0.12 + 0.05 = 0.17$.
+
+\color{black}
+
+5. Com base na análise anterior, interprete o efeito do tratamento nas mudanças na força. Sua análise sugere uma diferença entre os dois grupos?
+
+\color{blue}
+
+Podemos perceber (pelo item anterior) que há uma associação significativa com o tempo (aumento de 0.12 por dia de tratamento, em média, na força média). Este parece ser um efeito devido aos tratamentos. Porém, não foi observado um efeito significativo de grupo de tratamento.
+
+\color{black}

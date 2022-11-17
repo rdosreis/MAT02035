@@ -1,0 +1,37 @@
+---
+title:   |
+  | \normalsize UNIVERSIDADE FEDERAL DO RIO GRANDE DO SUL
+  | \normalsize INSTITUTO DE MATEMÁTICA E ESTATÍSTICA
+  | \normalsize DEPARTAMENTO DE ESTATÍSTICA
+  | \normalsize MAT02035 - Modelos para dados correlacionados
+  |
+  | \bf{\normalsize Avaliação pontual 02}
+fontsize: 12pt
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+__Exercício 1.__ (10 pontos) Em um ensaio clínico de pacientes com doenças respiratórias, 111 pacientes de duas clínicas diferentes foram aleatorizados para receber placebo ou um tratamento ativo. Os pacientes foram examinados na linha de base e em quatro visitas durante o tratamento. Em cada exame, o estado respiratório (categorizado como 1 = bom, 0 = ruim) foi determinado. O principal objetivo das análises é compreender os efeitos conjuntos do tratamento e do tempo na probabilidade de que o estado respiratório seja classificado como bom. Também é de interesse determinar se o efeito do tratamento é o mesmo para os pacientes das duas clínicas.
+
+Os dados brutos são armazenados em um arquivo externo: `respir.dta`.
+
+Cada linha do conjunto de dados contém as oito variáveis a seguir:
+
+- `yd`, `clinic`, `trt`, `y0`, `y1`, `y2`, `y3`, `y4`.
+
+Nota: A variável resposta "estado respiratório", $Y_j$, é codificada como `1 = bom` e `0 = ruim`, na $j$-ésima ocasião. A variável categórica Tratamento (`trt`) é codificada `A = Droga ativa`, `P = Placebo`. A variável categórica Clínica (`clinic`) é codificada `1 = clínica 1`, `2 = clínica 2`.
+
+1. Ignorando a variável clínica, considere um modelo para o $\log$-chances de que o estado respiratório seja classificado como bom (modelo logístico), incluindo os principais efeitos do tratamento e tempo (em que o tempo é considerado uma variável categórica com cinco níveis) e sua interação.
+Use equações de estimativa generalizadas (GEE), assumindo $\log$-razões de chances separadas (__ou seja, _odds ratio_ não estruturado__; ou correlações duas-a-duas separadas, se o _software_ disponível não permitir que a associação dentro do indivíduo seja parametrizada em termos de $\log$-razões de chances) entre as cinco respostas binárias. Construa um teste da hipótese nula de nenhum efeito do tratamento sobre as mudanças na $log$-chances de que o estado respiratório seja classificado como bom com base nos erros padrão empíricos (__estimador sanduíche__).
+
+2. Que conclusões você tira sobre o efeito do tratamento nas mudanças na $log$-chances? Forneça resultados que suportem suas conclusões.
+
+3. Os pacientes neste estudo foram retirados de duas clínicas separadas. Repita a análise para o Item 1, permitindo que os efeitos do tratamento (e, possivelmente, o tempo) dependam da clínica.
+    a. O efeito do tratamento é o mesmo nas duas clínicas? Apresente resultados para apoiar sua conclusão.
+    b. Encontre um modelo parcimonioso que descreva os efeitos da clínica, do tratamento e do tempo nas $log$-chances de que o estado respiratório seja classificado como bom. Para o modelo selecionado, forneça uma interpretação clara dos parâmetros de regressão estimados para o modelo final selecionado.
+    
+4. Para o modelo final selecionado no Item 3, construa uma tabela das probabilidades estimadas de que o estado respiratório seja classificado como bom em função do tempo e do grupo de tratamento (e, possivelmente, da clínica). O que você conclui dessa tabela?

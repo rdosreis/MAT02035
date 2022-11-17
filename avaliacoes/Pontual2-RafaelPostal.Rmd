@@ -1,0 +1,298 @@
+---
+title: "Modelos para Dados Correlacionados"
+subtitle: "Avaliação Pontual 2"
+author: "Rafael Postal"
+date: "05/02/2022"
+header-includes:
+   - \usepackage[portuguese]{babel}
+output: html_document
+---
+
+# Exercício 1 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = F, fig.align = 'center', fig.width = 5, fig.height = 3)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(geepack)
+library(doBy)
+library(haven)
+library(tidyr)
+# setwd("C:/Users/Dell/Desktop/Faculdade/2021_2/Modelos para Dados Correlacionados")
+```
+
+
+# 1 -
+
+Para a questão a seguir tratarei o bom estar respiratório como "sucesso".
+
+
+```{r fig.width=8, fig.height=4}
+
+df = read_dta(here::here("data", "respir.dta"))
+df$id = factor(df$id)
+df$clinic = factor(df$clinic)
+df$trt = factor(df$trt)
+dfLong = df %>% pivot_longer(cols = c(4:8), names_to = "tempo", values_to = "y")
+dfLong$tempo = factor(gsub("y","t",dfLong$tempo))
+dfLong$trt = factor(dfLong$trt, levels = c("P", "A"))
+```
+
+
+```{r echo=F}
+dsc = dfLong %>% group_by(trt) %>% summarise(n = n(), prop = mean(y)) %>% 
+  mutate(logOdds = log(prop/(1 - prop)))
+
+dsc[,c(3,4)] = round(dsc[,c(3,4)], 3)
+
+kable(dsc, row.names = F, align = 'c', booktabs = T,
+      caption = "Tratamento",
+      col.names = c("Tratamento", "n" ,"Proporção de Sucesso","log(odds ratio)")) %>% 
+  kable_classic() %>% kable_styling(latex_options = c("HOLD_position"))
+```
+
+
+```{r echo=F}
+dsc = dfLong %>% group_by(tempo) %>% summarise(n = n(), prop = mean(y)) %>% 
+  mutate(logOdds = log(prop/(1 - prop)))
+
+dsc[,c(3,4)] = round(dsc[,c(3,4)], 3)
+
+kable(dsc, row.names = F, align = 'c', booktabs = T,
+      caption = "Tempo",
+      col.names = c("Tempo", "n" ,"Proporção de Sucesso","log(odds ratio)")) %>% 
+  kable_classic() %>% kable_styling(latex_options = c("HOLD_position"))
+```
+
+**Interação Tratamento-Tempo**
+
+```{r echo=FALSE}
+dsc = dfLong %>% group_by(tempo,trt) %>% summarise(n = n(), prop = mean(y)) %>% 
+  mutate(logOdds = log(prop/(1 - prop)))
+
+dsc[,c(4,5)] = round(dsc[,c(4,5)], 3)
+
+dscWide = dsc %>% filter(trt == "A") %>% bind_cols(dsc %>% filter(trt == "P"))
+
+dscWide = dscWide[,-c(2,6,7)]
+
+kable(dscWide, row.names = F, align = 'c',
+      caption = "Interação Tempo-Tratamento",
+      booktabs=T,
+      col.names = c("Tempo",rep(c("n" ,"Proporção de Sucesso","log(odds ratio)"),2))) %>% 
+  kable_classic() %>% kable_styling(latex_options = c("HOLD_position")) %>% 
+  add_header_above(c(" "=1, "Tratamento A" = 3, "Tratamento P" = 3))
+```
+
+```{r echo=FALSE, fig.width=8, fig.height=4}
+dsc$tempoNum = as.numeric(gsub("t","", dsc$tempo))
+names(dsc)[2] = "Tratamento"
+dsc %>% ggplot(aes(x=tempoNum, y=prop, colour=Tratamento)) + geom_line() + 
+  geom_point(size=1.5) + theme_bw() +
+  labs(y="Proporção de Sucesso", x="Ocasião (tempo)", title="Gráfico 1:") +
+  scale_y_continuous(breaks = seq(0,1,.1/2), 
+                     labels = formatC(seq(0,1,0.1/2), digits = 2, format = "f"), 
+                     limits = c(0.35,0.75)) +
+  theme(axis.text = element_text(size = 11), axis.title = element_text(size = 11))
+```
+O gráfico acima deixa muito claro que deve existir interação tempo-tratamento, quando comparamos a transição entre t0 e t1 nos grupos de tratamento (Ativo e Placebo) parece ainda mais que existe esta interação. 
+
+
+**Modelo**
+
+```{r}
+modelo = geeglm(formula = y ~ trt * tempo, data = dfLong,
+                id = id, family = binomial("logit"), corstr = "unstructured",
+                std.err = "san.se")
+summary(modelo)
+anova(modelo)
+```
+
+**Teste de Hipótese   **
+
+```{r}
+L = matrix(c(0,1,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,1,0,0,0,
+            0,0,0,0,0,0,0,1,0,0,
+            0,0,0,0,0,0,0,0,1,0,
+            0,0,0,0,0,0,0,0,0,1), byrow = T, nrow = 5)
+
+esticon(obj = modelo, L = L, joint.test = T)
+
+```
+
+
+```{r}
+estat <- esticon(modelo, diag(10))
+odds <- exp(cbind(estat$estimate, estat$lwr, estat$upr))
+odds <- cbind(odds, odds[,1]*100)
+rownames(odds) <- names(coef(modelo))
+colnames(odds) <- c("OR", "OR 95% LI", "OR 95% LS", "OR100%")
+odds
+```
+
+# 2 -
+A partir da função *summary(modelo)*, podemos ver que as interações do tratamento com o tempo possuem os betas significativos, com isso, testamos se a interação é significativa para todos os tempos. Como podemos ver abaixo a hipótese nula é rejeitada com 5% de significância.
+
+```{r, echo=TRUE}
+
+esticon(obj = modelo, L = L, joint.test = T)
+
+```
+Na sequência podemos ver que o tratamento melhorou a condição respiratória dos pacientes ao longo do tempo, no momento t2 o grupo com tratamento ativo registrou uma melhora de 396%.
+
+```{r}
+odds
+
+```
+
+
+
+# 3a - 
+
+
+**Interação Clínica-Tempo**
+
+```{r echo=FALSE}
+dsc = dfLong %>% group_by(tempo,clinic) %>% summarise(n = n(), prop = mean(y)) %>% 
+  mutate(logOdds = log(prop/(1 - prop)))
+
+dsc[,c(4,5)] = round(dsc[,c(4,5)], 3)
+
+dscWide = dsc %>% filter(clinic == "1") %>% bind_cols(dsc %>% filter(clinic == "2"))
+
+dscWide = dscWide[,-c(2,6,7)]
+
+kable(dscWide, row.names = F, align = 'c',
+      caption = "Interação Tempo-Clínica",
+      booktabs=T,
+      col.names = c("Tempo",rep(c("n" ,"Proporção de Sucesso","log(odds)"),2))) %>% 
+  kable_classic() %>% kable_styling(latex_options = c("HOLD_position")) %>% 
+  add_header_above(c(" "=1, "Clínica 1" = 3, "Clínica 2" = 3))
+```
+
+```{r echo=FALSE, fig.width=8, fig.height=4}
+dsc$tempoNum = as.numeric(gsub("t","", dsc$tempo))
+names(dsc)[2] = "Clínica"
+dsc %>% ggplot(aes(x=tempoNum, y=prop, colour=Clínica)) + geom_line() + 
+  geom_point(size=1.5) + theme_bw() +
+  labs(y="Proporção de Sucesso", x="Ocasião (tempo)", title="Gráfico 2:") +
+  scale_y_continuous(breaks = seq(0,1,.1/2), 
+                     labels = formatC(seq(0,1,0.1/2), digits = 2, format = "f"), 
+                     limits = c(0.2,0.75)) +
+  theme(axis.text = element_text(size = 11), axis.title = element_text(size = 11))
+```
+
+Conforme podemos ver acima, não podemos concluir que existe uma grande diferença entre as duas clínicas, tivemos apenas uma diferença na transição entre os tempos t3 e t4 em que a clínica 1 apresentou uma queda maior.
+
+# 3b -
+
+```{r}
+modeloNE = geeglm(formula = y ~ trt * tempo + clinic , data = dfLong,
+                id = id, family = binomial("logit"), corstr = "unstructured",
+                std.err = "san.se")
+
+modeloAR = geeglm(formula = y ~ trt * tempo + clinic, data = dfLong,
+                id = id, family = binomial("logit"), corstr = "ar1",
+                std.err = "san.se")
+
+modeloSim = geeglm(formula = y ~ trt * tempo + clinic, data = dfLong,
+                id = id, family = binomial("logit"), corstr = "exchangeable",
+                std.err = "san.se")
+```
+
+
+```{r}
+print("Correlação não estruturada")
+geepack::QIC(modeloNE)
+print("Correlação auto-regressiva")
+geepack::QIC(modeloAR)
+print("Correlação Simetria Composta")
+geepack::QIC(modeloSim)
+```
+O modelo escolhido foi o com estrutura de covariância de simetria composta, pois ele possui um ajuste melhor e uma menor quantidade de parâmetros para estimação.
+
+
+```{r}
+modelo2 = geeglm(formula = y ~ trt * tempo + clinic, data = dfLong,
+                id = id, family = binomial("logit"), corstr = "exchangeable",
+                std.err = "san.se")
+
+summary(modelo2)
+```
+
+
+# 4 - 
+```{r echo=T}
+
+b = coef(modelo2)
+
+linearComponent = c(b[1], b[1]+b[3],
+                    b[1]+b[4],
+                    b[1]+b[5],
+                    b[1]+b[6],
+                    b[1]+b[7],
+                    b[1]+b[3]+b[7],
+                    b[1]+b[4]+b[7],
+                    b[1]+b[5]+b[7],
+                    b[1]+b[6]+b[7],
+                    b[1]+b[2],
+                    b[1]+b[2]+b[3]+b[8],
+                    b[1]+b[2]+b[4]+b[9],
+                    b[1]+b[2]+b[5]+b[10],
+                    b[1]+b[2]+b[6]+b[11],
+                    b[1]+b[2]+b[7],
+                    b[1]+b[2]+b[3]+b[8]+b[7],
+                    b[1]+b[2]+b[4]+b[9]+b[7],
+                    b[1]+b[2]+b[5]+b[10]+b[7],
+                    b[1]+b[2]+b[6]+b[11]+b[7])
+
+probEstimada = exp(linearComponent)/(1 + exp(linearComponent))
+
+tab = data.frame(
+  Tratamento = c("P","P","P","P","P","P","P","P","P","P","A",
+                 "A","A","A","A","A","A","A","A","A"),
+  tempo = rep(c("$t^{(0)}$", "$t^{(1)}$","$t^{(2)}$","$t^{(3)}$","$t^{(4)}$"),4),
+  clinica = rep(c("1","1","1","1","1","2","2","2","2","2"),2),
+  logMu = c("$\\widehat{\\beta}_1$","$\\widehat{\\beta}_1 + \\widehat{\\beta}_3$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_4$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_5$", 
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_6$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_7$", 
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_3 + \\widehat{\\beta}_7$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_4 + \\widehat{\\beta}_7$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_5 + \\widehat{\\beta}_7$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_6 + \\widehat{\\beta}_7$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_2$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_2 + 
+            \\widehat{\\beta}_3 + \\widehat{\\beta}_8$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_2 + 
+            \\widehat{\\beta}_4 + \\widehat{\\beta}_9$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_2 + 
+            \\widehat{\\beta}_5 + \\widehat{\\beta}_{10}$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_2 + 
+            \\widehat{\\beta}_6 + \\widehat{\\beta}_{11}$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_2 + 
+            \\widehat{\\beta}_7$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_2 + 
+            \\widehat{\\beta}_3 + \\widehat{\\beta}_8 + \\widehat{\\beta}_7$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_2 + 
+            \\widehat{\\beta}_4 + \\widehat{\\beta}_9 + \\widehat{\\beta}_7$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_2 + 
+            \\widehat{\\beta}_5 + \\widehat{\\beta}_{10} + \\widehat{\\beta}_7$",
+            "$\\widehat{\\beta}_1 + \\widehat{\\beta}_2 + 
+            \\widehat{\\beta}_6 + \\widehat{\\beta}_{11} + \\widehat{\\beta}_7$"),
+  round(linearComponent,3), round(probEstimada,3)
+)
+
+kable(tab, row.names = F, escape = F, align = 'cccl', 
+      col.names = c("Tratamento", "Tempo", "Clínica", "Componente Linear Estimado", 
+                    "Componente Linear Estimado (Valor)", 
+                    "Probabilidade de Sucesso Estimada")) %>% 
+  kable_styling(position = 'center', latex_options = c("HOLD_position")) %>% 
+  column_spec(1:3, width = "2cm") %>% 
+  column_spec(4, width = "4cm") %>% 
+  column_spec(5:6, width = "2cm")
+  
+```

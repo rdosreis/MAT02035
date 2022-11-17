@@ -20,7 +20,7 @@ date: |
 
 ## Olá!
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', out.height='80%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', out.height='80%', paged.print=FALSE, purl=FALSE}
 
 knitr::include_graphics(here::here('images', 'hi_my_name_is.png'))
 
@@ -36,7 +36,7 @@ knitr::include_graphics(here::here('images', 'hi_my_name_is.png'))
 - A minha dissertação de mestrado, intitulada _Técnicas estatísticas para avaliação de novos marcadores de risco: aplicações envolvendo o Modelo de Cox_, foi orientada pelos Professores Enrico A. Colosimo e Maria do Carmo P. Nunes.
 - A minha tese de doutorado, intitulada _Análise hierárquica de múltiplos sistemas reparáveis_, foi orientada pelos Professores Enrico A. Colosimo e Gustavo L. Gilardoni.
 
-- Os meus interesses de pesquisa são __Inferência causal em epidemiologia__, __Análise de mediação__, __Modelos de predição de risco__ e __Análise de sobrevivência__.
+- Os meus interesses de pesquisa são __Inferência causal em epidemiologia__, __Análise de mediação__, __Técnicas de amostragem__, __Modelos de predição de risco__ e __Análise de sobrevivência__.
 - Em estatística aplicada eu tenho interesse na __epidemiologia do Diabetes Mellitus__.
 
 <!-- - Eu sou um grande entusiasta do R! -->
@@ -56,7 +56,7 @@ knitr::include_graphics(here::here('images', 'hi_my_name_is.png'))
 
 - __Disciplina:__ Modelos para dados correlacionados
 - __Turma:__ U
-- __Modalidade:__ Ensino remoto emergencial \structure{(Moodle)}
+- __Modalidade:__ Ensino presencial
 - __Professor:__ Rodrigo Citton Padilha dos Reis
     + e-mail: `citton.padilha@ufrgs.br` ou `rodrigocpdosreis@gmail.com` 
     + Sala: B215 do Instituto de Matemática e Estatística
@@ -90,28 +90,29 @@ knitr::include_graphics(here::here('images', 'hi_my_name_is.png'))
 
 ## Aulas e material didático
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE}
-knitr::include_graphics(here::here('images','videoaula-2.png'))
-```
-
-- __Aulas:__ Terças e quintas, das 10hs 30min às 11hs 30min, no MConf do Moodle da disciplina
-    + As aulas serão realizadas de maneira __síncrona__ com __gravação__ e disponibilizadas para posterior consulta
+- __Aulas:__ terças e quintas, das 10hs 30min às 12hs 10min, na Sala F115 do Instituto de Química - Campus do Vale
 
 ## Aulas e material didático
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='10%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='10%', paged.print=FALSE, purl=FALSE}
+
 knitr::include_graphics(here::here('images','Rlogo.png'))
+
 ```
 
 - Exemplos e exercícios com o apoio do computador:
     + `R` e `RStudio`
     
 ```{r, echo=FALSE, eval=TRUE}
+
 x <- rnorm(n = 100, mean = 10, sd = 1)
+
 ```
 
 ```{r, echo=TRUE, eval=TRUE, fig.align='center', out.width='50%'}
+
 hist(x, col = 'black', border = 'white')
+
 ```
 
 ## Conteúdo programático
@@ -142,28 +143,33 @@ __Área 2__
 
 ## Avaliação
 
-- Serão realizadas pelo menos uma (e no máximo três) avaliação(ões) pontuais de cada área por meio de questionários e tarefas do Moodle
-- Será realizada uma avaliação parcial de cada área por meio de questionários e tarefas do Moodle
+- Serão realizadas quatro atividades de avaliação (pelo menos uma em de cada área):
+    + duas provas ($P_1$ e $P_2$) presenciais e individuais;
+    + dois trabalhos em grupo ($T_1$ e $T_2$).
 - Cada atividade de avaliação vale 10 pontos
-- Será realizado um um teste no Moodle (individual) como atividade de recuperação ($TR$)
+- Será realizado uma prova presencial e individual como atividade de recuperação ($PR$)
     + Para os alunos que não atingirem o conceito mínimo
-    + __Este teste abrange todo o conteúdo da disciplina__
+    + __Esta prova abrange todo o conteúdo da disciplina__
+
 
 ## Avaliação
 
-\begin{align*}
-MF &= [(\mbox{Avaliação parcial Área}_1 \times 3) + (\mbox{Avaliação parcial Área}_2 \times 3) \\
-   &+ (\mbox{nota média das avaliações pontuais} \times 4)] / 10.
-\end{align*}
+$$
+MF = \frac{P_1 + P_2 + T_1 + T_2}{4}
+$$
 
 + __A:__ $9 \leq MF \leq 10$
 + __B:__ $7,5 \leq MF < 9$
 + __C:__ $6 \leq MF < 7,5$
++ __D:__ $MF < 6$
++ __FF:__ se o aluno tiver frequência inferior a 75% da carga horária prevista no plano da disciplina
 
-+ Se $MF < 6$ o aluno poderá realizar o teste de recuperação e neste caso
+## Avaliação
+
++ Se $MF < 6$ e frequência mínima de 75% o aluno poderá realizar a prova de recuperação e neste caso
 
 $$
-MF' = MF \times 0,4 + TR \times 0,6
+MF' = MF \times 0,4 + PR \times 0,6
 $$
 
 - __C:__ $MF' \geq 6$
@@ -171,8 +177,10 @@ $$
 
 ## Referências bibliográficas
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='30%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='30%', paged.print=FALSE, purl=FALSE}
+
 knitr::include_graphics(here('images','ctanlion.png'))
+
 ```
 
 ### Principal
@@ -191,7 +199,7 @@ Diggle, P., Heagerty, P., Liang, K. Y., Zeger, S. __Analysis of Longitudinal Dat
 https://content.sph.harvard.edu/fitzmaur/ala2e/
 \end{center}
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='90%',  out.height='70%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='90%',  out.height='70%', paged.print=FALSE, purl=FALSE}
 
 knitr::include_graphics(here('images', 'ref_biblio.png'))
 
@@ -201,7 +209,7 @@ knitr::include_graphics(here('images', 'ref_biblio.png'))
 
 ## Séries temporais
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', out.height='70%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', out.height='70%', paged.print=FALSE, purl=FALSE}
 
 knitr::include_graphics(here('images', 'time_series.jpeg'))
 
@@ -212,7 +220,7 @@ knitr::include_graphics(here('images', 'time_series.jpeg'))
 
 ## Dados espaciais
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', out.height='70%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', out.height='70%', paged.print=FALSE, purl=FALSE}
 
 knitr::include_graphics(here('images', 'space_data.jpg'))
 
@@ -223,7 +231,7 @@ knitr::include_graphics(here('images', 'space_data.jpg'))
 
 ## Dados espaço-temporais
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', out.height='70%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', out.height='70%', paged.print=FALSE, purl=FALSE}
 
 knitr::include_graphics(here('images', 'space_time_data.jpg'))
 
@@ -234,7 +242,7 @@ knitr::include_graphics(here('images', 'space_time_data.jpg'))
 
 ## Dados longitudinais
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', out.height='60%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', out.height='60%', paged.print=FALSE, purl=FALSE}
 
 knitr::include_graphics(here('output_figs', 'capa.png'))
 
@@ -244,7 +252,7 @@ knitr::include_graphics(here('output_figs', 'capa.png'))
 
 ## Dados agrupados
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', out.height='60%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', out.height='60%', paged.print=FALSE, purl=FALSE}
 
 knitr::include_graphics(here('images', 'Multilevel_data_structure.png'))
 
@@ -261,6 +269,7 @@ Daremos atenção a estruturas de __dados longitudinais__ e __dados agrupados (m
 + Modelar os dados
     - Aplicar modelos estatísticos para representar de maneira compacta a estrutura dos dados
     - Fazer estimação e inferência (construção de intervalos de confiança e testes de hipóteses) com respeito às quantidades de interesse (coeficientes de regressão, componentes de variância, etc.)
+    - Avaliar o modelo que melhor descreve os dados através da comparação de modelos
 
 ## Próxima aula
 
@@ -268,8 +277,10 @@ Daremos atenção a estruturas de __dados longitudinais__ e __dados agrupados (m
 
 ## Por hoje é só! Sejam todos bem-vindos!
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE, purl=FALSE}
+
 knitr::include_graphics(here('images', 'perna_longa.png'))
+
 ```
 
 

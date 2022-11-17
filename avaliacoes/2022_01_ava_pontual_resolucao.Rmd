@@ -1,0 +1,186 @@
+---
+title:   |
+  | \normalsize UNIVERSIDADE FEDERAL DO RIO GRANDE DO SUL
+  | \normalsize INSTITUTO DE MATEMÁTICA E ESTATÍSTICA
+  | \normalsize DEPARTAMENTO DE ESTATÍSTICA
+  | \normalsize MAT02035 - Modelos para dados correlacionados
+  |
+  | \bf{\normalsize Avaliação pontual 01}
+fontsize: 12pt
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+__Exercício 1.__ (1.5 ponto) Apresente as principais características de um estudo longitudinal.
+
+\color{blue}
+
+Em um estudo longitudinal as medidas dos mesmos indivíduos são tomadas repetidamente através do tempo, permitindo, assim, o estudo direto da mudança da variável resposta ao longo do tempo. Os dados longitudinais podem ser considerados um caso especial de dados agrupados. Estes fornecem observações dentro de um grupo: um indivíduo representa um agrupamento em um estudo longitudinal; uma família/domicílio representa um agrupamento. Tipicamente, dados agrupados irão exibir correlação positiva, e esta correlação deve ser levada em conta na análise. 
+
+Outra característica presente em estudos longitudinais é a perda de dados. Em estudos com muitos participantes e/ou com um longo período de acompanhamento é comum que algumas medidas não sejam realizadas. A perda de uma visita (ao centro de investigação), ou o acompanhamento (indivíduo não deseja mais participar do estudo) são alguns dos motivos para a perda de informação.
+
+\color{black}
+
+__Exercício 2.__ (1.5 ponto) Para um estudo longitudinal, descreva as diferenças entre os delineamentos balanceado e desbalanceado.
+
+\color{blue}
+
+Quando o número e o momento das medidas repetidas são os mesmos para todos os indivíduos do estudo, dizemos que o estudo segue um delineamento balanceado. Em estudos com delineamento balanceado, as ocasiões de medição podem ser igualmente ou desigualmente distribuídas ao longo da duração do estudo. Quando a sequência dos tempos de observação não é mais comum a todos os indivíduos no estudo, dizemos que o estudo possui um delinemanto desabalanceado. Isto geralmente ocorre em alguns estudos longitudinais, especialmente aqueles em que as medidas repetidas se estendem por um período relativamente longo, e alguns indivíduos perdem a sua visita programada ou data de observação.
+
+\color{black}
+
+__Exercício 3.__ (1.5 ponto) Descreva as diferenças (incluindo possíveis vantagens e desvantagens) entre estudos longitudinais e estudos transversais.
+
+\color{blue}
+
+Em um estudo longitudinal, em que medidas repetidas realizadas nos indivíduos, é possível capturar a mudança dentro de indivíduo. Já em um estudo transversal, em que a resposta é medida em apenas uma ocasião, é possível apenas estimar diferenças nas respostas entre indivíduos. Ou seja, os estudos transversais permitem comparações entre subpopulações que diferem em idade, mas não fornecem qualquer informação a respeito de como os indivíduos mudam durante o correspondente período.
+
+\color{black}
+
+__Exercício 4.__ (1.5 ponto) Quais as consequências de se ignorar (na análise) a correlação presente entre os dados de medidas repetidas?
+
+\color{blue}
+
+Ao ignorar a correlação entre as medidas repetidas irá, em geral, resultar em estimativas incorretas da variabilidade amostral, que levam a inferências bastante enganosas. Ou seja, a análise (incorreta) implicará em erros padrões muito grandes, intervalos de confiança muito largos, e valores $p$ para testes de hipóteses para avaliar a mudança na resposta média muito grandes.
+
+\color{black}
+
+__Exercício 5.__ (4 pontos) O estudo _Treatment of Lead-Exposed Children_ (TLC) foi um estudo aleatorizado e controlado por placebo de _succimer_ (um agente quelante) em crianças com níveis de chumbo no sangue de 20 a 44 microgramas/dL. Lembre-se de que os dados consistem em quatro medições repetidas dos níveis de chumbo no sangue obtidos na linha de base (ou semana 0), semana 1, semana 4 e semana 6 em 100 crianças que foram aleatoriamente designadas para tratamento de quelação com _succimer_ ou placebo. Para este conjunto de problemas, focamos apenas nas 50 crianças designadas para tratamento de quelação com _succimer_.
+
+Os dados brutos são armazenados em um arquivo externo: `lead.dta`
+Cada linha do conjunto de dados contém as 5 variáveis a seguir:
+
+- `ID`, `Y1`, `Y2`, `Y3`, `Y4`.
+
+a. Leia os dados do arquivo externo e calcule as médias da amostra, os desvios padrão e as variações dos níveis de chumbo no sangue em cada ocasião.
+
+\color{blue}
+
+Lendo, formatando e filtrando os dados.
+
+```{r carrega-dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+# Carrega pacotes
+library(haven)
+library(tidyr)
+library(dplyr)
+
+# Carrega dados
+chumbo <- read_dta(file = here::here("data","tlc.dta"))
+
+# Largo para longo
+chumbo.longo <- gather(data = chumbo,
+                        key = "tempo",
+                        value = "chumbo", -id, -trt)
+
+# Transforma dados
+chumbo.longo$tempo <- as.numeric(
+  as.character(factor(chumbo.longo$tempo,
+                      labels = c(0, 1, 4, 6))))
+
+chumbo.longo$trt <- factor(chumbo.longo$trt,
+                           labels = c("Placebo", "Succimer"))
+
+# Filtra dados do grupo succimer
+chumbo.longo <- chumbo.longo %>% 
+  filter(trt == "Succimer")
+
+```
+
+A seguir são apresentados os desvios-padrões e variâncias dos níveis de chumbo no sangue em cada ocasião para os indivíduos do grupo _Succimer_.
+
+```{r dp-var, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, results='asis'}
+
+chumbo.resumo <- chumbo.longo %>% 
+  group_by(tempo) %>% 
+  summarise(chumbo.m = mean(chumbo),
+            chumbo.dp = sd(chumbo),
+            chumbo.var = var(chumbo))
+
+knitr::kable(chumbo.resumo,
+             format = 'pandoc',
+             digits = c(0,1,1,1),
+             row.names = FALSE,
+             col.names = c("Tempo", "Média", "Desvio Padrão", "Variância"),
+             align = 'c')
+
+```
+
+\color{black}
+
+b. Construa um gráfico de tempo dos níveis médios de chumbo no sangue versus tempo (em semanas). Descreva as características gerais da tendência temporal.
+
+\color{blue}
+
+O gráfico de perfis médios é apresentado a seguir.
+
+```{r perfis-medios, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, fig.align='center', out.width='80%'}
+
+library(ggplot2)
+
+p <- ggplot(data = chumbo.resumo,
+            mapping = aes(x = tempo, y = chumbo.m)) +
+  geom_point(color = "#D95F02") + geom_line(color = "#D95F02") +
+  scale_x_continuous(breaks = c(0, 1, 4, 6)) +
+  labs(x = "Tempo (semanas)",
+       y = expression("Média nível de chumbo no sangue"~(mu*g/dL))) +
+  theme_bw()
+p
+
+```
+
+É possível perceber um decaimento acentuado no nível médio de chumbo no sangue logo após o começo do estudo. No entanto, após a semana 1, os níveis médios de chumbo no sangue volta a subir, embora não atinjam o mesmo nível apresentado na linha de base.
+
+\color{black}
+
+c. Calcule as matrizes de covariância e correlação $4 \times 4$ para as quatro medidas repetidas dos níveis de chumbo no sangue.
+
+\color{blue}
+
+A matriz de covariância das medidas repetidas dos níveis de chumbo no sangue é apresentada a seguir.
+
+```{r cov, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+
+chumbo.succimer <- chumbo %>% 
+  filter(trt == 1) %>% 
+  select(y0, y1, y4, y6) %>% 
+  mutate(y0 = as.numeric(y0),
+         y1 = as.numeric(y1),
+         y4 = as.numeric(y4),
+         y6 = as.numeric(y6))
+
+knitr::kable(cov(chumbo.succimer),
+             format = 'pandoc',
+             digits = 2,
+             row.names = TRUE,
+             # col.names = c("Tempo", "Desvio Padrão", "Variância"),
+             align = 'c')
+
+
+```
+
+E a seguir, é apresentada a matriz de correlação das medidas repetidas dos níveis de chumbo no sangue é apresentada a seguir.
+
+```{r cor, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+
+
+knitr::kable(cor(chumbo.succimer),
+             format = 'pandoc',
+             digits = 2,
+             row.names = TRUE,
+             # col.names = c("Tempo", "Desvio Padrão", "Variância"),
+             align = 'c')
+
+
+```
+
+\color{black}
+
+d. Verifique se os elementos diagonais da matriz de covariâncias são as variâncias comparando com a estatística descritiva obtida no item (a).
+
+\color{blue}
+
+Como sabemos, a $\mbox{Cov}(Y_j, Y_j) = \mbox{Var}(Y_j)$. Assim, como era de se esperar, verifica-se que os elementos diagonais da matriz de covariâncias (`r round(diag(cov(chumbo.succimer)), 1)`) são as variâncias das medidas em cada ocasião de tempo apresentadas no item (a).

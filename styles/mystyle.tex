@@ -4,10 +4,15 @@
 \usepackage{mathtools}
 \usepackage{tikz}
 \usepackage{amsmath}
+\usepackage[brazil]{babel}   
+\usepackage[utf8]{inputenc}
 
 \setbeamercolor{math text}{fg=black!15!blue}
 
 \newcommand\beamermathcolor[1]{\color{#1}\setbeamercolor{math text}{fg=#1}}
+\newcommand{\Comb}[2]{{}_{#1}{C}_{#2}}
+\newcommand{\specialcell}[2][c]{%
+\begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
 
 \newcount\tmpnum
 \def\tallymarks#1{\leavevmode \lower1bp\vbox to9bp{}%
@@ -25,6 +30,13 @@
 }
 \def\tallyI{\pdfliteral{q .5 w 0 -1 m 0 8 l S Q}}
 \def\tallyV{\kern1bp\pdfliteral{q .5 w -1 0 m 9 7 l S Q}\tallynum4\kern1bp }
+
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
 
 \setbeamertemplate{frametitle continuation}{}
 \setbeamertemplate{items}[default] 

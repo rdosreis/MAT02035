@@ -1,0 +1,138 @@
+Revisar a escrita do modelo do Exercício 1.1. 
+
+No Exercício 1.3, $\beta$ assume valores fixos?
+
+Atenção na definição dos intervalos dos índices $i$ e $j$.
+
+Exercício 3.3: revisar a distribuição da estatística de teste.
+
+Revisar Exercícios 3.4 e 3.5.
+
+# ---------------------------
+
+Revisar Exercício 1.3.
+
+Exercício 2.1: descreva $t_{ij}$ (valores).
+
+Exercício 3.3: revisar a distribuição da estatística de teste.
+
+Revisar Exercícios 3.4 e 3.5.
+
+Muito bom! Parabéns!
+
+# ---------------------------
+
+Dúvida: existem NA's no estudo TLC? Revisar Exercício 1.1. Escreva o modelo (a expressão matemática).
+
+Revisar Exercício 1.3. Qual o número de graus de liberdade da distribuição qui-quadrado?
+
+Exercício 3.1: revisar a formatação dos dados (relação resposta e tempo); consequentemente revisar o gráfico.
+
+Revisar Exercícios 3.2 a 3.5.
+
+Muito bom! Parabéns!
+
+# ---------------------------
+
+Atenção: os Exercício 1 e 2 não solicita a análise de dados (implementação em R).
+
+Revisar Exercício 1.1. Escreva o modelo (a expressão matemática).
+
+Exercício 2.1: descreva $t_{ij}$ (valores).
+
+Não recebi os Exercícios 3.2 a 3.5.
+
+# ---------------------------
+
+Revisar Exercício 1.1. Escreva o modelo (a expressão matemática).
+
+Revisar Exercício 1.3. Cuidado com a diferença entre os termos "função de verossimilhança", "método de estimação da máxima verossimilhança", "teste da razão de verossimilhanças". Qual a distribuição de referência do teste?
+
+Exercício 2.1: descreva $t_{ij}$ (valores).
+
+Exercício 2.2: atenção: o item 2 se refere ao Exercício 2. Logo, espera-se a descrição dos modelos de covariância, utilizando a estrutura de dados do Exercício 2 (N, n, t_{ij}, etc.); n = 2?
+
+Não recebi o Exercício 3.
+
+# ---------------------------
+
+Exercício 1.1: atenção a notação.
+
+Exercício 1.3: qual a distribuição de referência do teste?
+
+Revisar Exercícios 3.3 (distribuição da estatística de teste) e 3.5.
+
+Muito bom! Parabéns!
+
+# ---------------------------
+
+Atenção: os Exercícios 1 e 2 não solicita a análise de dados (implementação em R).
+
+Exercício 2.1: descreva $t_{ij}$ (valores).
+
+Não recebi os Exercícios 3.2 a 3.5.
+
+# ---------------------------
+
+Não recebi o Exercício 1.
+
+Exercício 2.1: descreva $t_{ij}$ (valores).
+
+Não recebi o Exercício 3.3.
+
+Revisar Exercícios 3.4 e 3.5.
+
+# ---------------------------
+
+Atenção: subitens das questões devem ser indicados.
+
+Revisar o Exercício 1.
+
+Exercício 3.1: revisar a formatação dos dados (relação resposta e tempo); consequentemente revisar o gráfico.
+
+Não recebi os Exercícios 3.3 a 3.5.
+
+# ---------------------------
+
+Exercício 1.1: atenção a notação.
+
+Exercício 1.3: qual a distribuição de referência do teste?
+
+Exercício 2.1: descreva $t_{ij}$ (valores).
+
+Revisar Exercícios 3.3 (distribuição da estatística de teste) a 3.5.
+
+Muito bom! Parabéns!
+
+# ---------------------------
+
+Atenção: os Exercícios 1 e 2 não solicita a análise de dados (implementação em R).
+
+Revisar o Exercício 1.3.
+
+Exercício 2.1: descreva $t_{ij}$ (valores).
+
+Revisar o Exercício 2.2.
+
+Não recebi os Exercícios 3.2 a 3.5.
+
+# ---------------------------
+
+Exercício 1.3: qual a distribuição de referência do teste?
+
+Exercício 3.1: revisar a formatação dos dados (relação resposta e tempo); consequentemente revisar o gráfico (e os demais itens do Exercício 3).
+
+Revisar Exercício 3.4.
+
+Muito bom! Parabéns!
+
+# ---------------------------
+
+Atenção a notação.
+
+Revisar Exercícios 1.1 e 1.3.
+
+Revisar Exercício 2.1
+
+Revisar Exercício 3.
+

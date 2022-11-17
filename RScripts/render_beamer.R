@@ -2,7 +2,7 @@ library(here)
 library(rmarkdown)
 
 pasta <- "Rmds"
-arquivo <- "2022_16_mldl_analise_residuos"
+arquivo <- "2022_00_apresenta_curso"
 
 arquivo_rmd <- paste0(arquivo, ".Rmd")
 arquivo_pdf <- paste0(arquivo, ".pdf")
@@ -23,11 +23,16 @@ rmarkdown::render(input = input,
                   output_dir = here::here("output_pdf_v2"),
                   encoding = "UTF-8")
 
-knitr::purl(input = input,
-            output = here::here("RScripts", arquivo_r),
-            documentation = 1,
-            encoding = "UTF-8")
+# knitr::purl(input = here::here("avaliacoes", "2022_01_ava_pontual_resolucao.Rmd"),
+#             output = here::here("RScripts", "2022_01_ava_pontual_resolucao.R"),
+#             documentation = 1,
+#             encoding = "UTF-8")
 
 
 # rmarkdown::render(input = input, 
 #                   output_format = "powerpoint_presentation")
+
+knitr::purl(input = input,
+            output = here::here("RScripts", arquivo_r),
+            documentation = 1,
+            encoding = "UTF-8")
