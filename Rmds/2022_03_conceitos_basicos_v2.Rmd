@@ -1,0 +1,509 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Dados longitudinais: conceitos básicos"
+fontsize: 10pt
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2022
+---
+
+# Objetivos da análise longitudinal {.allowframebreaks}
+
+- Nas ciências da saúde, os __estudos longitudinais__ desempenham um papel importante em aumentar nossa compreensão do __desenvolvimento__ e __persistência__ da doença.
+- Há muita __heterogeneidade__ natural __entre os indivíduos__ em termos de como as doenças se desenvolvem e progridem.
+    <!-- + Essa heterogeneidade se deve a __fatores genéticos, ambientais, sociais e comportamentais__. -->
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='60%', purl=FALSE}
+knitr::include_graphics(here::here('images', 'Environmental-health.jpg'))
+```
+
+\framebreak
+
+- \structure{Delineamento de estudo longitudinal:} permite a descoberta de características individuais que podem explicar essas __diferenças interindividuais__ nas __mudanças nos resultados__ de saúde __ao longo do tempo__.
+    - Os participantes do estudo são \structure{medidos repetidamente ao longo da duração do estudo}, permitindo assim a avaliação direta de __mudanças na variável resposta ao longo do tempo__^[Em estudos transversais não é possível avaliar as mudanças individuais com base em uma __única "fotografia" da resposta__ do indivíduo em um determinado momento.].
+
+## Objetivos da análise longitudinal {.allowframebreaks}
+
+- A \structure{característica definidora de um estudo longitudinal} \alert{é que duas ou mais observações da variável resposta, realizadas em momentos diferentes, são obtidas em pelo menos alguns dos participantes do estudo}.
+
++ Normalmente, o delineamento longitudinal exige um __número fixo de medidas repetidas__ a serem feitas __em todos os participantes__ do estudo __em um conjunto de pontos de tempo comuns__.
+    + As ocasiões de medição não são necessariamente distribuídas uniformemente ao longo da duração do estudo.
+
+\framebreak
+
+- O \structure{objetivo principal} de um estudo longitudinal é __caracterizar a mudança na resposta ao longo do tempo__.
+- Também é interessante __determinar se essas mudanças__ dentro de cada indivíduo na resposta __estão relacionadas a covariáveis selecionadas__.
+    + \structure{Exemplos:} grupo de tratamento, grupo etário, grupo de exposição a determinado fator (social, econômico, clínico, etc.).
+    
+\framebreak
+
+\structure{Relembrando: exemplo TLC}
+
+```{r tlc_p, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, fig.align='center', out.width="80%", purl=FALSE}
+# ----------------------------------------------------
+# Carregando pacotes do R
+
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+
+chumbo.df <- read_dta(file = here::here("data", "tlc.dta"))
+
+chumbo.df$trt <- factor(chumbo.df$trt, labels = c("Placebo", "Succimer"))
+
+# ----------------------------------------------------
+# Reformando o objeto: de "largo" para "longo"
+
+chumbo.df.longo <- gather(data = chumbo.df, key = "tempo", value = "chumbo", -id, -trt)
+
+# ----------------------------------------------------
+# Formata variáveis
+
+chumbo.df.longo$tempo <- factor(chumbo.df.longo$tempo, labels = c("0", "1", "4", "6"))
+chumbo.df.longo$tempo.num <- as.numeric(as.character(chumbo.df.longo$tempo))
+
+# ----------------------------------------------------
+
+library(plyr)
+
+chumbo.resumo <- ddply(chumbo.df.longo, ~ trt + tempo.num, summarize, chumbo.m = mean(chumbo))
+
+p <- ggplot(data = chumbo.resumo,
+            mapping = aes(x = tempo.num, y = chumbo.m, group = trt, colour = trt)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(breaks = c(0,1,4,6)) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(x = "Semana",
+       y = expression("Média nível de chumbo no sangue"~(mu*g/dL)),
+       colour = "Grupo de tratamento") +
+  theme(legend.position = "bottom") + theme_bw()
+p
+```
+
+\framebreak
+
+- Na forma mais elementar, uma medida da __mudança observada dentro de indivíduo__ na resposta pode ser conceituada em termos de  __"escores de mudança"__ ou __"escores de diferença"__.
+    - Por exemplo, as diferenças ($\Delta_y$) entre as medidas de pós-tratamento e pré-tratamento na resposta:
+
+$$
+\Delta_y = y_{t_f} - y_{t_0}.
+$$
+
+\framebreak
+
+- Essa noção simples de mudança intraindividual se estende naturalmente de "escores de diferença" para __"trajetórias de resposta"__ mais gerais ao longo do tempo. 
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'escore_de_mudanca.png'))
+```
+
+\framebreak
+
+- Note que outros tipos de trajetórias de resposta, __lineares por partes__ ou __curvilíneas__, podem ser usados para suavizar parcimoniosamente e resumir as mudanças intraindividuais na resposta ao longo da duração do estudo.
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='80%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'escore_de_mudanca_2.png'))
+```
+
+\framebreak
+
+Uma análise longitudinal das mudanças dentro de indivíduo procede em dois estágios conceitualmente distintos.
+
+1. A __mudança individual na resposta__ é caracterizada em termos de algum resumo apropriado das mudanças nas medidas repetidas em cada indivíduo durante o período de observação;
+    + por exemplo, usando "escores de diferença" ou alguma forma de "trajetória de resposta".
+2. Essas estimativas de __mudanças individuais são relacionadas a diferenças interindividuais em covariáveis selecionadas__.
+
+\framebreak
+
+- Embora essas duas etapas da análise sejam conceitualmente distintas, elas podem ser combinadas em um \structure{modelo estatístico} para dados longitudinais.
+- Um único modelo estatístico para dados longitudinais pode ser usado tanto para \structure{(1)} __capturar como os indivíduos mudam ao longo do tempo__ quanto para \structure{(2)} __relacionar mudanças individuais na resposta a covariáveis selecionadas__.
+
+\framebreak
+
+<!-- - As mudanças na resposta dentro de indivíduo (grupo) ao longo do tempo pode ser alcançada apenas de um estudo de delineamento longitudinal. -->
+<!-- - Um estudo transversal não pode estimar como os indivíduos mudam com o tempo, já que a resposta é medida em uma única ocasião. -->
+- Um estudo longitudinal pode estimar como os indivíduos mudam e também o fazem __com grande precisão__, pois cada indivíduo age como seu próprio controle.
++ Ao comparar as respostas de cada indivíduo em duas ou mais ocasiões, uma análise longitudinal pode remover fontes alheias, mas inevitáveis, de variabilidade entre indivíduos.
+
+<!-- ## Objetivos da análise longitudinal -->
+
+<!-- ###  -->
+<!-- - O ponto chave aqui é que há heterogeneidade natural entre os indivíduos em muitas variáveis alheias. -->
+<!-- - Embora essas variáveis externas não sejam de interesse substantivo, elas podem ter um impacto na variável resposta. -->
+<!-- - A beleza de um delineamento longitudinal é que quaisquer fatores externos (independentemente de terem sido medidos) influenciam a resposta, e cuja influência persiste, mas permanece relativamente estável durante toda a duração do estudo (por exemplo, gênero, status socioeconômico e muitos fatores genéticos, ambientais, sociais e comportamentais) são eliminados ou bloqueados quando as respostas de um indivíduo são comparadas em duas ou mais ocasiões. -->
+<!-- - Ao eliminar essas principais fontes de variabilidade ou "ruído" da estimativa de mudança individual, uma estimativa muito precisa da mudança pode ser obtida. -->
+
+# Características definidoras dos dados longitudinais
+
+## Terminologia: indivíduos e tempos
+
+- Em um estudo longitudinal, \structure{os participantes}, ou, mais geralmente, \structure{as unidades} em estudo, são referidas como __indivíduos__ ou __sujeitos__. 
+    + Em muitos estudos longitudinais, os indivíduos são seres humanos.
+    + Em outros casos, os indivíduos podem ser animais ou objetos.
+- Em um estudo longitudinal os indivíduos são medidos repetidamente em diferentes __ocasiões__ ou __tempos__.
+
+::: {.block}
+
+###
+
+Assim, adotando a terminologia introduzida até agora, a característica definidora de um estudo longitudinal é que as medidas da variável resposta são obtidas nos mesmos indivíduos em diversas ocasiões.
+
+:::
+
+## Terminologia: dados balanceados {.allowframebreaks}
+
+- O __número de observações repetidas__ e __seus tempos (momentos de ocorrência)__ podem variar muito de um estudo longitudinal para outro.
+
+\footnotesize
+
+::: {.block}
+
+###
+
+- Por exemplo, um ensaio clínico delineado para examinar a eficácia de um novo agente analgésico pode realizar medidas repetidas de uma escala de dor autorreferida na linha de base e ao final de seis intervalos de 15 minutos.
+    + Isso resultaria em __sete medidas__ repetidas que são __igualmente separadas__ no tempo.
+- Por outro lado, um estudo observacional do crescimento humano pode fazer medições de altura e peso em intervalos de 3 meses, do nascimento até a idade de 2 anos, seguido por observações anuais desde a infância até a idade adulta jovem.
+    + Por delineamento, este último estudo resultaria em uma __sequência de medidas__ repetidas de altura e peso que são __separadas de forma desigual__ no tempo.
+
+:::
+
+\framebreak
+
+\normalsize
+
+- Em ambos os exemplos, o __número__ e o __momento__ das medições repetidas __são os mesmos__ para todos os indivíduos, independentemente das ocasiões de medição serem igualmente ou desigualmente distribuídas ao longo da duração do estudo.
+
+- Empregando a terminologia estatística emprestada do campo do delineamento experimental, nos referimos aos últimos estudos como sendo __"balanceados" (equilibrados)__ ao longo do tempo.
+
+\framebreak
+
+\footnotesize
+
+::: {.block}
+### Exemplo TLC
+
+```{r, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis'}
+# ----------------------------------------------------
+set.seed(40)
+
+knitr::kable(chumbo.df[sample(x = chumbo.df$id, size = 2, replace = F),],
+             col.names = c("ID", "Grupo", "Linha de base", "Semana 1", "Semana 4", "Semana 6"), caption = "Níveis de chumbo no sangue de dez crianças do estudo TLC")
+```
+:::
+
+::: {.block}
+### Exemplo ensaio clínico medicamento anti-epilético
+
+```{r, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis'}
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+
+epilep.df <- read_dta(file = here::here("data", "epilepsy.dta"))
+
+epilep.df$trt <- factor(epilep.df$trt, labels = c("Placebo", "Progabide"))
+
+# ----------------------------------------------------
+# Reformando o objeto: de "largo" para "longo"
+
+epilep.df.longo <- gather(data = epilep.df, key = "tempo", value = "convusoes", -id, -trt, -age)
+
+# ----------------------------------------------------
+# Formata variáveis
+
+epilep.df.longo$tempo <- factor(epilep.df.longo$tempo, labels = c("0", "1", "2", "3", "4"))
+epilep.df.longo$tempo.num <- as.numeric(as.character(epilep.df.longo$tempo))
+
+# ----------------------------------------------------
+set.seed(10)
+
+knitr::kable(epilep.df[sample(x = epilep.df$id, size = 2, replace = F), - 3],
+             col.names = c("ID", "Grupo", "Linha de base", "Sem 1", "Sem 2", "Sem 3", "Sem 4"), caption = "Número de convulsões por semana")
+```
+:::
+
+## Terminologia: dados desbalanceados {.allowframebreaks}
+\normalsize
+
+- É uma característica dos estudos longitudinais, especialmente aqueles em que as medidas repetidas se estendem por um período relativamente longo, que alguns indivíduos perderão sua visita programada ou data de observação.
+- Em alguns estudos, isso pode exigir que as observações sejam feitas algum tempo antes ou depois do momento programado.
+    + Consequentemente, a __sequência dos tempos__ de observação __não é mais comum a todos os indivíduos__ no estudo.
+- Nesse caso, nos referimos aos dados como __"desbalanceados"__ ao longo do tempo.
+
+\framebreak
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'dados_desbalanceados.png'))
+```
+
+## Terminologia: dados ausentes {.allowframebreaks}
+
+- __Dados ausentes__ são um problema comum e desafiador em estudos longitudinais.
+    - A ocorrência de dados ausentes em estudos longitudinais é a regra, e não a exceção.
+- Por exemplo, os participantes do estudo nem sempre aparecem para uma observação agendada, ou podem simplesmente deixar o estudo antes de sua conclusão \structure{(padrão dropout)}.
+- Quando faltam algumas observações, os dados são necessariamente desbalanceados ao longo do tempo, uma vez que nem todos os indivíduos têm o mesmo número de medidas repetidas obtidas em um conjunto comum de ocasiões.
+
+\framebreak
+
+- Para distinguir dados ausentes em um estudo longitudinal de outros tipos de dados desbalanceados, esses conjuntos de dados são geralmente chamados de __"incompletos"__.
+    + Essa distinção é importante e enfatiza o fato de que uma medida pretendida em um indivíduo não pôde ser obtida.
+- Uma das consequências da falta de balanceamento e/ou ausência de dados é que requer alguns cuidados para recuperar a mudança dentro de cada indivíduo.
+
+\framebreak
+
+- Por exemplo, considere uma configuração em que cada indivíduo é medido em cada uma das $n$ ocasiões.
+    + Em seguida, considere traçar a resposta média em cada ocasião.
+    + Diferenças na resposta média ao longo do tempo medem a mudança dentro de cada indivíduo.
+    + Isso ocorre porque a diferença nas médias também é a média das diferenças quando cada indivíduo é medido em todas as ocasiões.
+
+\framebreak
+
+- Quando há dados ausentes, um gráfico da resposta média sobre o tempo pode ser enganador.
+    + \alert{Mudanças ao longo do tempo podem refletir o padrão de ausência de dados, e não de mudança individual}.
+- Como discutiremos ao longo do curso, será necessário examinar cuidadosamente as suposições e a adequação da análise para determinar a validade das inferências com delineamentos desbalanceados e/ou ocorrência de dados ausentes. 
+
+<!-- ## Comentários -->
+
+<!-- - Dados longitudinais podem ser balanceados e completos quando todos os indivíduos são medidos em um conjunto comum de ocasiões e não há dados faltantes. -->
+<!-- - Dados longitudinais nas ciências da saúde raramente são balanceados e completos, a menos que os indivíduos não tenham a vontade humana (por exemplo, ratos de laboratório) ou a duração do estudo seja relativamente curta (por exemplo, um estudo longitudinal da eficácia de um analgésico medições repetidas podem ser obtidas em uma única visita de estudo). -->
+<!-- - É muito mais comum ter dados longitudinais desequilibrados e/ou incompletos. -->
+<!-- - Como resultado, para ser de uso prático real, métodos para a análise de dados longitudinais devem ser capazes de lidar com dados que são desequilibrados ao longo do tempo e possivelmente incompletos. -->
+
+## Terminologia: correlação
+
+- Um aspecto dos dados longitudinais é que as medidas repetidas no mesmo indivíduo são geralmente __positivamente correlacionadas__.
+- As observações correlacionadas são uma característica positiva dos dados longitudinais, pois fornecem estimativas mais precisas da taxa de mudança^[Ou o efeito das covariáveis nessa taxa de mudança.] do que seria obtido a partir de um número igual de observações independentes de indivíduos diferentes.
+- No entanto, __a correlação entre medidas repetidas viola a suposição de independência__ que é fundamental em tantas técnicas de regressão padrão.
+
+## Notação: variável resposta
+
+- Seja $Y_{ij}$ a variável resposta para o $i$-ésimo indivíduo ($i = 1, \ldots, N$) na $j$-ésima ocasião do tempo ($j = 1, \ldots, n$).
+    + Variável aleatória: $Y_{ij}$
+    + Realização da variável aleatória: $y_{ij}$
+
+\begin{table}[]
+\begin{tabular}{cccccc}
+\hline
+\multirow{2}{*}{Indivíduo} & \multicolumn{5}{c}{Ocasião}                          \\ \cline{2-6} 
+                           & 1        & 2        & 3        & $\cdots$ & n        \\ \hline
+1                          & $y_{11}$ & $y_{12}$ & $y_{13}$ & $\cdots$ & $y_{1n}$ \\
+2                          & $y_{21}$ & $y_{22}$ & $y_{23}$ & $\cdots$ & $y_{2n}$ \\
+$\cdot$                    & $\cdot$  & $\cdot$  & $\cdot$  & $\cdots$ & $\cdot$  \\
+$\cdot$                    & $\cdot$  & $\cdot$  & $\cdot$  & $\cdots$ & $\cdot$  \\
+$\cdot$                    & $\cdot$  & $\cdot$  & $\cdot$  & $\cdots$ & $\cdot$  \\
+$N$                        & $y_{N1}$ & $y_{N2}$ & $y_{N3}$ & $\cdots$ & $y_{Nn}$ \\ \hline
+\end{tabular}
+\end{table}
+
+## Notação: variável resposta
+
+- As $n$ medidas repetidas da variável resposta em cada indivíduo pode ser agrupada em um vetor resposta $n\times 1$, denotado por
+
+$$
+Y_i  = \left(\begin{array}{c}
+Y_{i1}\\
+Y_{i2}\\
+\vdots\\
+Y_{in}
+\end{array}\right).
+$$
+
+- Uma forma equivalente é dada por
+
+$$
+Y_i = (Y_{i1}, Y_{i2}, \ldots, Y_{in})'.
+$$
+
+## Notação: resposta média
+
+- Na análise de dados de um estudo longitudinal, o principal interesse está na resposta média.
+    + Mudanças ao longo do tempo na resposta média.
+    + Como estas mudanças dependem de covariáveis (grupo de tratamento, exposições).
+- Denotamos a média ou o valor esperado de cada resposta $Y_{ij}$ por
+
+$$
+\mu_j = \E(Y_{ij}).
+$$
+
+###
+
+- Podemos pensar em $\mu_j$ como uma média sobre uma grande __população__ de indivíduos na $j$-ésima ocasião do tempo.
+
+## Notação: resposta média
+
+- Em muitos estudos longitudinais o principal objetivo é relacionar mudanças na resposta média sobre o tempo à covariáveis.
+- Para permitir adicionalmente que a resposta média e as mudanças na resposta média variem de indivíduo para indivíduo em função de covariáveis de nível individual, utilizaremos a seguinte notação
+
+$$
+\mu_{ij} = \E(Y_{ij}).
+$$
+
+###
+
+- Aqui, o valor esperado denota uma média sobre uma grande __subpopulação__ de indivíduos que compartilham valores semelhantes das covariáveis (por exemplo, indivíduos designados para o grupo de tratamento ativo, sujeitos não expostos) na $j$-ésima ocasião do tempo.
+    + Diremos que $\mu_{ij}$ é a resposta média condicional na $j$-ésima ocasião, em que o termo condicional é usado para denotar a dependência da média nas covariáveis.
+
+## Dependência e Correlação {.allowframebreaks}
+
+- Na estatística, as noções de dependência e independência têm significados precisos. 
+- Duas variáveis são consideradas independentes se a distribuição condicional de uma delas não depender da outra.
+
+::: {.block}
+
+###
+
+Por exemplo, o nível de colesterol LDL seria considerado independente do sexo se a distribuição do nível de colesterol LDL fosse a mesma para indivíduos do sexo feminino e masculino.
+
+:::
+
+\framebreak
+
+- Muitas técnicas estatísticas (por exemplo, regressão linear e análise de variância para uma resposta única e univariada) assumem que as __observações__ do estudo são realizações de variáveis aleatórias que são __independentes__ umas das outras.
+- Esta suposição será bastante razoável:
+    1. Quando o delineamento do estudo exigir que uma observação seja obtida de cada indivíduo __e__ os indivíduos sejam selecionados aleatoriamente de uma população maior.
+    2. Quando o estudo exige que uma observação seja obtida de cada indivíduo e os indivíduos sejam aleatoriamente designados para diferentes condições de tratamento.
+
+\framebreak
+
+- Além disso, a suposição de observações independentes pode ser justificada em bases puramente físicas ou científicas, quando as respostas de indivíduos distintos no estudo são consideradas como completamente não relacionadas entre si.
+    + Ou seja, a resposta de um indivíduo não influencia nem é influenciada pela resposta do outro.
+
+\framebreak
+
+- No caso em que mais de uma única observação é obtida no mesmo indivíduo, a suposição de observações independentes é simplesmente __insustentável__.
+- Ou seja, a resposta de um indivíduo em uma ocasião é muito provável que seja preditiva da resposta do mesmo indivíduo em uma ocasião futura.
+    + Por exemplo, um indivíduo com um alto nível de colesterol LDL em uma ocasião é muito provável que também tenha um alto nível de colesterol LDL na próxima ocasião.
+- Além disso, com uma __variável resposta quantitativa__, essa dependência entre as medidas repetidas no mesmo indivíduo pode ser caracterizada pela sua __correlação__. 
+
+## Dependência e Correlação
+
+- Considere um delineamento longitudinal simples que é balanceado e completo, com $n$ medidas repetidas da variável resposta em um conjunto comum de ocasiões em $N$ indivíduos.
+- Se denotamos a __média condicional__ de $Y_{ij}$ por $\mu_{ij} = \E(Y_{ij})$, então a __variância condicional__ de $Y_{ij}$ é definida como
+
+$$
+\sigma^2_j = \E\{Y_{ij} - \E(Y_{ij})\}^2 = \E(Y_{ij} - \mu_{ij})^2.
+$$
+
+- O __desvio-padrão__ condicional $\sigma_j = \sqrt{\sigma^2_j}$.
+- __Observação:__ note que assumimos que a variância pode variar de ocasião para ocasião ($\sigma^2_j$).
+
+## Dependência e Correlação
+
+A __covariância condicional__ entre as respostas em duas diferentes ocasiões, $Y_{ij}$ e $Y_{ik}$, é denotada por
+
+$$
+\sigma_{jk} = \E\{(Y_{ij} - \mu_{ij})(Y_{ik} - \mu_{ik})\},
+$$
+
+e fornece uma medida de __dependência linear__ entre $Y_{ij}$ e $Y_{ik}$, dado as covariáveis.
+
+- A covariância entre $Y_{ij}$ e $Y_{ik}$ pode assumir valores positivos ou negativos.
+- Quando a covariância é zero, então não há dependência linear entre as respostas nas duas ocasiões (dado as covariáveis).
+
+## Dependência e Correlação
+
+A magnitude da covariância é de difícil interpretação. A __correlação condicional__ entre $Y_{ij}$ e $Y_{ik}$ é denotada por 
+
+$$
+\rho_{jk} = \frac{\E\{(Y_{ij} - \mu_{ij})(Y_{ik} - \mu_{ik})\}}{\sigma_j\sigma_k},
+$$
+
+em que $\sigma_j$ e $\sigma_k$ são os desvios-padrão de $Y_{ij}$ e $Y_{ik}$, respectivamente.
+
+- A correlação pode variar entre $-1$ e $1$.
+    - Correlação positiva implica que uma variável aumenta conforme a outra aumenta.
+    - Correlação negativa implica que uma variável aumenta conforme a outra diminui.
+
+## Dependência e Correlação
+
+- Embora duas variáveis que são estatisticamente independentes uma da outra sejam necessariamente não correlacionadas, as variáveis podem ser não correlacionadas sem serem independentes (uma vez que a correlação apenas mede a dependência linear).
+- A independência estatística é uma condição mais forte que a correlação zero.
+    + Implica "nenhuma dependência", isto é, nenhuma dependência linear ou não linear entre as variáveis.
+- Por outro lado, a correlação quantifica o grau em que duas variáveis são relacionadas ou dependentes, desde que a dependência seja linear.
+
+## Dependência e Correlação
+
+- Quando $n$ medidas repetidas são coletadas em um vetor $Y_i = (Y_{i1}, Y_{i2},\ldots, Y_{in})$, podemos definir a __matriz de variância-covariância__:
+
+\footnotesize
+
+\begin{eqnarray*}
+\Cov\left(\begin{array}{c}
+Y_{i1}\\
+Y_{i2}\\
+\vdots\\
+Y_{in}
+\end{array}\right) &=& \left(\begin{array}{cccc}
+\Var(Y_{i1}) & \Cov(Y_{i1}, Y_{i2}) & \ldots & \Cov(Y_{i1}, Y_{in})\\
+\Cov(Y_{i2}, Y_{i1}) & \Var(Y_{i2}) &  \ldots & \Cov(Y_{i2}, Y_{in})\\
+\vdots & \vdots & \ddots & \vdots\\
+\Cov(Y_{in}, Y_{i1}) & \Cov(Y_{in}, Y_{i2}) & \hdots & \Var(Y_{in})
+\end{array}\right) \\
+ &=& \left(\begin{array}{cccc}
+\sigma_{11} & \sigma_{12} & \hdots & \sigma_{1n}\\
+\sigma_{21} & \sigma_{22} &  \hdots & \sigma_{2n}\\
+\vdots & \vdots & \ddots & \vdots\\
+\sigma_{n1} & \sigma_{n2} & \hdots & \sigma_{nn}
+\end{array}\right).
+\end{eqnarray*}
+
+## Dependência e Correlação
+
+- Note que $\Cov(Y_{ij}, Y_{ik}) = \sigma_{jk} = \sigma_{kj} = \Cov(Y_{ik}, Y_{ij})$ (__simetria__).
+- Ainda, $\sigma_{kk} = \Cov(Y_{ik}, Y_{ik}) = \Var(Y_{ik}) = \sigma^2_k$.
+- Dessa forma podemos nos referir a matriz de variância-covariância de $Y_i$ como a (matriz) covariância de $Y_i$, ou $\Cov(Y_i)$
+
+$$
+\Cov(Y_i) = \left(\begin{array}{cccc}
+\sigma_{1}^2 & \sigma_{12} & \hdots & \sigma_{1n}\\
+\sigma_{21} & \sigma_{2}^2 &  \hdots & \sigma_{2n}\\
+\vdots & \vdots & \ddots & \vdots\\
+\sigma_{n1} & \sigma_{n2} & \hdots & \sigma_{n}^2
+\end{array}\right).
+$$
+
+## Dependência e Correlação
+
+- Também podemos definir a matriz de __correlação__, $\Corr(Y_i)$
+
+$$
+\Corr(Y_i) = \left(\begin{array}{cccc}
+1 & \rho_{12} & \hdots & \rho_{1n}\\
+\rho_{21} & 1 &  \hdots & \rho_{2n}\\
+\vdots & \vdots & \ddots & \vdots\\
+\rho_{n1} & \rho_{n2} & \hdots & 1
+\end{array}\right).
+$$
+
+## Comentários {.allowframebreaks}
+
+- Em dados longitudinais, os pressupostos usuais da análise de regressão padrão não são válidos.
+- A heterogeneidade da variância ao longo do tempo pode ser explicada ao permitir que os elementos na diagonal principal da matriz de covariância sejam diferentes.
+- A falta de independência entre as medições repetidas é explicada por permitir que os elementos fora da diagonal das matrizes de covariância e correlação sejam diferentes de zero.
+
+\framebreak
+
+- Além disso, espera-se que as correlações sejam positivas e a natureza sequencial dos dados longitudinais implica que pode haver um padrão para as correlações.
+    + Por exemplo, espera-se que um par de medidas repetidas que foram obtidas próximas no tempo sejam mais altamente correlacionadas do que um par de medidas repetidas separadas no tempo.
+    + Em geral, espera-se que a correlação entre as medidas repetidas diminua com o aumento da separação de tempo.
+
+## Avisos
+
+- __Para casa:__ ler o Capítulo 1 do livro "__Applied Longitudinal Analysis__". Caso já tenha lido o Cap. 1, leia o Capítulo 2.
+- __Próxima aula:__ Dados longitudinais: exemplo, fontes de variação e consequências de ignorar a correlação entre dados longitudinais.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'conceitos-basicos-de-trade.jpg'))
+```
