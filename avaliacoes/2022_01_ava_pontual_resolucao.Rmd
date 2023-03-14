@@ -5,7 +5,7 @@ title:   |
   | \normalsize DEPARTAMENTO DE ESTATÍSTICA
   | \normalsize MAT02035 - Modelos para dados correlacionados
   |
-  | \bf{\normalsize Avaliação pontual 01}
+  | \bf{\normalsize Avaliação 01}
 fontsize: 12pt
 output:
   pdf_document: default
@@ -15,7 +15,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-__Exercício 1.__ (1.5 ponto) Apresente as principais características de um estudo longitudinal.
+__Exercício 1.__ (1 ponto) Apresente as principais características de um estudo longitudinal.
 
 \color{blue}
 
@@ -25,15 +25,17 @@ Outra característica presente em estudos longitudinais é a perda de dados. Em 
 
 \color{black}
 
-__Exercício 2.__ (1.5 ponto) Para um estudo longitudinal, descreva as diferenças entre os delineamentos balanceado e desbalanceado.
+__Exercício 2.__ (1 ponto) Explique por que dados longitudinais podem ser vistos como dados agrupados. Dê um exemplo de outro tipo de estudo que pode fornecer dados agrupados.
 
 \color{blue}
 
-Quando o número e o momento das medidas repetidas são os mesmos para todos os indivíduos do estudo, dizemos que o estudo segue um delineamento balanceado. Em estudos com delineamento balanceado, as ocasiões de medição podem ser igualmente ou desigualmente distribuídas ao longo da duração do estudo. Quando a sequência dos tempos de observação não é mais comum a todos os indivíduos no estudo, dizemos que o estudo possui um delinemanto desabalanceado. Isto geralmente ocorre em alguns estudos longitudinais, especialmente aqueles em que as medidas repetidas se estendem por um período relativamente longo, e alguns indivíduos perdem a sua visita programada ou data de observação.
+As medidas repetidas ao longo do tempo em um mesmo indivíduo podem ser vistas como um agrupamento das observações ao nível de indivíduo.
+
+Um __estudo aleatorizado por _clusters___ é outro exemplo de uma estrutura de dados agrupados. As observações são aleatorizadas em grupos. Por exemplo, turmas de alunos que recebem um tratamento (ensino com apoio de dispositivo eletrônico) vs. turmas de alunos que recebem o tratamento controle (ensino tradicional). Neste exemplo, as turmas são aleatorizadas nos grupos de tratamentos, e cada turma representa um agrupamento de observções (no caso, as respostas dos alunos).
 
 \color{black}
 
-__Exercício 3.__ (1.5 ponto) Descreva as diferenças (incluindo possíveis vantagens e desvantagens) entre estudos longitudinais e estudos transversais.
+__Exercício 3.__ (1 ponto) Descreva as diferenças (incluindo possíveis vantagens e desvantagens) entre estudos longitudinais e estudos transversais.
 
 \color{blue}
 
@@ -41,7 +43,15 @@ Em um estudo longitudinal, em que medidas repetidas realizadas nos indivíduos, 
 
 \color{black}
 
-__Exercício 4.__ (1.5 ponto) Quais as consequências de se ignorar (na análise) a correlação presente entre os dados de medidas repetidas?
+__Exercício 4.__ (1 ponto) Para um estudo longitudinal, descreva as diferenças entre os delineamentos balanceado e desbalanceado. Dê um exemplo para cada um dos delineamentos.
+
+\color{blue}
+
+Quando o número e o momento das medidas repetidas são os mesmos para todos os indivíduos do estudo, dizemos que o estudo segue um delineamento balanceado. Em estudos com delineamento balanceado, as ocasiões de medição podem ser igualmente ou desigualmente distribuídas ao longo da duração do estudo. Quando a sequência dos tempos de observação não é mais comum a todos os indivíduos no estudo, dizemos que o estudo possui um delinemanto desabalanceado. Isto geralmente ocorre em alguns estudos longitudinais, especialmente aqueles em que as medidas repetidas se estendem por um período relativamente longo, e alguns indivíduos perdem a sua visita programada ou data de observação.
+
+\color{black}
+
+__Exercício 5.__ (1 ponto) Quais as consequências de se ignorar (na análise) a correlação presente entre os dados de medidas repetidas?
 
 \color{blue}
 
@@ -49,14 +59,11 @@ Ao ignorar a correlação entre as medidas repetidas irá, em geral, resultar em
 
 \color{black}
 
-__Exercício 5.__ (4 pontos) O estudo _Treatment of Lead-Exposed Children_ (TLC) foi um estudo aleatorizado e controlado por placebo de _succimer_ (um agente quelante) em crianças com níveis de chumbo no sangue de 20 a 44 microgramas/dL. Lembre-se de que os dados consistem em quatro medições repetidas dos níveis de chumbo no sangue obtidos na linha de base (ou semana 0), semana 1, semana 4 e semana 6 em 100 crianças que foram aleatoriamente designadas para tratamento de quelação com _succimer_ ou placebo. Para este conjunto de problemas, focamos apenas nas 50 crianças designadas para tratamento de quelação com _succimer_.
+__Exercício 6.__ (2 pontos) O estudo _Treatment of Lead-Exposed Children_ (TLC) foi um estudo aleatorizado e controlado por placebo de _succimer_ (um agente quelante) em crianças com níveis de chumbo no sangue de 20 a 44 microgramas/dL. Lembre-se de que os dados consistem em quatro medições repetidas dos níveis de chumbo no sangue obtidos na linha de base (ou semana 0), semana 1, semana 4 e semana 6 em 100 crianças que foram aleatoriamente designadas para tratamento de quelação com _succimer_ ou placebo. Para este conjunto de problemas, focamos apenas nas 50 crianças designadas para tratamento de quelação com _succimer_.
 
-Os dados brutos são armazenados em um arquivo externo: `lead.dta`
-Cada linha do conjunto de dados contém as 5 variáveis a seguir:
+Os dados brutos são armazenados em um arquivo externo: `lead.dta`. Cada linha do conjunto de dados contém as 5 variáveis a seguir: `ID`, `Y1`, `Y2`, `Y3`, `Y4`.
 
-- `ID`, `Y1`, `Y2`, `Y3`, `Y4`.
-
-a. Leia os dados do arquivo externo e calcule as médias da amostra, os desvios padrão e as variações dos níveis de chumbo no sangue em cada ocasião.
+a. Leia os dados do arquivo externo e calcule as médias da amostra, os desvios padrão e as variâncias dos níveis de chumbo no sangue em cada ocasião.
 
 \color{blue}
 
@@ -112,7 +119,6 @@ knitr::kable(chumbo.resumo,
 \color{black}
 
 b. Construa um gráfico de tempo dos níveis médios de chumbo no sangue versus tempo (em semanas). Descreva as características gerais da tendência temporal.
-
 \color{blue}
 
 O gráfico de perfis médios é apresentado a seguir.
@@ -184,3 +190,105 @@ d. Verifique se os elementos diagonais da matriz de covariâncias são as variâ
 \color{blue}
 
 Como sabemos, a $\mbox{Cov}(Y_j, Y_j) = \mbox{Var}(Y_j)$. Assim, como era de se esperar, verifica-se que os elementos diagonais da matriz de covariâncias (`r round(diag(cov(chumbo.succimer)), 1)`) são as variâncias das medidas em cada ocasião de tempo apresentadas no item (a).
+
+\color{black}
+
+__Exercício 7.__ (3 pontos) Seja $Y_i = (Y_{i1}, Y_{i2}, \ldots, Y_{in_i})'$ um vetor de respostas de medidas repetidas, $X_i$ uma matriz $n_i \times p$ de covariáveis associadas ao vetor de respostas $Y_i$, para $i = 1, \ldots, N$, em que $N$ é o número de indivíduos em um certo estudo. Considere o seguinte modelo:
+
+$$
+Y_i = X_i\beta + e_i, i = 1, \ldots, N,
+$$
+em que $\beta = (\beta_1, \beta_2, \ldots, \beta_p)'$ é um vetor de coeficientes de regressão desconhecidos, e $e_i = (e_{i1}, e_{i2}, \ldots, e_{in_i})'$ é um vetor de erros aleatórios. Ainda, suponha que $e_i \sim N_{n_i}(0, \Sigma_i)$, em que $\Sigma_i$ é uma matriz de covariâncias.
+
+a. Qual a distribuição condicional de $Y_i|X_i$?
+
+\color{blue}
+
+Pela propriedade da distribuição normal, temos:
+
+$$
+Y_i|X_i \sim N_{n_i}(X_i\beta, \Sigma_i).
+$$
+
+\color{black}
+
+b. Escreva a função de verossimilhança de $\beta$ (considere $\Sigma_i$ conhecido).
+
+\color{blue}
+
+$$
+L(\beta) = \prod_{i=1}^N{f(y_i)},
+$$
+
+em que 
+
+$$
+f(y_i) = (2\pi)^{-n_i/2}|\Sigma_i|^{-1/2}\exp\left\{-\frac{1}{2}(y_i - \mu_i)'\Sigma_i^{-1}(y_i - \mu_i)\right\}.
+$$
+Logo,
+
+$$
+L(\beta) = \left\{\prod_{i=1}^N{(2\pi)^{-n_i/2}|\Sigma_i|^{-1/2}}\right\}\times \exp\left\{-\frac{1}{2}\sum_{i=1}^N{\left[(y_i - X_i\beta)'\Sigma_i^{-1}(y_i - X_i\beta)\right]}\right\}.
+$$
+
+\color{black}
+
+c. Utilizando o método da máxima verossimilhança, encontre a expressão do estimador de $\beta$ (considere $\Sigma_i$ conhecido). (Apresente o desenvolvimento)
+
+\color{blue}
+
+Da função de log-verossimilhança, temos que:
+
+$$
+\ell = -\frac{K}{2} \log(2\pi) - \frac{1}{2}\sum_{i=1}^N{\log|\Sigma_i|} - \frac{1}{2}\left\{\sum_{i=1}^N{(y_i - X_i\beta)'\Sigma_i^{-1}(y_i - X_i\beta)}\right\},
+$$
+em que $K = \sum_{i=1}^N{n_i}$ é o __número total de observações__. Note que maximizar a log-verossimilhança em relação a $\beta$ é equivalente a minimizar
+
+$$
+\sum_{i=1}^N{(y_i - X_i\beta)'\Sigma_i^{-1}(y_i - X_i\beta)}.
+$$
+
+\begin{align*} 
+& \frac{\partial}{\partial\beta}{\sum_{i=1}^N{(y_i - X_i\beta)'\Sigma_i^{-1}(y_i - X_i\beta)}} = 0 \\
+&\Rightarrow \sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)\hat{\beta}} = \sum_{i=1}^N{(X_i'\Sigma_i^{-1}y_i)} \\
+&\Rightarrow \hat{\beta} = \left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{(X_i'\Sigma_i^{-1}y_i)}.
+\end{align*}
+
+\color{black}
+
+d. Demonstre que o estimador de máxima verossimilhança $\widehat{\beta}$ é não-enviesado para $\beta$. Em palavras, explique as implicações práticas deste resultado.
+
+\color{blue}
+
+\begin{eqnarray*} 
+\mbox{E}[\hat{\beta}] &=& \mbox{E}\left[\left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{(X_i'\Sigma_i^{-1}Y_i)}\right] \\
+&=& \left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{(X_i'\Sigma_i^{-1}\mbox{E}[Y_i])} \\
+&=& \left\{\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{(X_i'\Sigma_i^{-1}X_i)\beta} \\
+&=& I_{p}\beta = \beta.
+\end{eqnarray*}
+
+Diferentes amostras, de mesmo tamanho, considerando que o modelo especificado é modelo correto, produzem diferentes estimativas (as estimativas variam). No entanto, a média das estimativas é igual ao parâmetro ("em média acertam o alvo"). 
+
+\color{black}
+
+e. Suponha que este modelo foi ajustado para um certo conjunto de dados, considerando três covariáveis (portanto, $\beta = (\beta_1, \beta_2, \beta_3)'$) e que $\widehat{\beta}_2 = 1.4$. A matriz de covariância estimada de $\widehat{\beta}$ é apresentada a seguir:
+
+$$
+\widehat{\mbox{Cov}}(\widehat{\beta}) = \left[\begin{array}{ccc}
+0.50 &       -0.50  & -0.12\\
+-0.50 &       1.01   & 0.12\\
+-0.12 &       0.12   & 0.63\\
+\end{array}\right].
+$$
+Apresente um intervalo de confiança (IC) de 95% para $\beta_2$. Justifique este método de construção do IC.
+
+\color{blue}
+
+Pelas propriedades dos estimadores de máxima verossimilhança do modelo linear geral para dos longitudinais, temos que um IC de 95% para $\beta_2$ pode ser obtido da seguinte forma
+
+$$
+1.4 \pm 1,96\sqrt{1.01} = (-0.57,\ 3.37),
+$$
+em que $\widehat{\mbox{Var}}(\hat{\beta}_2) = 1.01$.
+
+\color{black}

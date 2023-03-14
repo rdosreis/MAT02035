@@ -10,60 +10,72 @@ institute: |
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2022
+  | Porto Alegre, 2023
 ---
 
 # Introdução
 
-## Introdução
+## Introdução {.allowframebreaks}
 
-- Na aula anterior descrevemos uma abordagem para modelar dados longitudinais que efetivamente não impôs nenhuma estrutura na __tendência no tempo__ da resposta média. 
-    + Esta abordagem tem algum apelo quando todos os indivíduos foram medidos nas mesmas ocasiões e o número de ocasiões é relativamente pequeno.
+- Na __aula anterior:__ \structure{perfis de respostas}.
+    + Não impõe nenhuma estrutura na tendência no tempo da resposta média. 
+    + Abordagem interessante quando: \structure{(1)} todos os indivíduos foram medidos nas mesmas ocasiões; \structure{(2)} o número de ocasiões é relativamente pequeno.
 
-- Mas, conforme o número de ocasiões aumenta e as medidas repetidas são irregulares no tempo, analisar perfis de resposta se torna menos atraente.
-    + Ainda, o teste da hipótese nula de __ausência de interação__ $grupo \times tempo$ é um teste global e (a rejeição desta hipótese nula) não fornece nenhum indicativo de um padrão de mudança da média ao longo do tempo.
-- A resposta média ao longo tempo pode, em geral, ser descrita por curvas paramétricas (__lineares__ ou __quadráticas__) ou semiparamétricas (__splines lineares__) relativamente simples.
+\framebreak
 
-## Introdução
+- Conforme o número de ocasiões aumenta e as medidas repetidas são irregulares no tempo, analisar perfis de resposta se torna menos atraente.
++ Ainda, o teste da hipótese nula de __ausência de interação__ $grupo \times tempo$ é um teste global; 
+    + A rejeição desta hipótese não fornece nenhum indicativo de um padrão de mudança da média ao longo do tempo.
+- A resposta média ao longo tempo pode, em geral, ser descrita por \structure{curvas paramétricas} (__lineares__ ou __quadráticas__) ou \structure{semiparamétricas} (__splines lineares__) relativamente simples.
 
-- De um ponto de vista puramente substantivo, é improvável que o padrão de mudança na resposta média ao longo de um estudo longitudinal seja tão complicado que sua descrição exija tantos parâmetros quanto as ocasiões de medição.
-- A análise dos perfis de resposta usa um modelo __saturado__ para a resposta média ao longo do tempo e, portanto, produz um ajuste perfeito ao perfil de resposta média observado.
+\framebreak
+
+- É improvável que o padrão de mudança na resposta média ao longo de um estudo longitudinal seja tão complicado que sua descrição exija tantos parâmetros quanto as ocasiões de medição.
+- A análise dos perfis de resposta usa um modelo __saturado__ para a resposta média ao longo do tempo e, portanto, produz um __ajuste perfeito ao perfil__ de resposta média observado.
     <!-- + Isso pode parecer uma característica desejável de qualquer abordagem analítica; isto é, ele se ajusta bem nas respostas médias observadas. (De fato, não apenas bem, mas perfeitamente!)  -->
     + Ao fazer isso, o método falha em descrever os aspectos mais importantes das mudanças na resposta média ao longo do tempo em termos de algum padrão que pode ser interpretado de maneira substantiva ou teórica.
 - Ou seja, na análise dos perfis de resposta, __não há redução na complexidade__.
 
-## Introdução
+\framebreak
 
 - Por outro lado, o ajuste de curvas paramétricas ou semiparamétricas a dados longitudinais pode ser justificado em bases substantivas e estatísticas.
-- Substancialmente, em muitos estudos longitudinais, o verdadeiro __processo de resposta média subjacente__ provavelmente __mudará ao longo do tempo__ em um __padrão__ relativamente __suave__, monotonicamente crescente ou decrescente, pelo menos durante a duração do estudo.
+- \structure{Substancialmente}, em muitos estudos longitudinais, o verdadeiro __processo de resposta média subjacente__ provavelmente __mudará ao longo do tempo__ em um __padrão__ relativamente __suave__, __monotonicamente crescente ou decrescente__, pelo menos durante a duração do estudo.
+    + __Exemplo:__ crescimento da função pulmonar em criança e adolescentes.
     + Como resultado, curvas paramétricas ou semiparamétricas simples podem ser usadas para descrever como a resposta média muda com o tempo.
-- De uma perspectiva estatística, o ajuste de modelos parcimoniosos para a resposta média resultará em testes estatísticos de efeitos de covariáveis (por exemplo, interações $tratamento \times tempo$) que têm __maior poder__ do que em uma análise de perfis de resposta.
+- \structure{De uma perspectiva estatística}, o ajuste de modelos parcimoniosos para a resposta média resultará em testes estatísticos de efeitos de covariáveis (por exemplo, interações $tratamento \times tempo$) que têm __maior poder__ do que em uma análise de perfis de resposta.
 
 <!-- A razão para o poder maior é que os testes de efeitos covariáveis se concentram apenas em uma gama relativamente estreita de hipóteses alternativas. Por outro lado, as estatísticas de teste na análise dos perfis de resposta dispersam seu poder sobre uma gama de hipóteses alternativas muito mais ampla, mas em muitos casos menos substancialmente plausível ou relevante. -->
 
-## Introdução
+\framebreak
 
 - Finalmente, curvas paramétricas simples fornecem uma __descrição parcimoniosa__ das mudanças na resposta média ao longo do tempo em termos de um número relativamente pequeno de parâmetros. 
 - Os resultados podem ser comunicados facilmente a pesquisadores.
 
 # Tendências polinomiais no tempo
 
-## Tendências lineares no tempo
+## Tendências lineares no tempo {.allowframebreaks}
 
-- A curva mais simples possível para descrever mudanças na resposta média ao longo do tempo é uma __linha reta__.
-    + Neste modelo, a inclinação do tempo tem interpretação direta em termos de uma __mudança constante__ na resposta média para uma mudança unitária no tempo\footnote{Se $\E(Y_{ij}) = \beta_1 + \beta_2 t_{ij}$, então $\frac{d}{dt_{ij}}\E(Y_{ij}) = \beta_2$.}.
+- A __curva mais simples possível__ para descrever mudanças na resposta média ao longo do tempo __é uma linha reta__.
++ Neste modelo, a inclinação do tempo tem interpretação direta em termos de uma __mudança constante__ na resposta média para uma mudança unitária no tempo:
+    + Se $\E(Y_{ij}) = \beta_1 + \beta_2 t_{ij}$, então $\frac{d}{dt_{ij}}\E(Y_{ij}) = \beta_2$.
+
 - Considere o estudo hipotético de __dois grupos__ comparando um __novo tratamento__ e um __controle__.
 
-## Tendências lineares no tempo
+\framebreak
 
-- Se a resposta média mudar de uma maneira aproximadamente linear ao longo da duração do estudo, podemos adotar o seguinte modelo de tendência linear:
+Se a resposta média mudar de uma maneira aproximadamente linear ao longo da duração do estudo, podemos adotar o seguinte modelo de tendência linear:
 
 $$
 \E(Y_{ij}) = \beta_1 + \beta_2 Tempo_{ij} + \beta_3 Grupo_i + \beta_4 (Tempo_{ij} \times Grupo_i),
 $$
-em que $Grupo_i = 1$ se o $i$-ésimo indivíduo foi designado ao novo tratamento, e $Grupo_i = 0$ caso contrário; $Tempo_{ij}$ denota o tempo de medição para a $j$-ésima ocasião no $i$-ésimo indivíduo.
+em que
 
-- No modelo linear acima, a média dos indivíduos designados ao grupo controle é
+- $Grupo_i = 1$ se o $i$-ésimo indivíduo foi designado ao novo tratamento, e $Grupo_i = 0$ caso contrário;
+- $Tempo_{ij}$ denota o tempo de medição para a $j$-ésima ocasião no $i$-ésimo indivíduo.
+
+\framebreak
+
+- No modelo linear descrito no slide anterior, a média dos indivíduos designados ao grupo controle é
 
 $$
 \E(Y_{ij}) = \beta_1 + \beta_2 Tempo_{ij},
@@ -74,34 +86,45 @@ $$
 \E(Y_{ij}) = (\beta_1 + \beta_3) + (\beta_2 + \beta_4)Tempo_{ij}.
 $$
 
-## Tendências lineares no tempo
+\framebreak
 
 - Presume-se que a resposta média de cada grupo muda linearmente ao longo do tempo.
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.height='70%', out.width='70%', paged.print=FALSE, purl=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.height='50%', out.width='60%', paged.print=FALSE, purl=FALSE}
 knitr::include_graphics(here::here('images', 'fig6_1.png'))
 ```
 
-## Tendências lineares no tempo
+- Se o termo de interação é diferente de zero, então a mudança (a inclinação da reta) ao longo do tempo é específica de cada grupo de tratamento.
 
-- Aqui $\color{darkviolet}\beta_1$ é o intercepto no grupo de controle (o grupo de "referência"), enquanto $\color{darkviolet}(\beta_1 + \beta_2)$ é o intercepto no grupo de tratamento.
+\framebreak
+
+- Aqui $\color{darkviolet}\beta_1$ é o \textcolor{darkviolet}{intercepto no grupo de controle} (o grupo de "referência"), enquanto $\color{darkgreen}(\beta_1 + \beta_2)$ é o \textcolor{darkgreen}{intercepto no grupo de tratamento}.
 - Os interceptos para cada um dos dois grupos têm interpretação em termos da resposta média quando $Tempo_{ij} = 0$.
-- A menos que algum cuidado seja tomado com como as covariáveis são padronizadas (por exemplo, centralizando todas as covariáveis quantitativas antes da inclusão no modelo), $\beta_1$ nem sempre é prontamente interpretável e pode representar uma extrapolação para além dos dados em mãos.
 
-## Tendências lineares no tempo
+::: {.block}
 
--  Finalmente, a inclinação, ou taxa constante de mudança na resposta média por unidade de mudança no tempo, é $\color{darkviolet}{\beta_2}$ no grupo controle, enquanto a inclinação correspondente no grupo de tratamento é $\color{darkviolet}{(\beta_2 + \beta_4)}$.
-- Normalmente, em um estudo longitudinal a questão de interesse primário diz respeito a uma comparação das mudanças na resposta média ao longo do tempo; isso pode ser traduzido em uma comparação das inclinações.
-- Assim, se $\color{darkviolet}{\beta_4 = 0}$, então os dois grupos não diferem em termos de mudanças na resposta média ao longo do tempo.
+### Observação
 
-## Tendências quadráticas no tempo
+A menos que algum cuidado seja tomado com como as covariáveis são padronizadas (por exemplo, centralizando todas as covariáveis quantitativas antes da inclusão no modelo), $\beta_1$ nem sempre é prontamente interpretável e pode representar uma extrapolação para além dos dados em mãos.
+
+:::
+
+\framebreak
+
+-  Finalmente, a inclinação, ou \textcolor{darkviolet}{taxa constante de mudança} na resposta média por unidade de mudança no tempo, é $\color{darkviolet}{\beta_2}$ no \textcolor{darkviolet}{grupo controle}, enquanto a \textcolor{darkgreen}{inclinação} correspondente no \textcolor{darkgreen}{grupo de tratamento} é $\color{darkgreen}{(\beta_2 + \beta_4)}$.
+- Normalmente, em um estudo longitudinal a questão de interesse primário diz respeito a uma comparação das mudanças na resposta média ao longo do tempo; __isso pode ser traduzido em uma comparação das inclinações__.
+- Assim, se $\color{red}{\beta_4 = 0}$, então os dois grupos não diferem em termos de mudanças na resposta média ao longo do tempo.
+
+## Tendências quadráticas no tempo {.allowframebreaks}
 
 - Quando mudanças na resposta média ao longo do tempo não são lineares, __tendências polinomiais de ordem mais alta__ podem ser consideradas.
 - Por exemplo, se as médias estão aumentando monotonicamente ou diminuindo ao longo do estudo, mas de forma curvilínea, um modelo com __tendências quadráticas__ pode ser considerado.
 - Em um modelo de tendência quadrática, as __mudanças na resposta média não são mais constantes__ (como no modelo de tendência linear) ao longo da duração do estudo.
-- Em vez disso, a taxa de mudança na resposta média depende do tempo\footnote{Se $\E(Y_{ij}) = \beta_1 + \beta_2 t_{ij} + \beta_3 t^2_{ij}$, então $\frac{d}{dt_{ij}}\E(Y_{ij}) = \beta_2 + 2\beta_3t_{ij}$.}.
+- Em vez disso, a taxa de mudança na resposta média depende do tempo:
 
-## Tendências quadráticas no tempo
+se $\E(Y_{ij}) = \beta_1 + \beta_2 t_{ij} + \beta_3 t^2_{ij}$, então $\frac{d}{dt_{ij}}\E(Y_{ij}) = \beta_2 + 2\beta_3t_{ij}$.
+
+\framebreak
 
 - Considere mais uma vez o estudo hipotético de __dois grupos__ comparando um __novo tratamento__ e um __controle__.
 - Assumindo que as mudanças nas respostas médias podem ser aproximadas por tendências quadráticas, o seguinte modelo pode ser adotado:
@@ -111,7 +134,7 @@ knitr::include_graphics(here::here('images', 'fig6_1.png'))
 && + \beta_5 (Tempo_{ij} \times Grupo_i) + \beta_6 (Tempo_{ij}^2 \times Grupo_i).
 \end{eqnarray*}
 
-## Tendências quadráticas no tempo
+\framebreak
 
 - Neste modelo, a média dos indivíduos designados ao grupo controle é
 
@@ -124,76 +147,82 @@ $$
 \E(Y_{ij}) = (\beta_1 + \beta_4) + (\beta_2 + \beta_5)Tempo_{ij} + (\beta_3 + \beta_6)Tempo^2_{ij}.
 $$
 
-## Tendências quadráticas no tempo
+\framebreak
 
 ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.height='70%', out.width='70%', paged.print=FALSE, purl=FALSE}
 knitr::include_graphics(here::here('images', 'fig6_2.png'))
 ```
 
-## Tendências quadráticas no tempo
+\framebreak
 
 - Observe que no modelo de tendências quadráticas, a resposta média muda a uma taxa diferente, dependendo do $Tempo_{ij}$.
 - Por exemplo, a taxa de mudança no grupo controle é dada por $\color{darkviolet}{\beta_2 + 2\beta_3 Tempo_{ij}}$. 
     + Assim, no início do estudo, quando $\color{darkviolet}{Tempo_{ij} = 1}$, a taxa de mudança na resposta média é $\color{darkviolet}{\beta_2 + 2\beta_3}$, enquanto mais tarde no estudo, digamos $\color{darkviolet}{Tempo_{ij} = 4}$, a taxa de mudança na resposta média é $\color{darkviolet}{\beta_2 + 8\beta_3}$.
 
-## Tendências quadráticas no tempo
+\framebreak
 
 -  A taxa de mudança é diferente nas duas ocasiões e a magnitude e o sinal dos coeficientes de regressão $\beta_2$ e $\beta_3$ determinam se a resposta média está aumentando ou diminuindo ao longo do tempo e como a taxa de mudança depende no tempo.
-- Os coeficientes de regressão, $\color{darkviolet}{(\beta_2 + \beta_5)}$ e $\color{darkviolet}{(\beta_3 + \beta_6)}$, têm interpretações semelhantes para o grupo de tratamento.
+- Os coeficientes de regressão, $\color{darkgreen}{(\beta_2 + \beta_5)}$ e $\color{darkgreen}{(\beta_3 + \beta_6)}$, têm interpretações semelhantes para o grupo de tratamento.
 
-## Tendências quadráticas no tempo
+\framebreak
 
-- Nos modelos de tendência polinomial, existe uma __hierarquia natural__ de efeitos que tem implicações para testar hipóteses sobre tendências polinomiais lineares, quadráticas e de ordem superior.
-- Termos de ordem superior devem ser testados (e, se apropriado, removidos do modelo) antes que os termos de ordem inferior sejam avaliados.
+- Nos modelos de tendência polinomial, existe uma __hierarquia natural de efeitos__ que tem implicações para testar hipóteses sobre tendências polinomiais lineares, quadráticas e de ordem superior.
 
-## Tendências quadráticas no tempo
+:::{.block}
+
+###
+Termos de ordem superior devem ser testados (e, se apropriado, removidos do modelo) antes que os termos de ordem inferior sejam avaliados.
+
+:::
+
+\framebreak
 
 - Assim, no modelo quadrático, não é  apropriado testar o coeficiente para a tendência linear, $\beta_2$, em um modelo que também inclui um coeficiente para a tendência quadrática, $\beta_3$.
-- Em vez disso, um teste para a tendência quadrática (versus tendência linear) pode ser executada testando a hipótese nula de que $\color{darkviolet}{\beta_3 = 0}$.
+- Em vez disso, um __teste para a tendência quadrática (versus tendência linear)__ pode ser executada testando a hipótese nula de que $\beta_3 = 0$.
     + __Se essa hipótese nula não puder ser rejeitada__, é apropriado remover o termo quadrático do modelo e considerar o modelo apenas com tendência linear.
-    + O teste para tendência linear é realizada testando a hipótese nula de que $\color{darkviolet}{\beta_2 = 0}$ no modelo que inclui __apenas__ o termo linear.
+    + O teste para tendência linear é realizada testando a hipótese nula de que $\beta_2 = 0$ no modelo que inclui __apenas__ o termo linear.
 
 # Splines lineares
 
-## Splines lineares
+## Splines lineares {.allowframebreaks}
 
 - Em algumas aplicações, as tendências longitudinais na resposta média não podem ser caracterizadas por polinômios de primeiro e segundo graus no tempo.
 - Além disso, existem outras aplicações em que tendências não lineares na resposta média não podem ser bem aproximadas por polinômios de qualquer ordem.
 - Isso ocorre com mais frequência quando a resposta média aumenta (ou diminui) rapidamente por algum tempo e depois mais lentamente depois (ou vice-versa).
 - Quando esse tipo de padrão de alteração ocorre, muitas vezes pode ser tratado usando __modelos de splines lineares__.
 
-## Splines lineares
+\framebreak
 
 - Se o modelo mais simples possível para a resposta média for uma linha reta, uma maneira de estender este modelo é ter uma __sequência de segmentos de retas__  conectados que produzam um __padrão linear por partes__.
 - Os modelos de spline linear fornecem uma maneira muito útil e flexível de acomodar muitas das tendências não lineares que não podem ser aproximadas por polinômios simples no tempo.
 - A ideia básica por trás dos modelos de splines lineares é notavelmente simples:
     + Divida o eixo do tempo em uma série de segmentos e considere um modelo para a tendência ao longo do tempo, composta por tendências lineares por partes, com __diferentes inclinações__ em cada segmento, mas unidas em tempos fixos.
 
-## Splines lineares
+\framebreak
 
 - Os locais em que as retas são interligadas são conhecidos como __"nós"__.
 - Este modelo permite que a resposta média aumente ou diminua à medida que o tempo avança, dependendo do sinal e da magnitude das inclinações de regressão para os segmentos de retas.
 - A curva linear por partes resultante é chamada de __spline__.
 
-## Splines lineares
+\framebreak
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.height='70%', out.width='70%', paged.print=FALSE, purl=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.height='50%', out.width='60%', paged.print=FALSE, purl=FALSE}
 knitr::include_graphics(here::here('images', 'fig6_3.png'))
 ```
 
-## Splines lineares
-
-\footnotesize
-
 - O modelo de spline mais simples possível __possui apenas um nó__ e pode ser parametrizado de __várias maneiras diferentes__.
-- Voltando ao estudo hipotético de dois grupos, comparando um __novo tratamento__ e um __controle__, se a resposta média mudar ao longo do tempo de maneira linear por partes, podemos ajustar o seguinte modelo de spline linear com o nó em $\color{darkviolet}{t^{*}}$:
+
+\framebreak
+
+
+- Voltando ao estudo hipotético de dois grupos, comparando um __novo tratamento__ e um __controle__, se a resposta média mudar ao longo do tempo de maneira linear por partes, podemos ajustar o seguinte modelo de spline linear com o nó em $t^{*}$:
 
 \begin{eqnarray*}
 \E(Y_{ij}) &=& \beta_1 + \beta_2 Tempo_{ij} + \beta_3 (Tempo_{ij} - t^{*})_{+} + \beta_4 Grupo_i\\
 && + \beta_5 (Tempo_{ij} \times Grupo_i) + \beta_6 \{(Tempo_{ij} - t^{*})_{+} \times Grupo_i\},
 \end{eqnarray*}
 
-em que $\color{darkviolet}{(x)_{+}}$, é conhecida como a __função de reta truncada__, e é definida como uma função que é \structure{igual a $x$ quando $x$ é positivo} e é __igual a zero caso contrário__. Assim,
+em que $(x)_{+}$, é conhecida como a __função de reta truncada__, e é definida como uma função que é \structure{igual a $x$ quando $x$ é positivo} e é __igual a zero caso contrário__. Assim,
 
 $$
 (Tempo_{ij} - t^{*})_{+} = \left\{\begin{array}{l}
@@ -202,11 +231,9 @@ $$
 \end{array}\right.
 $$
 
-## Splines lineares
+\framebreak
 
 - No modelo acima, as médias para os indivíduos no grupo controle são
-
-\footnotesize
 
 $$
 \E(Y_{ij}) = \beta_1 + \beta_2 Tempo_{ij} + \beta_3 (Tempo_{ij} - t^{*})_{+}.
@@ -223,11 +250,9 @@ $$
 
 - No grupo controle, a inclinação antes de $t^{*}$ é $\beta_2$ e após $t^{*}$ é $(\beta_2 + \beta_3)$.
 
-## Splines lineares
+\framebreak
 
-- De maneira similar para os indivíduos do grupo tratamento são dadas por
-
-\footnotesize
+- De maneira similar para indivíduos do grupo tratamento são dadas por
 
 $$
 \E(Y_{ij}) = (\beta_1 + \beta_4) + (\beta_2 + \beta_5) Tempo_{ij} + (\beta_3 + \beta_6)(Tempo_{ij} - t^{*})_{+}.
@@ -235,18 +260,21 @@ $$
 
 - Quando expressa em termos da reposta média antes e após $t^{*}$,
 
+\footnotesize
+
 $$
 \begin{array}{cclr}
 \E(Y_{ij}) & = & (\beta_1 + \beta_4) + (\beta_2 + \beta_5) Tempo_{ij}, & Tempo_{ij} \leq t^{*};\\
 \E(Y_{ij}) & = & \{(\beta_1 + \beta_4) - (\beta_3 + \beta_6)t^{*})\} + (\beta_2 + \beta_3 + \beta_5 + \beta_6)Tempo_{ij}, & Tempo_{ij} > t^{*}.\\
 \end{array}
 $$
+\normalsize
 
-## Splines lineares
+\framebreak
 
-- Então, em termos de comparações entre grupos, a hipótese nula de não haver diferenças entre os grupos nos padrões de mudança ao longo do tempo pode ser expressa como $\color{darkviolet}{H_0: \beta_5 = \beta_6 = 0}$.
+- Então, em termos de comparações entre grupos, a hipótese nula de não haver diferenças entre os grupos nos padrões de mudança ao longo do tempo pode ser expressa como $H_0: \beta_5 = \beta_6 = 0$.
 - Também são possíveis comparações dos grupos antes e depois de $t^{*}$.
-    + Por exemplo, a hipótese nula de não haver diferenças de grupo nos padrões de mudança anteriores a $t^{*}$ pode ser expressa como $\color{darkviolet}{H_0: \beta_5 = 0}$.
+    + Por exemplo, a hipótese nula de não haver diferenças de grupo nos padrões de mudança anteriores a $t^{*}$ pode ser expressa como $H_0: \beta_5 = 0$.
 
 ## Splines lineares
 

@@ -1,0 +1,265 @@
+---
+title: "MAT02035 - Modelos para dados correlacionados"
+subtitle: "Modelos lineares de efeitos mistos (continuação)"
+fontsize: 10pt
+author: |
+  | Rodrigo Citton P. dos Reis
+  | `citton.padilha@ufrgs.br`
+institute: |
+  | \textsc{Universidade Federal do Rio Grande do Sul}
+  | \textsc{Instituto de Matemática e Estatística}
+  | \textsc{Departamento de Estatística}
+date: |
+  | Porto Alegre, 2023
+---
+
+# Estrutura de covariância de efeitos aleatórios
+
+## Estrutura de covariância de efeitos aleatórios
+
+- No modelo linear de efeitos mistos,
+
+$$
+Y_i = X_i\beta + Z_ib_i + \epsilon_i,
+$$
+
+$R_i = \Cov(\epsilon_i)$ descreve a covariância entre as observações longitudinais ao focar no perfil de resposta média condicional de um indivíduo __específico__.
+
+- Ou seja, é a covariância dos desvios do $i$-ésimo indivíduo com respeito ao seu perfil de resposta média,
+
+$$
+\E(Y_i|b_i) = X_i\beta + Z_ib_i.
+$$
+
+## Estrutura de covariância de efeitos aleatórios
+
+- É usualmente assumido que $R_i$ é uma matriz diagonal, $\sigma^2I_{n_i}$, em que $I_{n_i}$ denota uma matriz identidade $n_i\times n_i$.
+- Esta suposição é comumente referida como a \structure{``suposição de independência condicional''}.
+- Ou seja, dado os efeitos aleatórios $b_i$, os erros de medição são distribuídos independentemente com uma variância comum $\sigma^2$.
+
+## Estrutura de covariância de efeitos aleatórios
+
+- Como comentamos anteriormente, no modelo linear de efeitos mistos podemos distinguir a média condicional de $Y_i$, dado $b_i$,
+
+$$
+\E(Y_i|b_i) = X_i\beta + Z_ib_i,
+$$
+
+da __média marginal__ de $Y_i$,
+
+$$
+\E(Y_i) = X_i\beta.
+$$
+
+## Estrutura de covariância de efeitos aleatórios {.allowframebreaks}
+
+- De forma similar podemos distinguir entre as __covariância condicional e marginal__.
+- A covariância condicional de $Y_i$, dado $b_i$, é
+
+$$
+\Cov(Y_i|b_i) = \Cov(\epsilon_i) = R_i,
+$$
+enquanto a covariância marginal de $Y_i$ é
+
+\begin{eqnarray*}
+\Cov(Y_i) &=& \Cov(Z_ib_i) + \Cov(\epsilon_i)\\
+&=& Z_i\Cov(b_i)Z_i' + \Cov(\epsilon_i)\\
+&=& Z_iGZ_i' + R_i.
+\end{eqnarray*}
+
+\framebreak
+
+- Mesmo quando $R_i = \Cov(\epsilon_i) = \sigma^2I_{n_i}$ (uma matriz diagonal com todas as correlações duas-a-duas iguais a zero), a matriz $\Cov(Y_i)$ __possui elementos fora da diagonal diferentes de zero__, deste modo __levando em consideração a correlação entre as observações repetidas no mesmo indivíduo__ em um estudo longitudinal.
+- Isto é, __a introdução de efeitos aleatórios__, $b_i$, __induz correlação entre os componentes__ de $Y_i$.
+
+## Estrutura de covariância de efeitos aleatórios
+
+### Comentários
+
+- O modelo linear de efeitos mistos permite a análise explícita das fontes de variação nas respostas:
+    + entre indivíduos ($G$);
+    + e intra-indivíduo ($R_i$).
+- A covariância marginal de $Y_i$ é uma função do tempo de medição.
+- A estrutura de covariância induzida por efeitos aleatórios [$\Cov(Y_i) = Z_iGZ_i' + \sigma^2I_{n_i}$] pode ser contrastada com os modelos de padrão de covariância apresentados na aula anterior.
+    + Modelos de padrão de covariância não distinguem as diferentes fontes de variabilidade, enquanto que modelos lineares de efeitos mistos distinguem as fontes de variabilidade entre indivíduos e intra-indivíduo.
+
+## Estrutura de covariância de efeitos aleatórios
+
+### Comentários (continuação)
+
+- Para os modelos lineares __com respostas contínuas__, as duas abordagens (padrão de covariância e efeitos mistos) produzem o mesmo modelo para a média marginal de $Y_i$ [$\E(Y_i) = X_i\beta$], e diferem somente em termos do modelo assumido para a covariância.
+- A estrutura de covariância de efeitos aleatórios __não requer__ delineamento balanceado.
+- Ainda, o número de parâmetros de covariância é o mesmo independente do número e as ocasiões de medições.
+- Finalmente, ao contrário de muitos dos modelos de padrão de covariância que fazem suposições fortes sobre a homogeneidade da variância ao longo do tempo, a estrutura de covariância de efeitos aleatórios permite que a variância e a covariância aumentem ou diminuam em função dos tempos de medição.
+
+# Estimação via máxima verossimilhança {.allowframebreaks}
+
+- Note, que pelas propriedades da distribuição normal, temos que 
+
+$$
+Y_i\sim N(X_i\beta, Z_iGZ_i' + \sigma^2I_{n_i}).
+$$
+
+- Logo, podemos escrever a __função de verossimilhança__ com base no modelo normal multivariado.
+- Como esperado, o estimador de máxima verossimilhança de $\beta$ é o estimador de __mínimos quadrados generalizados__ (MQG) e depende da covariância marginal entre as medidas repetidas [$\Cov(Y_i) = Z_iGZ_i' + \sigma^2I_{n_i}$]
+
+\begin{equation*}
+\tikz[baseline]{
+      \node[fill=blue!30,anchor=base] (t1)
+{$\displaystyle \hat{\beta} = \left\{\sum_{i=1}^N{(X_i'[\Cov(Y_i)]^{-1}X_i)}\right\}^{-1}\sum_{i=1}^N{(X_i'[\Cov(Y_i)]^{-1}y_i)}$.
+};
+}
+\end{equation*}
+
+\framebreak
+
+- Em geral, não há expressão simples para o estimador de máxima verossimilhança dos componentes de covariância [$G$ e $\sigma^2$ (ou $R_i$)] e requer __técnicas iterativas__.
+- Porque a estimativa de covariância de máxima verossimilhança é enviesada em amostras pequenas, usa-se a __estimação de máxima verossimilhança restrita (REML)__;
+    + e a resultante estimativa REML de $\beta$ é dada por $\hat{\beta}$ substituindo $\Cov(Y_i)$ pela sua estimativa REML.
+# Inferência para o modelo linear de efeitos mistos
+
+## Inferência para o modelo misto
+
+Considere o modelo
+
+$$
+Y_i = X_i\beta + Z_ib_i + \epsilon_i,
+$$
+
+em que, $b_i \sim N_q(0, G(\alpha))$ e $\epsilon_{ij} \sim N(0, \sigma^2)$, $b_i$ e $\epsilon_{ij}$ independentes.
+
+- Tem-se: $p$ efeitos fixos e $\frac{q(q + 1)}{2} + 1$ efeitos aleatórios.
+- Inferência estatística para $\theta = (\beta, \alpha, \sigma^2)$:
+    1. Máxima verossimilhança.
+    2. Máxima verossimilhança restrita.
+
+## Inferência para o modelo misto
+
+A função de verossimilhança é dada por:
+
+\begin{eqnarray*}
+L(\theta|y) &=& \prod_{i=1}^N{p(y_i|\theta)}\\
+&=& \prod_{i=1}^N{\int{p(y_i, b_i|\theta)db_i}}\\
+&=& \prod_{i=1}^N{\int{p(y_i|b_i, \theta)p(b_i|\theta)db_i}},
+\end{eqnarray*}
+
+em que $p(y_i|b_i, \theta) \sim N_{n_i}(X_i\beta + Z_ib_i, \sigma^2I_{n_i})$ e $p(b_i|\theta) \sim N_q(0, G)$.
+
+- Note que $p(y_i|\theta) \sim N_{n_i}(X_i\beta, Z_iGZ_i' + \sigma^2I_{n_i})$.
+
+# Escolha entre modelos de covariância de efeitos aleatórios
+
+## Escolha entre modelos de covariância
+
+- Embora o modelo linear de efeitos mistos assume que as respostas longitudinais dependem em uma combinação dos efeitos populacionais e indivíduo-específicos, quando tomamos a média com respeito a distribuição dos efeitos aleatórios
+
+$$
+\E(Y_i) = X_i\beta,
+$$
+
+e a covariância entre as respostas tem a estrutura distinta de efeitos aleatórios
+
+$$
+\Cov(Y_i) = Z_iGZ_i' + \sigma^2I_{n_i}.
+$$
+
+## Escolha entre modelos de covariância
+
+- Da perspectiva de modelar a covariância, a estrutura de efeitos aleatórios é atraente porque o __número de parâmetros de covariância__, $q \times (q + 1) / 2 + 1$, é o mesmo, independentemente do número e do momento das ocasiões de medição.
+- Em muitas aplicações, será suficiente incluir apenas interceptos e inclinações aleatórios para o tempo (um total de $2 \times (2 + 1) / 2 + 1 = 4$ parâmetros de covariância), __permitindo__ assim a __heterogeneidade nas variâncias__ e __correlações__ que podem ser expressas __como funções do tempo__.
+- Em outras aplicações, uma estrutura de efeitos aleatórios mais complexa pode ser necessária.
+
+## Escolha entre modelos de covariância
+
+- Na escolha de um modelo para a covariância, muitas vezes será interessante __comparar__ dois modelos aninhados, um com $q$ efeitos aleatórios correlacionados, outro com $q + 1$ efeitos aleatórios correlacionados.
+- A diferença no número de parâmetros de covariância entre esses dois modelos é $q + 1$, pois há uma variância adicional e $q$ covariâncias adicionais no modelo "completo".
+- Conforme mencionado em aulas anteriores, o __teste da razão de verossimilhança__ fornece um método válido para __comparar modelos aninhados__ para a covariância.
+- No entanto, em certos casos, a distribuição nula usual para o teste da razão de verossimilhança não é mais válida.
+
+## Escolha entre modelos de covariância
+
+- Estes testes, usualmente, estão na __fronteira do espaço de parâmetros__.
+    + Neste caso, a estatística da RV, sob $H_0$, não tem uma distribuição qui-quadrado.
+- A distribuição neste caso é uma __mistura de distribuições__ qui-quadrado.
+    + Ou seja, por exemplo, para $H_0: \sigma_{b_2} = 0$
+
+$$
+RV \sim 0.5\chi_q + 0.5\chi_{q+1}.
+$$
+
+### Exemplo
+
+- Modelo completo: $q = 2$ (intercepto e inclinação aleatórios)
+- Modelo restrito: $q = 1$ (somente intercepto aleatório)
+    + Teste usual __(errado)__: nível de significância 5%, o valor crítico é dado por 5,99.
+    + Teste correto: $RV \sim 0.5\chi_1 + 0.5\chi_{2}$ nível de significância 5%, o valor crítico é dado por 5,14 __(Tabela, Apend. C, Fitzmaurice et al.)__.
+
+# Predição de efeitos aleatórios
+
+## Predição de efeitos aleatórios
+
+- __Objetivo:__ predizer perfis individuais ou identificar indivíduos acima ou abaixo do perfil médio.
+
+- Deseja-se:
+
+$$
+\widehat{Y}_i = \widehat{\E}(Y_i|b_i) = Xi\widehat{\beta} + Z_i\widehat{b}_i,
+$$
+
+e para tal é necessário $\widehat{b}_i$, o chamado \structure{Estimador BLUP, \emph{``Best Linear Unbiased Predictor''} de $b_i$.
+
+## Predição de efeitos aleatórios
+
+- No modelo linear misto, $Y_i$ e $b_i$ tem uma distribuição conjunta normal multivariada.
+- Usando conhecidas propriedades da normal multivariada, temos que
+
+$$
+\E(b_i|Y_i,\widehat{\beta}) = GZ_i'\Sigma_i^{-1}(Y_i - X_i\widehat{\beta})
+$$
+
+- Usando as estimativas de máxima verossimilhança dos componentes de variância,
+
+$$
+\widehat{b}_i = \widehat{G}Z_i'\widehat{\Sigma}_i^{-1}(Y_i - X_i\widehat{\beta}),
+$$
+
+o BLUP de $b_i$.
+
+- (Abordagem __empirical Bayes__)
+
+## Predição de efeitos aleatórios
+
+$$
+\widehat{Y}_i = X_i\widehat{\beta} + Z_i\widehat{b}_i = (\widehat{R}_i\widehat{\Sigma}_i^{-1})X_i\widehat{\beta} + (I_{n_i} - \widehat{R}_i\widehat{\Sigma}_i^{-1})Y_i,
+$$
+
+em que $\Var(\epsilon_i) = R_i$, e $\widehat{\Sigma}_i\widehat{\Sigma}_i^{-1} = I_{n_i} = (Z_i\widehat{G}Z_i' + \widehat{R}_i)\widehat{\Sigma}_i^{-1} = Z_i\widehat{G}Z_i'\widehat{\Sigma}_i^{-1} + \widehat{R}_i\widehat{\Sigma}_i^{-1}$.
+
+- __Interpretação:__ média ponderada entre a média populacional $X_i\widehat{\beta}$ e o $i$-ésimo perfil observado. 
+    + Isto significa que o perfil predito é __"encolhido"__ na direção da média populacional.
+
+## Predição de efeitos aleatórios
+
+- A quantidade de "encolhimento" (\structure{\emph{shrinkage}}) depende da magnitude de $R_i$ e $\Sigma_i$.
+    + $R_i$: variância intra-indivíduo;
+    + $\Sigma_i$: variância total (entre e intra-indivíduo).
+- Quando $R_i$ é relativamente grande, e a variabilidade intra indivíduo é maior que a variabilidade entre indivíduos, mais peso é atribuído a $X_i\widehat{\beta}$, a média populacional estimada, do que à resposta individual observada.
+- Por outro lado, quando a variabilidade entre indivíduos é grande em relação à variabilidade intra-indivíduos, mais peso é dado à resposta observada $Y_i$.
+
+## Predição de efeitos aleatórios
+
+- Finalmente, o grau de "encolhimento" em direção à média populacional também depende de $n_i$.
+- Em geral, há maior encolhimento em direção à curva média populacional quando $n_i$ é pequeno.
+- Intuitivamente, isso faz sentido já que menos peso deve ser dado à trajetória observada do indivíduo quando menos dados estão disponíveis.
+
+## Avisos
+
+- __Próxima aula:__ Modelos lineares de efeitos mistos - exemplos e implementação computacional.
+- __Para casa:__ ler o Capítulo 8 do livro "__Applied Longitudinal Analysis__".
+    + Caso ainda não tenha lido, leia também os Caps. 1, 2, 3, 4, 5, 6 e 7.
+
+## Bons estudos!
+
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE, purl=FALSE}
+knitr::include_graphics(here::here('images', 'random-effects-addon_2.png'))
+```

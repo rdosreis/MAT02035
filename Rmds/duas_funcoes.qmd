@@ -1,0 +1,166 @@
+---
+title: "R: duas funções"
+author: "Rodrigo Citton P. dos Reis"
+format:
+  html:
+    embed-resources: true
+editor: visual
+---
+
+## Introdução
+
+Na última aula discutimos como expressar os modelos de **tendências polinomiais** e splines em termos do modelo linear geral
+
+$$
+{\rm E}(Y_i|X_i) = \mu_i = X_i\beta,
+$$
+
+para escolhas apropriadas de $X_i$. Ainda, como podemos "verificar" que a matriz $X_i$ é a matriz apropriada de acordo com a especificação de certo modelo através da função `gls` do pacote `nlme` do `R`.
+
+## Função `model.matrix`
+
+```{r}
+#| label:  tlc_p
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+
+# ----------------------------------------------------
+# Carregando pacotes do R
+
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+
+chumbo.df <- read_dta(file = here::here("data", "tlc.dta"))
+
+chumbo.df$trt <- factor(chumbo.df$trt, labels = c("Placebo", "Succimer"))
+
+# ----------------------------------------------------
+# Reformando o objeto: de "largo" para "longo"
+
+chumbo.df.longo <- gather(data = chumbo.df, key = "tempo", value = "chumbo", -id, -trt)
+
+# ----------------------------------------------------
+# Formata variáveis
+
+chumbo.df.longo$semana <- factor(chumbo.df.longo$tempo, labels = c("0", "1", "4", "6"))
+chumbo.df.longo$semana <- as.numeric(as.character(chumbo.df.longo$semana))
+chumbo.df.longo$tempo <- as.numeric(factor(chumbo.df.longo$semana))
+```
+
+O primeiro modelo especificado para o exemplo da aula foi um modelo de **tendências lineares por partes**, utilizando uma função spline linear com apenas um nó em $t^{*} = 1$, e intercepto comum aos dois grupos de tratamento:
+
+\begin{eqnarray*}
+{\rm E}(Y_{ij}) &=& \beta_1 + \beta_2 Semana_{ij} + \beta_3 (Semana_{ij} - 1)_{+}\\
+&& + \beta_4 (Semana_{ij} \times Grupo_i) + \beta_5 \{(Semana_{ij} - 1)_{+} \times Grupo_i\},
+\end{eqnarray*} em que $Grupo_i = 1$ se o $i$-ésimo indivíduo foi designado ao novo tratamento, e $Grupo_i = 0$ caso contrário.
+
+### A matriz de covariáveis do modelo linear geral
+
+Lembrando que $(x)_{+}$, a **função da reta truncada** é definida como
+
+$$
+(x)_{+} = \left\{\begin{array}{ll}
+x, & \mbox{se } x > 0;\\
+0, & \mbox{se } x \leq 0.
+\end{array}\right.
+$$ A matriz de delineamento $X_i$ tem a seguinte forma para o **grupo de controle**:
+
+$$
+X_i = \left(\begin{array}{ccccc}
+1 & t_{i1} & (t_{i1} - 1)_{+} & 0 & 0 \\
+1 & t_{i2} & (t_{i2} - 1)_{+} & 0 & 0 \\
+1 & t_{i3} & (t_{i3} - 1)_{+} & 0 & 0 \\
+1 & t_{i4} & (t_{i4} - 1)_{+} & 0 & 0 \\
+\end{array}
+\right) = \left(\begin{array}{ccccc}
+1 & 0 & 0 & 0 & 0 \\
+1 & 1 & 0 & 0 & 0 \\
+1 & 4 & 3 & 0 & 0 \\
+1 & 6 & 5 & 0 & 0 \\
+\end{array}
+\right).
+$$
+
+E para o **grupo de tratamento**, a matriz de delineamento $X_i$ tem a seguinte forma:
+
+$$
+X_i = \left(\begin{array}{ccccc}
+1 & t_{i1} & (t_{i1} - 1)_{+} & t_{i1} & (t_{i1} - 1)_{+} \\
+1 & t_{i2} & (t_{i2} - 1)_{+} & t_{i2} & (t_{i2} - 1)_{+} \\
+1 & t_{i3} & (t_{i3} - 1)_{+} & t_{i3} & (t_{i3} - 1)_{+} \\
+1 & t_{i4} & (t_{i4} - 1)_{+} & t_{i4} & (t_{i4} - 1)_{+} \\
+\end{array}
+\right) = \left(\begin{array}{ccccc}
+1 & 0 & 0 & 0 & 0 \\
+1 & 1 & 0 & 1 & 0 \\
+1 & 4 & 3 & 4 & 3 \\
+1 & 6 & 5 & 6 & 5 \\
+\end{array}
+\right).
+$$
+
+### A função `gls`
+
+Para ajustar o modelo no `R`, utilizamos a função `gls` do pacote `nlme`:
+
+```{r}
+
+#| label: spline_mod
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+
+library(nlme)
+
+# modelo de curvas paramétricas
+#     splines lineares
+# com matriz de covariância não estruturada
+mod.spline <- gls(chumbo ~ semana + I( (semana - 1) * (semana > 1) ) +
+                    semana:trt + I( (semana - 1) * (semana > 1) ):trt,
+                  corr = corSymm(form = ~ tempo | id),
+                  weights = varIdent(form = ~ 1 | tempo),
+                  method = "REML",
+                  data = chumbo.df.longo)
+
+summary(mod.spline)
+
+```
+
+### A função `model.matrix`
+
+Para "verificar" se o modelo especificado está sendo de fato ajustado pelo `R` através da função `gls` podemos utilizar a função `model.matrix`.
+
+```{r}
+
+#| label: spline_mod2
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+
+
+# matriz de covariáveis do modelo de splines lineares (1 nó em t = 1)
+# para indivíduo do grupo placebo
+model.matrix(object = mod.spline,
+             data = chumbo.df.longo[chumbo.df.longo$id == 1, ])
+
+# matriz de covariáveis do modelo de splines lineares (1 nó em t = 1)
+# para indivíduo do grupo succimer
+model.matrix(object = mod.spline,
+             data = chumbo.df.longo[chumbo.df.longo$id == 2, ])
+
+```
+
+## A função `I`
+
+Outra questão discutida em aula foi o uso da função `I` no argumento fórmula da função `gls`. A função `I` altera a classe de um objeto para indicar que ele deve ser tratado "as.is".
+
+Para uma fórmula, é usado para inibir a interpretação de operadores como "+", "-", "*" e "^" como operadores de fórmula, portanto, são usados como operadores aritméticos.

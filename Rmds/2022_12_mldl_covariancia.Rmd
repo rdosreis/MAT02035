@@ -10,7 +10,7 @@ institute: |
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2022
+  | Porto Alegre, 2023
 ---
 
 # Introdução
@@ -264,7 +264,7 @@ e comparando a estatística com uma distribuição qui-quadrado com graus de lib
 ## Escolha entre modelos de padrão de covariância
 
 - __Para comparar modelos não encaixados__, uma abordagem alternativa é o __Critério de Informação de Akaike__ \structure{(Akaike Information Criterion - AIC)}.
-- De acordo com a AIC, dado um conjunto de modelos concorrentes para a covariância, __deve-se selecionar o modelo que minimiza__
+- De acordo com o AIC, dado um conjunto de modelos concorrentes para a covariância, __deve-se selecionar o modelo que minimiza__
 
 \begin{eqnarray*}
 AIC &=& -2(\mbox{log-vero. maximizada}) + 2(\mbox{número de parâmetros})\\
@@ -273,7 +273,7 @@ AIC &=& -2(\mbox{log-vero. maximizada}) + 2(\mbox{número de parâmetros})\\
 
 em que $\hat{\ell}$ é a __log-verossimilhança REML maximizada__ e $c$ é o número de parâmetros de covariância.
 
-# Estudo de caso
+# Exemplo
 
 ## Experimento de Terapia por Exercício
 

@@ -57,12 +57,12 @@ p
 
 
 
-## ----factor, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------------
+## ----factor, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------
 class(chumbo.df.longo$tempo)
 class(chumbo.df.longo$trt)
 
 
-## ----gls, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------------------------------
+## ----gls, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------
 
 library(nlme)
 
@@ -76,19 +76,19 @@ mod.pr <- gls(chumbo ~ trt * tempo,
 
 
 
-## ----summary.gls, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------------------
+## ----summary.gls, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----
 
 summary(mod.pr)
 
 
 
-## ----cov_est, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------------
+## ----cov_est, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------
 
 getVarCov(mod.pr)
 
 
 
-## ----cov_est2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------------
+## ----cov_est2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------
 
 knitr::kable(x = matrix(getVarCov(mod.pr),
                         ncol = 4),
@@ -96,14 +96,14 @@ knitr::kable(x = matrix(getVarCov(mod.pr),
 
 
 
-## ----wald, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------------------------
+## ----wald, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------
 library(car)
 
 Anova(mod.pr)
 
 
 
-## ----wald2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------------------------
+## ----wald2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------
 
 knitr::kable(
   Anova(mod.pr),
@@ -111,7 +111,7 @@ knitr::kable(
 
 
 
-## ----trv, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------------------------------
+## ----trv, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------
 
 mod.comp <- gls(chumbo ~ trt * tempo,
                 corr = corSymm(form = ~ 1 | id),
@@ -127,13 +127,13 @@ mod.red <- gls(chumbo ~ trt + tempo,
 
 
 
-## ----trv2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------------------------
+## ----trv2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------
 
 anova(mod.comp, mod.red)
 
 
 
-## ----coef, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------------------------
+## ----coef, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------
 knitr::kable(
   summary(mod.pr)$tTable[,-4],
   digits = c(3, 3, 2),

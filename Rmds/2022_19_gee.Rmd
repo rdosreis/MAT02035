@@ -10,13 +10,13 @@ institute: |
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2022
+  | Porto Alegre, 2023
 ---
 
 # Introdução {.allowframebreaks}
 
-- A premissa básica dos modelos marginais é fazer inferências sobre as médias populacionais.
-- O termo marginal é usado aqui para enfatizar que a resposta média modelada é condicional apenas para covariáveis e não para outras respostas ou efeitos aleatórios.
+- A premissa básica dos \structure{modelos marginais} é fazer inferências sobre as médias populacionais.
+- O termo "marginal" é usado aqui para enfatizar que a resposta média modelada é condicional apenas para covariáveis e não para outras respostas ou efeitos aleatórios.
 - Uma característica dos modelos marginais é que os modelos para a média e a "associação dentro do indivíduo" (por exemplo, covariância) são __especificados separadamente__.
     + __Pergunta:__ já vimos esta abordagem antes no curso?
     
@@ -58,7 +58,7 @@ __Nota:__ Para resposta contínua, pode permitir $\Var(Y_{ij}|X_{ij}) = \phi_j v
 
 \framebreak
 
-3. A "associação (correlação) intra-indivíduo" entre as respostas é uma função das médias e de parâmetros adicionais, digamos $\alpha$, que também precisam ser estimados.
+3. A __"associação (correlação) intra-indivíduo"__ entre as respostas é uma função das médias e de parâmetros adicionais, digamos $\alpha$, que também precisam ser estimados.
 
 \framebreak
 
@@ -162,8 +162,8 @@ $$
 # Inferência estatística para modelos marginais {.allowframebreaks}
 
 - Máxima verossimilhança (MV)?
-    + Infelizmente, com dados de resposta discreta, não existe um análogo simples da distribuição normal multivariada.
-- Na ausência de uma função de verossimilhança "conveniente" para dados discretos, não existe uma abordagem unificada baseada em probabilidade para modelos marginais.
+    + Infelizmente, com dados de resposta discreta, \structure{não existe um análogo} simples \structure{da distribuição normal multivariada}.
+- Na ausência de uma função de verossimilhança "conveniente" para dados discretos, não existe uma abordagem unificada baseada em verossimilhança para modelos marginais.
 - Abordagem alternativa para estimação: 
     + \structure{Equações de Estimação Generalizadas (GEE)}.
 

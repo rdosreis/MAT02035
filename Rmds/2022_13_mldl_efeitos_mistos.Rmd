@@ -10,7 +10,7 @@ institute: |
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2022
+  | Porto Alegre, 2023
 ---
 
 # Introdução
@@ -25,14 +25,14 @@ $$
 
 - Nosso objetivo principal tem sido a inferência sobre os __parâmetros populacionais__ de regressão $\beta$.
 - Ainda, discutimos como a especificação deste modelo de regressão para dados longitudinais podem ser completada através de suposições adicionais a respeito da __estrutura__ de $\Cov(Y_i|X_i) = \Cov(e_i) = \Sigma_i$.
-- Nesta aula nós vamos considerar uma abordagem __alternativa__, mas proximamente relacionada, para analisar dados longitudinais utilizando __modelos lineares de efeitos mistos__.
+- Nesta aula nós vamos considerar uma abordagem __alternativa__, mas proximamente relacionada, para analisar dados longitudinais utilizando \structure{modelos lineares de efeitos mistos}.
 
 ## Introdução
 
 :::{.block}
 ### Ideia básica
 
-Algum subconjunto dos parâmetros de regressão __varia aleatoriamente__ de um indivíduo para outro, respondendo assim por \structure{fontes de heterogeneidade natural na população}.
+Algum __subconjunto dos parâmetros__ (coeficientes) __de regressão varia aleatoriamente__ de um indivíduo para outro, respondendo assim por \structure{fontes de heterogeneidade natural na população}.
 :::
 
 :::{.block}
@@ -51,7 +51,7 @@ $$
 \E(Y_i|X_i) = X_i\beta.
 $$
 
-- No entanto, a introdução de efeitos aleatórios __induz covariância entre as respostas__ e $\Cov(Y_i|X_i) = \Sigma_i$ possui uma estrutura de efeitos aleatórios distinta.
+- No entanto, a introdução de efeitos aleatórios __induz uma covariância entre as respostas__ e $\Cov(Y_i|X_i) = \Sigma_i$ possui uma estrutura de efeitos aleatórios distinta.
     + Os __modelos lineares de efeitos mistos__ \structure{distinguem explicitamente as fontes de variação} __entre indivíduos__ e __intra-indivíduo__.
 - Além disso, a estrutura de covariância de efeitos aleatórios induzida pode frequentemente ser descrita com relativamente __poucos parâmetros__, independentemente do número e do momento das ocasiões de medição.
 
@@ -143,8 +143,8 @@ knitr::include_graphics(here::here('images', 'fig_8_1.png'))
 \begin{column}{.5\linewidth}
 \begin{itemize}
 \footnotesize
-\item O indivíduo A responde "mais alto" que a média da população e, portanto, possui um $b_i$ positivo.
-\item O indivíduo B responde "mais baixo" que a média da população e tem um $b_i$ negativo.
+\item O indivíduo A responde \textbf{``mais alto''} que a média da população e, portanto, possui um $b_i$ positivo.
+\item O indivíduo B responde \textbf{``mais baixo''} que a média da população e tem um $b_i$ negativo.
 \end{itemize}
 \end{column}
 \end{columns}
@@ -160,21 +160,21 @@ knitr::include_graphics(here::here('images', 'fig_8_2.png'))
 \begin{column}{.5\linewidth}
 \begin{itemize}
 \footnotesize
-\item A inclusão dos erros de medição, $\epsilon_{ij}$, permite a resposta em qualquer ocasião variar aleatoriamente acima e abaixo das trajetórias indivíduo-específicas.
+\item A inclusão dos \textbf{erros de medição}, $\epsilon_{ij}$, permite a resposta em qualquer ocasião variar aleatoriamente acima e abaixo das \textbf{trajetórias indivíduo-específicas}.
 \end{itemize}
 \end{column}
 \end{columns}
 
 ## O modelo de intercepto aleatório
 
-- Considere a covariância marginal entre as medidas repetidas no mesmo indivíduo.
-- Quando calculada a média dos efeitos específicos do indivíduo, a média marginal de $Y_{ij}$ é dada por
+<!-- - Considere a covariância marginal entre as medidas repetidas no mesmo indivíduo. -->
+- Quando calculada a média dos efeitos específicos do indivíduo, a __média marginal__ de $Y_{ij}$ é dada por
 
 $$
 \E(Y_{ij}) = \mu_{ij} = X_{ij}'\beta.
 $$
 
-- A __covariância marginal__ entre $Y_{ij}$ é definida em termos de desvios de $Y_{ij}$ para a média marginal $\mu_{ij}$.
+- A __variância marginal__ entre $Y_{ij}$ é definida em termos de desvios de $Y_{ij}$ para a média marginal $\mu_{ij}$.
     + Por exemplo, na última figura, esses desvios são positivos em todas as ocasiões de medição para o indivíduo A e negativos em todas as ocasiões de medição para o indivíduo B, __indicando uma forte correlação positiva__ (marginalmente) entre as respostas ao longo do tempo.
     
 ## O modelo de intercepto aleatório
@@ -190,7 +190,7 @@ $$
 
 ## O modelo de intercepto aleatório
 
-- Similarmente, a covariância marginal entre qualquer par de respostas $Y_{ij}$ e $Y_{ik}$ é dada por
+- Similarmente, a __covariância marginal__ entre qualquer par de respostas $Y_{ij}$ e $Y_{ik}$ é dada por
 
 \begin{eqnarray*}
 \Cov(Y_{ij}, Y_{ik}) &=& \Cov(X_{ij}'\beta + b_i + \epsilon_{ij}, X_{ik}'\beta + b_i + \epsilon_{ik})\\
@@ -254,7 +254,7 @@ knitr::include_graphics(here::here('images', 'fig_8_3.png'))
 
 ## Modelos lineares de efeitos mistos
 
-- Usando a notação vetorial, o modelo linear de efeitos mistos pode ser expresso como
+- Usando a __notação vetorial__, o modelo linear de efeitos mistos pode ser expresso como
 
 \begin{equation}
 Y_i = X_i\beta + Z_ib_i + \epsilon_i,
@@ -275,13 +275,13 @@ Aqui $Z_i$ é uma matriz de delineamento que liga o vetor de efeitos aleatórios
 
 ## Modelos lineares de efeitos mistos
 
-- Ainda, supõe-se que os efeitos aleatórios, $b_i$, tenham uma __distribuição normal multivariada__ com média zero e matriz de covariância denotada por $G$,
+- Ainda, supõe-se que os efeitos aleatórios, $b_i$, tenham uma __distribuição normal multivariada__ com __média zero__ e __matriz de covariância__ denotada por $G$,
 
 $$
 b_i\sim N (0, G).
 $$
 
-- __Em princípio__, qualquer distribuição multivariada para $b_i$ pode ser assumida; __na prática__, assume-se que $b_i$ tenha distribuição normal multivariada.
+- __Observação:__ em princípio, qualquer distribuição multivariada para $b_i$ pode ser assumida; __na prática__, assume-se que $b_i$ tenha distribuição normal multivariada.
 - Se, no modelo \eqref{mlem}, o vetor de efeitos aleatórios, $b_i$, tem média zero, os efeitos aleatórios tem interpretação em termos de como o subconjunto de parâmetros de regressão para o $i$-ésimo indivíduo desviam dos respectivos parâmetros da média populacional.
 
 ## Modelos lineares de efeitos mistos
@@ -305,7 +305,7 @@ e a __média marginal__ de $Y_i$ é
 
 ## Modelos lineares de efeitos mistos
 
-- Por fim, supõe-se que o vetor $(n_i\times 1)$ de erros intra-individuais, $\epsilon_i$, tenha uma distribuição normal multivariada com média zero e matriz de covariância denotada por $R_i$,
+- Por fim, supõe-se que o vetor $(n_i\times 1)$ de erros intra-individuais, $\epsilon_i$, tenha uma __distribuição normal multivariada__ com __média zero__ e __matriz de covariância__ denotada por $R_i$,
 
 $$
 \epsilon_i\sim N (0, R_i).
@@ -313,12 +313,12 @@ $$
 
 - __Nota:__ geralmente, assume-se que $R_i = \sigma^2I_{n_i}$, em que $I_{n_i}$ é uma matriz identidade $(n_i\times n_i)$.
 - Ou seja, $\epsilon_{ij}$ e $\epsilon_{ik}$ __são não-correlacionados__, com __variância constante__, e os $\epsilon_{ij}$'s podem ser interpretados como erros de medição ou amostrais.
-- Em princípio, um modelo de padrão de covariância (como aqueles vistos na aula anterior) pode ser adotado para $R_i$.
+- __Observação:__ em princípio, um modelo de padrão de covariância (como aqueles vistos na aula anterior) pode ser adotado para $R_i$.
     - Na prática, isto traz problemas de interpretação dos $\epsilon_{ij}$'s e de __identificação do modelo__.
 
 ## Modelos lineares de efeitos mistos
 
-- Para clarificar a notação matricial introduzida até agora, considere o seguinte modelo linear de efeitos mistos com interceptos de inclinações aleatórias:
+- Para clarificar a notação matricial introduzida até agora, considere o seguinte modelo linear de efeitos mistos com __interceptos__ e __inclinações aleatórias__:
 
 $$
 Y_{ij} = \beta_1 + \beta_2t_{ij} + b_{1i} + b_{2i}t_{ij} + \epsilon_{ij},\ j = 1, \ldots, n_i.
@@ -410,7 +410,7 @@ $$
 &=& g_{11} + 2t_{ij}g_{12} + t^2_{ij}g_{22} + \sigma^2.
 \end{eqnarray*}
 
-- Da mesma forma, pode ser demonstrado\footnote{Exercício: demonstre este último resultado.} que
+- Da mesma forma, pode ser demonstrado\footnote{\textbf{Exercício:} demonstre este último resultado.} que
 
 $$
 \Cov (Y_{ij}, Y_{ik}) = g_{11} + (t_{ij} + t_{ik})g_{12} + t_{ij}t_{ik}g_{22}.
@@ -501,15 +501,20 @@ enquanto a covariância marginal de $Y_i$ é
 
 ### Comentários (continuação)
 
-- Para os modelos lineares com respostas contínuas, as duas abordagens (padrão de covariância e efeitos mistos) produzem o mesmo modelo para a média marginal de $Y_i$ [$\E(Y_i) = X_i\beta$], e diferem somente em termos do modelo assumido para a covariância.
+- Para os modelos lineares __com respostas contínuas__, as duas abordagens (padrão de covariância e efeitos mistos) produzem o mesmo modelo para a média marginal de $Y_i$ [$\E(Y_i) = X_i\beta$], e diferem somente em termos do modelo assumido para a covariância.
 - A estrutura de covariância de efeitos aleatórios __não requer__ delineamento balanceado.
 - Ainda, o número de parâmetros de covariância é o mesmo independente do número e as ocasiões de medições.
 - Finalmente, ao contrário de muitos dos modelos de padrão de covariância que fazem suposições fortes sobre a homogeneidade da variância ao longo do tempo, a estrutura de covariância de efeitos aleatórios permite que a variância e a covariância aumentem ou diminuam em função dos tempos de medição.
 
 # Estimação via máxima verossimilhança {.allowframebreaks}
 
-- Note, que pelas propriedades da distribuição normal, temos que $Y_i\sim N(X_i\beta, Z_iGZ_i' + \sigma^2I_{n_i})$.
-- Logo, podemos escrever a função de verossimilhança com base no modelo normal multivariado.
+- Note, que pelas propriedades da distribuição normal, temos que 
+
+$$
+Y_i\sim N(X_i\beta, Z_iGZ_i' + \sigma^2I_{n_i}).
+$$
+
+- Logo, podemos escrever a __função de verossimilhança__ com base no modelo normal multivariado.
 - Como esperado, o estimador de máxima verossimilhança de $\beta$ é o estimador de __mínimos quadrados generalizados__ (MQG) e depende da covariância marginal entre as medidas repetidas [$\Cov(Y_i) = Z_iGZ_i' + \sigma^2I_{n_i}$]
 
 \begin{equation*}
@@ -522,8 +527,8 @@ enquanto a covariância marginal de $Y_i$ é
 
 \framebreak
 
-- Em geral, não há expressão simples para o estimador de máxima verossimilhança dos componentes de covariância [$G$ e $\sigma^2$ (ou $R_i$)] e requer técnicas iterativas.
-- Porque a estimativa de covariância de máxima verossimilhança é enviesada em amostras pequenas, usa-se a estimação de máxima verossimilhança restrita (REML);
+- Em geral, não há expressão simples para o estimador de máxima verossimilhança dos componentes de covariância [$G$ e $\sigma^2$ (ou $R_i$)] e requer __técnicas iterativas__.
+- Porque a estimativa de covariância de máxima verossimilhança é enviesada em amostras pequenas, usa-se a __estimação de máxima verossimilhança restrita (REML)__;
     + e a resultante estimativa REML de $\beta$ é dada por $\hat{\beta}$ substituindo $\Cov(Y_i)$ pela sua estimativa REML.
 
 ## Avisos

@@ -10,22 +10,24 @@ institute: |
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2021
+  | Porto Alegre, 2023
 ---
 
 # Introdução
 
 ## Introdução
 
-- Nesta aula apresentamos um método para analisar dados longitudinais que impõe uma estrutura mínima ou restrições na resposta média ao longo do tempo e na covariância entre as medidas repetidas.
-- O método foca na __análise de perfis de respostas__ e pode ser aplicado para dados longitudinais quando o __delineamento é balanceado__, com um conjunto de ocasiões de medidas comum para todos os indivíduos no estudo.
-    + A análise de perfis de respostas também pode contemplar dados incompletos devido à perda (ou seja, estudos longitudinais incompletos com delineamentos balanceados).
+- Nesta aula apresentamos um __método__ para analisar dados longitudinais que __impõe uma estrutura mínima__ ou restrições __na resposta média ao longo do tempo__ e __na covariância entre as medidas repetidas__.
+- O método foca na \structure{análise de perfis de respostas} e pode ser aplicado para dados longitudinais quando o __delineamento é balanceado__, com um conjunto de ocasiões de medidas comum para todos os indivíduos no estudo.
+    + A análise de perfis de respostas também pode contemplar __dados incompletos devido à perda__, ou seja, estudos longitudinais incompletos com delineamentos balanceados.
 
 ## Introdução
 
-- Métodos para analisar perfis de respostas são atraentes quando existe uma única covariável categórica (grupo de tratamento ou exposição) e quando nenhum padrão específico a priori para diferenças em perfis de respostas entre grupos pode ser especificado.
+- Métodos para analisar perfis de respostas são atraentes quando:
+    + existe uma __única covariável categórica__ (grupo de tratamento ou exposição);
+    + e quando __nenhum padrão específico a priori__ para diferenças em perfis de respostas entre grupos pode ser especificado.
 - Os dados podem ser resumidos pela resposta média em cada ocasião de tempo, estratificado por níveis do fator de grupo.
-- Em qualquer nível do fator de grupo, a sequência de médias no tempo é referida como o __perfil de resposta__ médio.
+- Em qualquer nível do fator de grupo, a sequência de médias no tempo é referida como o \structure{perfil de resposta médio}.
 
 ## Introdução
 
@@ -78,23 +80,35 @@ p <- ggplot(data = chumbo.resumo,
 p
 ```
 
-## Introdução
+## Introdução {.allowframebreaks}
 
-- O principal objetivo da análise de perfis de respostas é caracterizar os padrões de __mudança__ na resposta média ao longo do tempo nos grupos e para determinar quanto as formas dos perfis de respostas médias diferem entre os grupos.
-- O método de perfis de respostas pode ser generalizado para estudos com mais de um único fator de grupo de tratamento (exposição) e quando existem covariáveis medidas na linha de base que precisam ser ajustadas.
-    - Em estudos observacionais, os grupos são definidos por características dos indivíduos do estudo, tais como idade, sexo, ou nível de exposição.
-    - Em estudos aleatorizados, os grupos são definidos por um mecanismo aleatório. Logo, espera-se que a distribuição de tais características (idade, sexo, etc.) seja equilibrada (balanceada) entre os grupos de tratamento.
+- O __objetivo principal__ da análise de perfis de respostas é:
+    + caracterizar os padrões de __mudança na resposta média ao longo do tempo__ nos grupos;
+    + e para determinar __quanto__ as formas dos perfis de __respostas médias diferem entre os grupos__.
+
+\framebreak
+
+- Pode ser generalizado para estudos com mais de um único fator de grupo de tratamento (exposição) e quando existem covariáveis medidas na linha de base que precisam ser ajustadas.
+
+::: {.block}
+
+###
+
+- Em estudos observacionais, os grupos são definidos por características dos indivíduos do estudo, tais como idade, sexo, ou nível de exposição.
+- Em estudos aleatorizados, os grupos são definidos por um mecanismo aleatório. Logo, espera-se que a distribuição de tais características (idade, sexo, etc.) seja equilibrada (balanceada) entre os grupos de tratamento.
+
+::: 
 
 # Hipóteses sobre perfis de resposta
 
 ## Hipóteses sobre perfis de resposta
 
-- Em nossa discussão sobre a análise dos perfis de resposta, focamos inicialmente no delineamento de dois grupos, mas as generalizações para mais de dois grupos são diretas.
-- Dada uma sequência de $n$ medidas repetidas em um número de grupos distintos de indivíduos, três questões principais relacionadas aos perfis de resposta podem ser colocadas:
+- Focamos inicialmente no delineamento de dois grupos, mas as generalizações para mais de dois grupos são diretas.
+- Dada uma sequência de $n$ medidas repetidas em um número de grupos distintos de indivíduos, __três questões principais__ relacionadas aos perfis de resposta podem ser colocadas:
 
 ## Hipóteses sobre perfis de resposta
 
-1. Os perfis de resposta média são semelhantes nos grupos, no sentido de que os perfis de resposta média são paralelos?
+1. \structure{Os perfis de resposta média são semelhantes nos grupos, no sentido de que os perfis de resposta média são paralelos?}
     + Essa é uma pergunta que diz respeito ao __efeito de interação__ $grupo \times tempo$. 
 
 ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', paged.print=FALSE, purl=FALSE}
@@ -103,7 +117,7 @@ knitr::include_graphics(here::here('images', 'fig5_2_a.png'))
 
 ## Hipóteses sobre perfis de resposta
 
-2. Supondo que os perfis médios de resposta da população sejam paralelos, as médias são constantes ao longo do tempo?
+2. \structure{Supondo que os perfis médios de resposta da população sejam paralelos, as médias são constantes ao longo do tempo?}
     + Esta é uma pergunta que diz respeito ao __efeito do tempo__. 
 
 ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', paged.print=FALSE, purl=FALSE}
@@ -112,7 +126,7 @@ knitr::include_graphics(here::here('images', 'fig5_2_b.png'))
 
 ## Hipóteses sobre perfis de resposta
 
-3. Supondo que os perfis médios de resposta da população sejam paralelos, eles também estão no mesmo nível, no sentido de que os perfis médios de resposta para os grupos coincidem?
+3. \structure{Supondo que os perfis médios de resposta da população sejam paralelos, eles também estão no mesmo nível, no sentido de que os perfis médios de resposta para os grupos coincidem?}
     + Esta é uma pergunta que diz respeito ao __efeito do grupo__. 
 
 ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', paged.print=FALSE, purl=FALSE}
@@ -123,27 +137,35 @@ knitr::include_graphics(here::here('images', 'fig5_2_c.png'))
 
 - Exceto em circunstâncias muito raras, não faz sentido fazer a segunda e a terceira perguntas se os perfis médios de resposta não são paralelos.
 - Isso é consistente com o princípio geral de que os efeitos principais (por exemplo, efeitos de grupo ou tempo) normalmente não são de interesse quando há uma interação entre eles.
-- Ou seja, quando há uma interação $grupo \times tempo$, os perfis médios de resposta nos grupos são diferentes (perfis não paralelos); consequentemente, sua forma pode ser descrita apenas com referência a um grupo específico, e seu nível pode ser descrito apenas com referência a um tempo específico.
+
+::: {.block}
+
+### Observação
+
+- Ou seja, quando há uma interação $grupo \times tempo$, os perfis médios de resposta nos grupos são diferentes (perfis não paralelos); 
+    + consequentemente, sua forma pode ser descrita apenas com referência a um grupo específico, e seu nível pode ser descrito apenas com referência a um tempo específico.
+
+:::
 
 # Formulação do modelo linear geral
 
 ## Perfis de respostas e o modelo linear geral
 
-- Antes de ilustrarmos as principais ideias com um exemplo numérico, consideramos como a análise de perfis de respostas pode ser implementada no modelo linear geral
+Antes de ilustrarmos as principais ideias com um exemplo numérico, consideramos como a análise de perfis de respostas pode ser implementada no modelo linear geral
 
 $$
 \E(Y_i|X_i) = \mu_i = X_i\beta,
 $$
 
-para uma escolha apropriada de $X_i$.
+para uma escolha apropriada de $X_i$. Também descreveremos como as principais hipóteses de __ausência de efeito de interação__ $grupo \times tempo$ em termos de $\beta$.
 
-- Também descreveremos como as principais hipóteses de __ausência de efeito de interação__ $grupo \times tempo$ em termos de $\beta$.
 - Considere $n$ o número de medidas repetidas e $N$ o número de indivíduos.
 - Para expressar o modelo para o delineamento longitudinal com $G$ grupos e $n$ ocasiões de medição, __precisaremos de__ $G \times n$ __parâmetros__ para $G$ perfis de respostas médias.
 
 ## Perfis de respostas e o modelo linear geral
 
-- Por exemplo, com __dois grupos__ medidos em __três ocasiões__, há $2 \times 3 = 6$ parâmetros de média.
+\structure{Por exemplo}, com __dois grupos__ medidos em __três ocasiões__, há $2 \times 3 = 6$ parâmetros de média.
+
 - Para o __primeiro grupo__, a matriz de delineamento $3 \times 6$, $X_i$, fica
 
 $$
@@ -205,14 +227,14 @@ $$
 ## Perfis de respostas e o modelo linear geral: hipóteses
 
 - Como resultado, hipóteses sobre os perfis médios de resposta nos dois grupos podem ser facilmente expressas em termos de hipóteses sobre os componentes de $\beta$.
-- Especificamente, a hipótese de ausência de efeito de interação $grupo \times tempo$ pode ser expressa como
+- Especificamente, a \structure{hipótese de ausência de efeito de interação} $grupo \times tempo$ pode ser expressa como
 
 $$
 H_{01}: (\beta_1 - \beta_4) = (\beta_2 - \beta_5) = (\beta_3 - \beta_6).
 $$
 
-- Nesta parametrização, hipóteses sobre a interação $grupo \times tempo$ não podem ser expressas em termos de certos componentes de $\beta$ como sendo zero.
-- Em vez disso, essas hipóteses podem ser expressas em termos de $L\beta = 0$, para escolhas particulares de vetores ou matrizes $L$.
+- \structure{Nesta parametrização}, hipóteses sobre a interação $grupo \times tempo$ não podem ser expressas em termos de certos componentes de $\beta$ como sendo zero.
+    - Em vez disso, essas hipóteses podem ser expressas em termos de $L\beta = 0$, para escolhas particulares de vetores ou matrizes $L$.
 
 ## Perfis de respostas e o modelo linear geral: hipóteses
 
@@ -239,16 +261,16 @@ $$
 
 ## Perfis de respostas e o modelo linear geral: dados ausentes
 
-- Uma característica atraente da formulação do modelo linear geral
+Uma característica atraente da formulação do modelo linear geral
 
 $$
 \E(Y_i|X_i) = \mu_i = X_i\beta,
 $$
 
-é que ele pode lidar com configurações em que os dados de alguns indivíduos estão ausentes.
+é que ele __pode lidar com__ configurações em que os __dados__ de alguns indivíduos estão __ausentes__.
 
-- Por exemplo, suponha que o $i$-ésimo indivíduo pertença ao primeiro grupo e esteja faltando a resposta na terceira ocasião.
-- A matriz de delineamento apropriada para esse indivíduo é a seguinte matriz $2 \times 6$, obtida pela remoção da última linha da matriz de delineamento de dados completa para os indivíduos do primeiro grupo:
+- \structure{Por exemplo}, suponha que o $i$-ésimo indivíduo pertença ao primeiro grupo e esteja __faltando a resposta na terceira ocasião__.
+- A __matriz de delineamento__ apropriada para esse indivíduo é a seguinte matriz $2 \times 6$, obtida pela __remoção da última linha da matriz de delineamento__ de dados __completa__ para os indivíduos do primeiro grupo:
 
 $$
 X_i = \left(\begin{array}{cccccc}
@@ -328,7 +350,7 @@ $$
 
 ## Perfis de respostas e o modelo linear geral: categoria de referência
 
-- Esta __parametrização é a mais utilizada__ pelos softwares estatísticos.
+- \structure{Esta última parametrização é a mais utilizada} pelos softwares estatísticos.
 - A escolha desta parametrização, e a categoria de referência, é uma escolha do usuário do software (no `R` veja a formulação `~ -1` e a função `relevel()`).
 - Com esta parametrização as hipóteses de interesse de pesquisa podem ser reescritas:
 
