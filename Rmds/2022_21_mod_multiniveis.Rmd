@@ -10,7 +10,7 @@ institute: |
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2022
+  | Porto Alegre, 2023
 ---
 
 ## Introdução {.allowframebreaks}
@@ -69,13 +69,12 @@ knitr::include_graphics(here::here('images', 'Multilevel_data_structure.png'))
 
 ## Modelos lineares multiníveis {.allowframebreaks}
 
-- A abordagem dominante à análise de dados multiníveis emprega um tipo de __modelo linear de efeitos mistos__ conhecido como \structure{modelo linear hierárquico}.
+- A abordagem dominante à análise de dados multiníveis emprega um tipo de __modelo linear de efeitos mistos__ conhecido como \structure{modelo linear hierárquico}^[Também conhecido como __modelo multinível__.].
 - A __correlação induzida__ pelo agrupamento é descrita por __efeitos aleatórios__ em cada nível da hierarquia.
 - __Observação:__ Em um modelo multinível, a resposta é obtida no primeiro nível, mas as covariáveis podem ser medidas em qualquer nível.
-    + Por exemplo, se estamos estudando o IMC, podemos medir dietas individuais,
-atitudes familiares sobre hábitos alimentares e de compras e atributos da comunidade, como a densidade de restaurantes de _fast-food_.
+    + Por exemplo, se estamos estudando o IMC^[*Índice de massa corporal*; $IMC = \frac{\mbox{peso em kg}}{(\mbox{altura em m})^2}$.], podemos medir dietas individuais, atitudes familiares sobre hábitos alimentares e de compras e atributos da comunidade, como a densidade de restaurantes de _fast-food_.
 
-\framebreak
+## Modelos lineares multiníveis {.allowframebreaks}
 
 - A combinação de covariáveis medidas em diferentes níveis da hierarquia em um único modelo de regressão é central para a modelagem hierárquica.
 - Começamos introduzindo as ideias com o modelo de dois níveis.
@@ -215,6 +214,200 @@ em que $Y_k$ é um vetor coluna de comprimento $\sum_{j=1}^{n_{2k}}{n_{1jk}}$, o
 - Uma vez obtidas essas estimativas, podemos estimar as matrizes de covariância, $V_k$, e substituir essas estimativas na expressão do estimador MQG de $\beta$.
 - Este procedimento de estimativa está disponível nos pacotes `nlme` e `lme4`.
 
+## Exemplo: TVSFP {.allowframebreaks}
+
+- Embora a prevalência do tabagismo tenha diminuído entre os adultos nas últimas décadas, um número substancial de jovens começa a fumar e se torna viciado em tabaco.
+- O _Television, School and Family Smoking Prevention and Cessation Project_ (TVSFP) foi um estudo concebido para determinar a eficácia de um currículo escolar de prevenção do tabagismo em conjunto com um programa de prevenção baseado na televisão, em termos de prevenção do início do tabagismo e aumento da cessação do tabagismo.
+- O estudo utilizou um desenho fatorial $2 \times 2$, com quatro condições de intervenção determinadas pela classificação cruzada de um currículo escolar de resistência social (`CC: codificado 1 = sim, 0 = não`) com um programa de prevenção baseado em televisão (`TV : codificado 1 = sim, 0 = não`).
+- A randomização para uma das quatro condições de intervenção ocorreu em nível escolar, enquanto grande parte da intervenção foi realizada em nível de sala de aula.
+
+
+\framebreak
+
+- O estudo original envolveu 6.695 alunos em 47 escolas no sul da Califórnia. 
+- Nossa análise se concentra em um subconjunto de 1.600 alunos da sétima série de 135 turmas em 28 escolas de Los Angeles.
+- A variável resposta, uma escala de conhecimento sobre tabaco e saúde (THKS), foi administrada antes e após a randomização das escolas para uma das quatro condições de intervenção.
+    - A escala avaliou o conhecimento de um estudante sobre tabaco e saúde.
+
+\framebreak
+
+- Consideramos um modelo linear para o escore THKS pós-intervenção, com o escore THKS basal ou pré-intervenção como covariável.
+- Esse modelo para a mudança ajustada nos escores do THKS incluiu os principais efeitos de $CC$ e $TV$ e a interação $CC \times TV$.
+- Os __efeitos da escola e da sala de aula foram modelados pela incorporação de efeitos aleatórios nos níveis 3 e 2__, respectivamente. 
+
+\framebreak
+
+- Deixando $Y_{ijk}$ denotar a pontuação THKS pós-intervenção do $i$-ésimo aluno dentro da $j$-ésima sala de aula dentro da $k$-ésima escola, nosso modelo é dado por
+
+$$
+Y_{ijk} = \beta_1 + \beta_2Pre-THKS + \beta_3CC + \beta_4TV + \beta_5CC\times TV + b^{(3)}_k + b^{(2)}_{jk} + \epsilon_{ijk},
+$$
+
+em que $\epsilon_{ijk} \sim N(0, \sigma^2_1)$, $b^{(2)}_{jk} \sim N(0, \sigma^2_2)$ e $b^{(3)}_k \sim N(0, \sigma^2_3)$.
+
+\framebreak
+\footnotesize
+
+```{r carrega_dados, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE, results='asis'}
+# ---------------------------------------------------
+# Carregando pacotes do R
+
+library(haven)
+library(tidyr)
+library(dplyr)
+library(nlme)
+
+# ---------------------------------------------------
+# Carregando o arquivo de dados
+
+thks <- read_dta(file = here::here("data", "tvsfp.dta"))
+
+# ---------------------------------------------------
+# Formata dados
+
+thks$curriculum <- factor(thks$curriculum)
+thks$tvprevent <- factor(thks$tvprevent)
+
+```
+
+\framebreak
+
+```{r dados, echo=TRUE, eval=TRUE}
+
+thks
+
+```
+
+\framebreak
+\normalsize
+
+```{r ajuste, echo=TRUE, eval=TRUE}
+
+mod1 <- lme(
+  fixed = postscore ~ prescore + curriculum*tvprevent,
+            random = ~1 | sid/cid, # (turmas aninhadas em escolas)
+            data = thks,
+            na.action = na.omit)
+
+```
+
+\framebreak
+
+- As estimativas REML dos efeitos fixos são exibidas na tabela a seguir.
+
+```{r coef, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+
+knitr::kable(
+  summary(mod1)$tTable[,-c(3,5)],
+  digits = c(4, 4, 2),
+  col.names = c("Estimativa", "EP", "Z"),
+  format = "pandoc")
+
+```
+
+\framebreak
+
+- As estimativas REML das três fontes de variabilidade indicam que há variabilidade tanto nos níveis de sala de aula quanto na escola, com quase duas vezes mais variabilidade entre as salas de aula dentro de uma escola do que entre as escolas.
+
+```{r cov_est, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+VarCorr(mod1)
+
+```
+
+\framebreak
+
+- A correlação entre as pontuações do THKS para colegas (ou crianças da mesma sala de aula na mesma escola) é de aproximadamente $0.061$ (ou $\frac{0.039 + 0.065}{0.039 + 0.065 + 1.602}$), enquanto a correlação entre as pontuações do THKS para crianças de diferentes salas de aula dentro da mesma escola é de aproximadamente $0.023$ (ou $\frac{0.039}{0.039 + 0.065 + 1.602}$).
+
+\framebreak
+
+- As estimativas dos efeitos fixos para as condições de intervenção, quando comparadas com seus erros padrão, indicam que:
+    + \structure{nem a intervenção na mídia de massa (TV) nem sua interação com o currículo de sala de aula de resistência social (CC) têm impacto nas mudanças ajustadas pelas pontuações THKS da linha de base.}
+- Há um efeito significativo do currículo de sala de aula de resistência social, com crianças designadas ao currículo de resistência social mostrando maior conhecimento sobre tabaco e saúde.
+
+:::{.block}
+
+### Breve conclusão
+
+Políticas educacionais abrangentes são mais eficazes para promover o conhecimento sobre o assunto do que campanhas de mídia de massa, que dependem fortemente da motivação individual. Ver, por exemplo, Rose (2001)^[Rose G. Sick individuals and sick populations. Int J Epidemiol. 2001 Jun;30(3):427-32; discussion 433-4. doi: 10.1093/ije/30.3.427. PMID: 11416056.].
+
+:::
+
+## Exemplo: TVSFP {.allowframebreaks}
+
+- A estimativa do efeito principal do $CC$, no modelo que exclui a interação $CC \times TV$, é de $0.47$ ($EP = 0.113$, $p < 0.001$).
+
+```{r ajuste2, echo=TRUE, eval=TRUE}
+
+mod2 <- lme(
+  fixed = postscore ~ prescore + curriculum + tvprevent,
+            random = ~1 | sid/cid,
+            data = thks,
+            na.action = na.omit)
+
+```
+
+```{r coef2, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+
+knitr::kable(
+  summary(mod2)$tTable[,-c(3,5)],
+  digits = c(4, 4, 2),
+  col.names = c("Estimativa", "EP", "Z"),
+  format = "pandoc")
+
+```
+
+
+\framebreak
+
+- As correlações intra-cluster nos níveis de escola e sala de aula são relativamente pequenas.
+    - Podemos ficar tentados a considerar isso como uma indicação de que o agrupamento desses dados é irrelevante.
+    - __No entanto, tal conclusão seria errônea.__ 
+- Embora as correlações intra-cluster sejam relativamente pequenas, elas têm um impacto substancial nas inferências sobre os efeitos das condições de intervenção.
+
+\framebreak
+
+- Para ilustrar isso, considere o seguinte modelo para as mudanças ajustadas nas pontuações do THKS:
+
+$$
+Y_{ijk} = \beta_1 + \beta_2Pre-THKS + \beta_3CC + \beta_4TV + \beta_5CC\times TV + \epsilon_{ijk},
+$$
+
+em que $\epsilon_{ijk} \sim N(0, \sigma^2)$.
+
+- Este modelo ignora o agrupamento dos dados nos níveis de sala de aula e escola; é um modelo de __regressão linear padrão__ e __assume observações independentes__ e __variância homogênea__.
+
+\framebreak
+
+```{r ajuste3, echo=TRUE, eval=TRUE}
+
+mod3 <- lm(
+  formula = postscore ~ prescore + curriculum*tvprevent,
+            data = thks)
+
+```
+
+```{r coef3, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+
+knitr::kable(
+  summary(mod3)$coef[,-4],
+  digits = c(4, 4, 2),
+  col.names = c("Estimativa", "EP", "Z"),
+  format = "pandoc")
+
+```
+
+\framebreak
+
+- As estimativas dos efeitos fixos são semelhantes às relatadas no Modelo 1.
+- No entanto, os erros padrão baseados no modelo (supondo que não haja agrupamento) são __enganosamente pequenos__ para os efeitos da intervenção randomizada e __levam a conclusões substancialmente diferentes__ sobre os efeitos das condições de intervenção.
+
+\framebreak
+
+- __Isso destaca uma lição importante:__ o impacto do agrupamento depende tanto da magnitude da correlação intra-cluster quanto do tamanho do cluster.
+    - Para os dados do TVSFP, os tamanhos dos clusters variam de 1 a 13 salas de aula dentro de uma escola e de 2 a 28 alunos dentro de uma sala de aula.
+    - Com tamanhos de cluster relativamente grandes, mesmo uma correlação intra-cluster muito modesta pode ter um impacto discernível nas inferências.
+
 ## Generalizações
 
 - O modelo multinível pode ser generalizado para um número arbitrário de níveis.
@@ -239,7 +432,7 @@ __A modelagem multinível pode ser difícil:__
 
 ## Avisos
 
-- __Próxima aula:__ modelos multiníveis - exemplo.
+- __Próxima aula:__ atividade de avaliação 03.
 - __Para casa:__ ler o Capítulo 22 do livro "__Applied Longitudinal Analysis__".
     + Caso ainda não tenha lido, leia também os Caps. 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 e 13.
 

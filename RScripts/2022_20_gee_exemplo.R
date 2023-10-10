@@ -1,40 +1,40 @@
-## ----geeglm_sintax, echo=TRUE, eval=FALSE------------------------------------------------------
+## ----geeglm_sintax, echo=TRUE, eval=FALSE--------------------------------------------
 ## geeglm(formula, family = gaussian, data, id,
 ##        zcor = NULL, constr, std.err = "san.se")
 
 
-## ----esticon_sintax, echo=TRUE, eval=FALSE-----------------------------------------------------
+## ----esticon_sintax, echo=TRUE, eval=FALSE-------------------------------------------
 ## 
 ## esticon(obj, cm, beta0, joint.test = FALSE)
 ## 
 
 
-## ----ex_ohio_1, echo=TRUE, eval=FALSE----------------------------------------------------------
+## ----ex_ohio_1, echo=TRUE, eval=FALSE------------------------------------------------
 ## # Instala e carrega os pacotes geepack e doBy
 ## install.packages("geepack")
 ## install.packages("doBy")
-library(geepack)
-library(doBy)
+## library(geepack)
+## library(doBy)
 ## # conjunto de dados ohio do geepack - Efeito da poluição do ar na saúde
 ## # Crianças acompanhadas por quatro anos, com chiado registrado anualmente
-data(ohio) # carrega o conjunto de dados
-head(ohio)
+## data(ohio) # carrega o conjunto de dados
+## head(ohio)
 ## str(ohio)
 ## # Variável resposta é binária - ajuste um modelo GEE logístico
 ## # tempo (idade; age) como var. contínua
-fit.exch <- geeglm(resp ~ age + smoke,
-                   family = binomial(link = "logit"),
-                   data = ohio, id = id,
-                   corstr = "exchangeable", std.err = "san.se")
-fit.unstr <- geeglm(resp ~ age + smoke,
-                    family = binomial(link = "logit"),
-                    data = ohio, id = id,
-                    corstr = "unstructured", std.err = "san.se")
-summary(fit.exch)
-summary(fit.unstr)
+## fit.exch <- geeglm(resp ~ age + smoke,
+##                    family = binomial(link = "logit"),
+##                    data = ohio, id = id,
+##                    corstr = "exchangeable", std.err = "san.se")
+## fit.unstr <- geeglm(resp ~ age + smoke,
+##                     family = binomial(link = "logit"),
+##                     data = ohio, id = id,
+##                     corstr = "unstructured", std.err = "san.se")
+## summary(fit.exch)
+## summary(fit.unstr)
 
 
-## ----ex_ohio_2, echo=TRUE, eval=FALSE----------------------------------------------------------
+## ----ex_ohio_2, echo=TRUE, eval=FALSE------------------------------------------------
 ## # tempo (idade; age) como var. categórica
 ## fit <- geeglm(resp ~ factor(age) + smoke,
 ##               family = binomial(link = "logit"),
@@ -59,7 +59,7 @@ summary(fit.unstr)
 ## colnames(OR.CI) <- c("OR", "OR 95% LI", "OR 95% LS")
 
 
-## ----ex_ohio_3, echo=TRUE, eval=FALSE----------------------------------------------------------
+## ----ex_ohio_3, echo=TRUE, eval=FALSE------------------------------------------------
 ## # Razão de chances de chiado no peito para uma criança de 9 anos com uma mãe que
 ## # fumou durante o primeiro ano do estudo em  comparação com uma criança de 8
 ## # anos com uma mãe que não fumou  durante o primeiro ano do estudo.
@@ -87,7 +87,7 @@ summary(fit.unstr)
 ## anova(fit1, fit2)
 
 
-## ----antib, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis'----------------
+## ----antib, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis'------
 # ---------------------------------------------------
 # Carregando pacotes do R
 
@@ -146,7 +146,7 @@ export2md(restab, format = "latex", position = "center")
 
 
 
-## ----antib2, echo=TRUE, eval=TRUE--------------------------------------------------------------
+## ----antib2, echo=TRUE, eval=TRUE----------------------------------------------------
 fit <- geeglm(y ~ tempo + tempoA + tempoB,
               family = poisson(link = "log"), 
               data = ds.longo, id = id, waves = tempo,
@@ -154,20 +154,20 @@ fit <- geeglm(y ~ tempo + tempoA + tempoB,
 summary(fit)
 
 
-## ----antib3, echo=TRUE, eval=TRUE--------------------------------------------------------------
+## ----antib3, echo=TRUE, eval=TRUE----------------------------------------------------
 L <- rbind(c(0,0,1,0),
           c(0,0,0,1))
 esticon(fit, L, joint.test = TRUE)
 
 
-## ----antib3.2, echo=TRUE, eval=TRUE------------------------------------------------------------
+## ----antib3.2, echo=TRUE, eval=TRUE--------------------------------------------------
 
 L <- c(0,0,1,-1)
 esticon(fit, L, joint.test = TRUE)
 
 
 
-## ----antib4, echo=TRUE, eval=TRUE--------------------------------------------------------------
+## ----antib4, echo=TRUE, eval=TRUE----------------------------------------------------
 
 fit <- geeglm(y ~ tempo + tempoAB,
               family = poisson(link = "log"), 
@@ -177,13 +177,13 @@ summary(fit)
 
 
 
-## ----antib5, echo=FALSE, eval=TRUE-------------------------------------------------------------
+## ----antib5, echo=FALSE, eval=TRUE---------------------------------------------------
 
 est <- esticon(fit, diag(3))
 # Razão de taxas e intervalos de confiança
 RT.CI <- exp(cbind(est$estimate, est$lwr, est$upr))
 rownames(RT.CI) <- names(coef(fit))
-colnames(RT.CI) <- c("RT", "RT 95% LI", "RT 95% LS")
+colnames(RT.CI) <- c("RT", "LI IC 95%", "LS IC 95%")
 knitr::kable(RT.CI, digits = c(2, 2, 2), format = "pandoc")
 
 

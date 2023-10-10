@@ -10,34 +10,35 @@ institute: |
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2022
+  | Porto Alegre, 2023
 ---
 
 ## Equações de estimação generalizadas {.allowframebreaks}
 
-- Modelo de média populacional ou marginal, fornece uma abordagem de regressão para modelos lineares generalizados quando as respostas não são independentes (dados correlacionados/agrupados).
+- Modelo para a \structure{média populacional} ou \structure{marginal};
+    + Fornece uma \structure{abordagem de regressão para modelos lineares generalizados} quando as \structure{respostas não são independentes} (dados correlacionados/agrupados).
 - O objetivo é fazer inferências sobre a população, levando em consideração a correlação das medidas dentro de indivíduo.
 - Os pacotes `gee` e `geepack` são usados para modelos GEE no `R`.
-- A principal diferença entre `gee` e `geepack` é que o `geepack` contém um método ANOVA que nos permite comparar modelos e realizar testes de Wald.
+- A principal diferença entre `gee` e `geepack` é que o `geepack` contém um __método ANOVA que nos permite comparar modelos__ e realizar __testes de Wald__.
 
 \framebreak
 
-- Sintaxe básica para `geeglm()` do pacote `geepack` __(tem uma sintaxe muito parecida com `glm()`)__.
+- Sintaxe básica para `geeglm()` do pacote `geepack`^[Possui uma sintaxe muito parecida com `glm()`.]:
 
 ```{r geeglm_sintax, echo=TRUE, eval=FALSE}
 geeglm(formula, family = gaussian, data, id,
        zcor = NULL, constr, std.err = "san.se")
 ```
 
-- `formula` Descrição simbólica do modelo a ser ajustado;
-- `family` Descrição da distribuição da resposta e função de ligação;
-- `data` dataframe opcional;
-- `id` vetor que identifica os _clusters_ (agrupamentos);
-- `zcor` especifica uma estrutura de correlação definida pelo usuário;
-- `constr` estrutura de __correlação de trabalho__: "`independence`", "`exchangeable`", "`ar1`", "`unstructured`", "`userdefined`";
-- `std.err` tipo de erro padrão a ser calculado; o padrão "`san.se`" é a __estimativa robusta (sanduíche)__; use "`jack`" para obter uma estimativa da variância aproximada por _jackknife_.
+- `formula`: descrição simbólica do modelo a ser ajustado;
+- `family`: descrição da distribuição da resposta e função de ligação;
+- `data`: dataframe opcional;
+- `id`: vetor que identifica os _clusters_ (agrupamentos);
+- `zcor`: especifica uma estrutura de correlação definida pelo usuário;
+- `constr`: estrutura de __correlação de trabalho__: "`independence`", "`exchangeable`", "`ar1`", "`unstructured`", "`userdefined`";
+- `std.err`: tipo de erro padrão a ser calculado; o padrão "`san.se`" é a __estimativa robusta (sanduíche)__; use "`jack`" para obter uma estimativa da variância aproximada por _jackknife_.
 
-## Estrutura de correção {.allowframebreaks}
+## Estrutura de correlação {.allowframebreaks}
 
 \footnotesize
 
@@ -100,7 +101,7 @@ esticon(obj, cm, beta0, joint.test = FALSE)
 
 - `obj`: objeto do modelo;
 - `L`: matriz especificando funções lineares dos parâmetros de regressão (uma função linear por linha e uma coluna para cada parâmetro);
-- `beta0`: vetor de números ($H_0$ para $\beta$);
+- `beta0`: vetor numérico ($H_0$ para $\beta$);
 - `joint.test`: se `TRUE` um teste de hipóteses de Wald conjunto `Lbeta = beta0` é realizado, _default_ é um teste para cada linha, `(Lbeta).i=beta0.i`.
 
 ## Exemplo - GEE {.allowframebreaks}
@@ -195,7 +196,7 @@ anova(fit1, fit2)
 - Os participantes foram aleatorizados para um dos dois antibióticos (medicamento indicado para tratamento A e B) ou para um placebo (medicamento indicado para tratamento C).
 - Os dados da linha de base sobre o número de bacilos da hanseníase em 6 locais do corpo foram registrados.
 - Após vários meses de tratamento, o número de bacilos foi registrado pela segunda vez.
-- Desfecho/resposta: contagem total do número de bacilos da hanseníase em 6 locais.
+- \structure{Desfecho/resposta:} __contagem total__ do número de bacilos da hanseníase em 6 locais.
 
 ## Ensaio Clínico de Antibióticos para Hanseníase
 
@@ -270,7 +271,7 @@ $$
 
 em que $Y_{ij}$ é a contagem de bacilos para o $i$-ésimo paciente no $j$-ésimo período ($j = 1, 2$).
 
-- $trt_1$ e $trt_2$ são variáveis indicadoras para os medicamentos A e B, respectivamente.
+- $trt_1$ e $trt_2$ são __variáveis indicadoras__ para os medicamentos A e B, respectivamente.
 - A variável binária, tempo, denota os períodos de linha de base e pós-tratamento, com $tempo = 0$ para o período de linha de base (período 1) e $tempo = 1$ para o período de acompanhamento de pós-tratamento (período 2).
 
 \framebreak
@@ -352,7 +353,7 @@ $$
 \log \E(Y_{ij}) = \log\mu_{ij} = \beta_1+ \beta_2tempo_{ij} + \beta_3 tempo_{ij}\times trt_{i},
 $$
 
-em que a variável $trt$ é uma variável indicadora para uso de antibiótico, com $trt = 1$ se um paciente foi aleatorizado para o medicamento A ou B e $trt = 0$ caso contrário.
+em que a variável $trt$ é uma __variável indicadora__ para uso de antibiótico, com $trt = 1$ se um paciente foi aleatorizado para o medicamento A ou B e $trt = 0$ caso contrário.
 
 - Mantemos as mesmas suposições sobre a variância e correlação de antes.
 
@@ -387,9 +388,9 @@ knitr::kable(RT.CI, digits = c(2, 2, 2), format = "pandoc")
 - A estimativa comum da log-taxa é de -0.52783.
 - A razão de taxas é de 0.60 (ou $e^{-0.52783}$), com intervalo de confiança de 95%, 0.4 a 0.87, indicando que o tratamento com antibióticos reduz significativamente o número médio de bacilos quando comparado ao placebo.
 - Para o grupo placebo, há uma redução não significativa no número médio de bacilos de aproximadamente 3% (ou $[1 - e^{-0.00286}]\times 100\%$).
-- No grupo de antibióticos, há uma redução significativa de aproximadamente 41% (ou $[1 - e^{-0.00286 - -0.52783}]\times 100\%$).
+- No grupo de antibióticos, há uma redução significativa de aproximadamente 41% (ou $[1 - e^{-0.00286 - 0.52783}]\times 100\%$).
 - A correlação estimada em pares de 0.74 é relativamente grande.
-- O parâmetro de escala estimado de 3.23 indica superdispersão substancial (se não há superdispersão, então $\phi = 1$).
+- O parâmetro de escala estimado em 3.23 indica superdispersão substancial (se não há superdispersão, então $\phi = 1$).
 
 
 ## Avisos
