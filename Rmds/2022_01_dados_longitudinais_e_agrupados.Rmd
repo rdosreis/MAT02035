@@ -3,25 +3,28 @@ title: "MAT02035 - Modelos para dados correlacionados"
 subtitle: "Introdução aos dados longitudinais e agrupados"
 fontsize: 10pt
 author: |
-  | Rodrigo Citton P. dos Reis
+  | Rodrigo Citton Padilha dos Reis
   | `citton.padilha@ufrgs.br`
 institute: |
   | \textsc{Universidade Federal do Rio Grande do Sul}
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2022
+  | Porto Alegre, 2023
 ---
 
 # Introdução
 
 ## Introdução
 
-A pesquisa estatística em métodos para o delineamento e análise de investigações humanas expandiu explosivamente na segunda metade do Século XX.
+$\looparrowright$ A __pesquisa estatística__ em __métodos para o delineamento__ e __análise de investigações humanas__ expandiu explosivamente na segunda metade do Século XX.
 
-- Nos EUA (no começo dos anos 1950): mudança de suporte para pesquisa da área militar para a área biomédica.
-- Nos EUA (1944): aprovação da Lei do Serviço de Saúde Pública $\Rightarrow$ crescimento do _National Institutes of Health_ (NIH\footnote{{\bf Um pouco da história do NIH:} www.nih.gov/about-nih/who-we-are/history}).
+- Nos EUA, 1950: mudança de suporte financeiro para pesquisa \structure{da} __área militar__ \structure{para} a __área biomédica__.
+- Nos EUA, 1944: aprovação da Lei do Serviço de Saúde Pública $\Rightarrow$ crescimento do _National Institutes of Health_ (NIH\footnote{{\bf Um pouco da história do NIH:} www.nih.gov/about-nih/who-we-are/history}).
     + Orçamento do NIH: 1947 - \$8 milhões $\Rightarrow$ 1966 - \$1 bilhão.
+
+## Introdução
+
 - O NIH patrocinou vários dos estudos epidemiológicos importantes e ensaios clínicos daquele período, incluindo o \textbf{\emph{Framingham Heart Study}}\footnote{{\bf Um pouco da história do FHS:} www.ncbi.nlm.nih.gov/pmc/articles/PMC4159698/} (FHS).
     + Estudos de coorte no Brasil: \structure{coortes de Pelotas (1982)}; \structure{ELSA-Brasil (2007)}.
     + Estudos de coorte na Europa: \structure{1958 National Child Development Study}; \structure{The Rotterdam Study (1990)}.
@@ -43,15 +46,14 @@ A pesquisa estatística em métodos para o delineamento e análise de investiga�
 
 ## Introdução
 
-- No tratamento de artrite, asma e outras doenças que normalmente não ameaçam a vida, os pesquisadores começaram a estudar os efeitos dos tratamentos na mudança ao longo do tempo em medidas de gravidade da doença.
-    + Questões semelhantes estavam sendo colocadas em todos os contextos de doenças.
+- Questões semelhantes estavam sendo colocadas em todos os contextos de doenças.
 - Os pesquisadores começaram a __acompanhar populações__ de todas as idades ao longo do tempo, tanto em estudos observacionais quanto em ensaios clínicos, para __entender o desenvolvimento e a persistência da doença e para identificar fatores que alteram o curso do desenvolvimento da doença__.
 
 ## Introdução
 
-- Esse interesse nos padrões temporais de mudança nas características humanas ocorreu em um período em que os avanços no poder da computação tornaram novas e mais intensivas abordagens computacionais para a análise estatística disponíveis no _desktop_.
+- Esse interesse nos padrões temporais de mudança nas características humanas ocorreu em um período em que os __avanços no poder da computação__ tornaram novas e mais intensivas __abordagens computacionais__ para a análise estatística disponíveis no _desktop_.
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE}
 knitr::include_graphics(here::here('images', 'dims.jpg'))
 ```
 
@@ -68,19 +70,17 @@ models with structured covariance matrices. \emph{Biometrics}, 42:805-820, 1986.
 - Os últimos 40 anos assistiram a progressos consideráveis no desenvolvimento de métodos estatísticos para a análise de dados longitudinais. 
 - Este curso apresentará parte desta literatura de maneira rigorosa apontando para as possibilidades de aplicação destas técnicas.
     
-# Dados longitudinais e agrupados
-
-## Estudos longitudinais
+# Delineamento longitudinal
 
 - A característica definidora de estudos longitudinais é que medidas dos mesmos indivíduos são tomadas __repetidamente__ através do tempo, permitindo, assim, o estudo direto da __mudança ao longo do tempo__.
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='75%', out.height='55%', paged.print=FALSE}
+```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='65%', out.height='55%', paged.print=FALSE}
 knitr::include_graphics(here::here('images', 'levels_explanation.png'))
 ```
 
 - O __objetivo principal__ de um estudo longitudinal é caracterizar a mudança na resposta ao longo do tempo e fatores que influenciam a mudança.
 
-## Estudos longitudinais vs. estudos transversais
+# Estudos longitudinais vs. estudos transversais
 
 - Com medidas repetidas realizadas nos indivíduos, é possível capturar a __mudança dentro de indivíduo__\footnote{Intraindividual.}.
 - Em um __estudo transversal__, \structure{em que a resposta é medida em apenas uma ocasião}, é possível apenas estimar __diferenças__ nas respostas __entre indivíduos__.
@@ -92,32 +92,32 @@ knitr::include_graphics(here::here('images', 'levels_explanation.png'))
 knitr::include_graphics(here::here('images', 'CS_Vs_Longitudinal_Study.jpg'))
 ```
 
-## Um exemplo
+# Estudos longitudinais vs. estudos transversais: um exemplo
 
 Para destacar essa importante distinção entre delineamentos de estudos transversais e longitudinais, considere o seguinte exemplo.
 
 - Acredita-se que a gordura corporal nas meninas aumenta pouco antes ou ao redor da menarca, estabilizando-se aproximadamente 4 anos após a menarca.
 - Suponha que os investigadores estejam interessados em determinar o aumento da gordura corporal nas meninas após a menarca.
 
-## Um exemplo: estudo transversal
+## Um exemplo: delineamento transversal
 
-Em um delineamento de estudo transversal, os pesquisadores podem obter medidas de porcentagem de gordura corporal em dois grupos separados de meninas: 
+Em um delineamento transversal, os pesquisadores podem obter medidas de porcentagem de gordura corporal em dois grupos separados de meninas: 
 
 - um grupo de meninas de 10 anos (uma coorte\footnote{Coorte é um conjunto de pessoas que tem em comum um evento que se deu no mesmo período.} pré-menarca);
 - e um grupo de meninas de 15 anos de idade (uma coorte pós-menarca).
 
 ### 
 
-Neste delineamento de estudo transversal, a comparação direta da porcentagem de gordura corporal média nos dois grupos de meninas pode ser feita usando um __teste $t$ de duas amostras (não pareado)__.
+Neste delineamento transversal, a comparação direta da porcentagem de gordura corporal média nos dois grupos de meninas pode ser feita usando um __teste $t$ de duas amostras ("$t$" não pareado)__.
 
-## Um exemplo: estudo transversal
+## Um exemplo: delineamento transversal
 
 - Essa comparação não fornece uma estimativa da mudança na gordura corporal quando as meninas têm entre 10 e 15 anos.
-- O __efeito do crescimento__ ou __envelhecimento__, um inerente efeito individual, simplesmente não pode ser estimado a partir de um estudo transversal que não obtenha medidas de como os indivíduos mudam com o tempo. 
-- Em um estudo transversal, o efeito do envelhecimento é potencialmente __confundido__ com possíveis efeitos de coorte. 
+- O __efeito do crescimento__ ou __envelhecimento__, um inerente efeito individual, simplesmente __não pode ser estimado__ a partir de um estudo transversal que não obtenha medidas de como os indivíduos mudam com o tempo. 
+- Em um estudo transversal, o efeito do envelhecimento é potencialmente __confundido__ com efeitos de coorte. 
     +  Há muitas características que diferenciam as meninas nestes dois grupos etários distintos (hábitos alimentares de "duas gerações", por exemplo) que poderiam distorcer a relação entre a idade e a gordura corporal.
 
-## Um exemplo: estudo longitudinal
+## Um exemplo: delineamento longitudinal
 
 Por outro lado, um estudo longitudinal que mede uma única coorte de meninas nas idades (momentos) de 10 e 15 anos pode fornecer uma __estimativa__ válida __da mudança__ na gordura corporal à medida que as meninas envelhecem.
 
@@ -128,9 +128,15 @@ Neste caso, a análise seria baseada em um __teste $t$ pareado__, usando a difer
 
 - Esta comparação dentro do indivíduo fornece uma estimativa válida da mudança na gordura corporal quando as meninas envelhecem de 10 a 15 anos. 
 
-## Dados longitudinais são dados agrupados
+# Dados longitudinais são dados agrupados {.allowframebreaks}
 
 - Uma __característica distintiva__ de dados longitudinais é que eles são __agrupados__.
+    - __Cada indivíduo forma um grupo de observações repetidas ao longo do tempo.__
+- Dados longitudinais também possuem um __ordenamento temporal__, e este tem implicações importantes para a análise.
+
+- Podemos observar estas características, na figura a seguir.
+
+\framebreak
 
 ```{r long_eh_agrupado, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, fig.align='center', out.width="70%", out.height="50%"}
 # ----------------------------------------------------
@@ -166,48 +172,43 @@ ids <- sample(x = unique(chol.df.longo$id), size = 5, replace = FALSE)
 p <- ggplot(data = chol.df.longo[which(chol.df.longo$id %in% ids), ],
             mapping = aes(x = tempo, y = colesterol, group = id, colour = id)) +
   geom_line(size = 0.8) +
-  labs(x = "Tempo", y = "Colesterol", colour = "ID")
+  labs(x = "Tempo", y = "Colesterol", colour = "ID") + theme_bw()
 p
 ```
-
-- __Cada indivíduo forma um grupo de observações repetidas ao longo do tempo.__
-- Dados longitudinais também possuem um __ordenamento temporal__, e este tem implicações importantes para a análise.
 
 ## Dados agrupados
 
 - Observações dentro de um grupo tipicamente irão exibir __correlação positiva__, e esta correlação __deve ser levada em conta__ na análise.
 - Dados agrupados podem surgir de experimentos aleatorizados por grupo (intervenções de saúde pública) ou de amostragens aleatórias de grupos que se caracterizam naturalmente na população:
-    + Famílias;
-    + Domicílios;
-    + Enfermarias hospitalares;
-    + Práticas médicas;
+    + Famílias e/ou domicílios;
+    + Enfermarias hospitalares e/ou clínicas médicas;
     + Vizinhanças;
     + Escolas.
 - Ainda, dados agrupados podem surgir quando a resposta de interesse é simultaneamente obtida de __múltiplos avaliadores__ (juízes, examinadores) ou de __diferentes instrumentos de medição__.
 
 ## Correlação
 
-- Nestes casos, esperamos que medidas em unidades dentro de um grupo são mais similares que as medidas em unidades de grupos diferentes.
+- Nestes casos, esperamos que medidas em unidades dentro de um grupo sejam mais similares que as medidas em unidades de grupos diferentes.
 - O __grau de agrupamento__ pode ser expresso em termos da __correlação__ entre as medidas em unidades do mesmo grupo.
 - Esta correlação __invalida a suposição crucial de independência__ que é o pilar de tantas técnicas estatísticas.
     + Modelos estatísticos para dados correlacionados devem explicitamente descrever e levar em conta esta correlação.
 
 ## Comentários
 
-- Dados longitudinais são um caso especial de dados agrupados (com uma ordenação natural das medições dentro de um grupo).
+- Dados longitudinais são um **caso especial de dados agrupados** (com uma ordenação natural das medições dentro de um grupo).
     <!-- + Faremos a descrição dos métodos de análise para dados agrupados, mais amplamente definidos. -->
 - Um dos objetivos deste curso é demonstrar que os métodos para a análise de dados longitudinais são, mais ou menos, casos especiais de métodos de regressão mais gerais para dados agrupados.
     + Como resultado, uma compreensão abrangente de métodos para a análise de dados longitudinais fornece a base para uma compreensão mais ampla de métodos para analisar a ampla gama de dados agrupados.
     
 ## Comentários
 
-- Os exemplos descritos anteriormente consideram apenas um único nível de agrupamento.
+- Os exemplos descritos anteriormente consideram apenas **um** único **nível de agrupamento**.
 - Mais recentemente, pesquisadores desenvolveram metodologias para a análise de __dados multiníveis__, em que as observações podem ser agrupadas em mais de um nível.
     + Os dados podem consistir em medições repetidas em pacientes agrupados por clínica. 
     + Os dados podem consistir em observações sobre crianças "aninhadas" dentro de salas de aula, "aninhadas" dentro das escolas.
 - Os dados multiníveis serão discutidos no final do curso.
 
-# Um exemplo
+# Um (outro) exemplo
 
 ## Tratamento em Crianças Expostas a Chumbo
 
@@ -271,7 +272,7 @@ p <- ggplot(data = chumbo.resumo,
   labs(x = "Semana",
        y = expression("Média nível de chumbo no sangue"~(mu*g/dL)),
        colour = "Grupo de tratamento") +
-  theme(legend.position = "bottom")
+  theme_bw() + theme(legend.position = "bottom")
 p
 ```
 
@@ -292,7 +293,7 @@ p
 ## Modelos de regressão para dados correlacionadas
 
 - O caso mais simples é o familiar __modelo de regressão linear__ para uma variável resposta contínua.
-- No entanto, existem muitas __generalizações__ possíveis. Modelos de regressão foram desenvolvidos para outras variáveis resposta, como respostas binárias ou contagens.
+- No entanto, existem muitas __generalizações__ possíveis.
     + Para uma variável __resposta binária__, a __regressão logística__ tem sido amplamente utilizada para muitas aplicações.
     + Para __contagens__, a __regressão de Poisson__ (ou __log-linear__) é frequentemente apropriada.
 - Outra generalização importante é para \structure{observações que não podem ser consideradas estatisticamente independentes} umas das outras, ou seja, __modelos de regressão para respostas correlacionadas__.
@@ -300,8 +301,11 @@ p
 
 ## O modelo linear
 
-- Note que o termo "linear" apareceu em todos os três exemplos de modelos de regressão considerados até agora.
-- A linearidade neste cenário tem um significado muito preciso e refere-se ao fato de que todos esses modelos para a média (ou alguma transformação da média) são __lineares nos parâmetros (coeficientes)__ da regressão.
+\begin{mybox}{linearidade}
+
+A linearidade neste cenário tem um significado muito preciso e refere-se ao fato de que todos esses modelos para a média (ou alguma transformação da média) são \textbf{lineares nos parâmetros (coeficientes)} da regressão.
+
+\end{mybox}
 
 ## O modelo linear
 
@@ -338,9 +342,9 @@ são casos em que a __média é não-linear__ nos parâmetros de regressão.
 
 ## O modelo linear
 
-- __Observação:__ isto não impede relações entre a resposta média e covariáveis que são curvilíneas ou não lineares.
+- __Observação:__ isto não impede relações entre a resposta média e covariáveis que sejam curvilíneas ou não lineares.
 - Este tipo de não-linearidade pode ser acomodado tomando \structure{transformações} apropriadas da resposta média (transformação logarítmica na regressão de Poisson) e as covariáveis ($\log(\mbox{dose})$) e/ou incluindo polinômios.
-    + Por exemplo, uma tendência quadrática na resposta média ao longo do tempo pode ser incorporada incluindo a covariável $tempo$ e o $tempo^2$ no modelo de regressão.
+    + Por exemplo, uma tendência quadrática na resposta média ao longo do tempo pode ser incorporada incluindo a covariável $\color{blue}{tempo}$ e o $\color{blue}{tempo^2}$ no modelo de regressão.
 - A inclusão de covariáveis transformadas não viola a "linearidade" do modelo de regressão.
     + O modelo ainda é __linear nos parâmetros de regressão__.
 

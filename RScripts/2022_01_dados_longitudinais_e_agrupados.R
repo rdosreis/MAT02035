@@ -1,12 +1,12 @@
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='70%', paged.print=FALSE----------
+## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE----
 knitr::include_graphics(here::here('images', 'dims.jpg'))
 
 
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='75%', out.height='55%', paged.print=FALSE----
+## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='65%', out.height='55%', paged.print=FALSE----
 knitr::include_graphics(here::here('images', 'levels_explanation.png'))
 
 
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE---------
+## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE----
 knitr::include_graphics(here::here('images', 'CS_Vs_Longitudinal_Study.jpg'))
 
 
@@ -44,11 +44,11 @@ ids <- sample(x = unique(chol.df.longo$id), size = 5, replace = FALSE)
 p <- ggplot(data = chol.df.longo[which(chol.df.longo$id %in% ids), ],
             mapping = aes(x = tempo, y = colesterol, group = id, colour = id)) +
   geom_line(size = 0.8) +
-  labs(x = "Tempo", y = "Colesterol", colour = "ID")
+  labs(x = "Tempo", y = "Colesterol", colour = "ID") + theme_bw()
 p
 
 
-## ----tlc_tb, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis'-------------------------------
+## ----tlc_tb, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis'--------------------
 # ----------------------------------------------------
 # Carregando o arquivo de dados
 
@@ -91,10 +91,10 @@ p <- ggplot(data = chumbo.resumo,
   labs(x = "Semana",
        y = expression("Média nível de chumbo no sangue"~(mu*g/dL)),
        colour = "Grupo de tratamento") +
-  theme(legend.position = "bottom")
+  theme_bw() + theme(legend.position = "bottom")
 p
 
 
-## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE---------
+## ----echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='100%', paged.print=FALSE----
 knitr::include_graphics(here::here('images', 'long_study.jpg'))
 
