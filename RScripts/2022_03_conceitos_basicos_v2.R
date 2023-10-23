@@ -1,4 +1,4 @@
-## ---- echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis'-----------
+## ---- echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis'---------------------------
 # ----------------------------------------------------
 set.seed(40)
 
@@ -6,7 +6,7 @@ knitr::kable(chumbo.df[sample(x = chumbo.df$id, size = 2, replace = F),],
              col.names = c("ID", "Grupo", "Linha de base", "Semana 1", "Semana 4", "Semana 6"), caption = "Níveis de chumbo no sangue de dez crianças do estudo TLC")
 
 
-## ---- echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis'-----------
+## ---- echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis'---------------------------
 # ----------------------------------------------------
 # Carregando o arquivo de dados
 

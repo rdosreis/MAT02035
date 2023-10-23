@@ -3,19 +3,19 @@ title: "MAT02035 - Modelos para dados correlacionados"
 subtitle: "Dados longitudinais: conceitos básicos"
 fontsize: 10pt
 author: |
-  | Rodrigo Citton P. dos Reis
+  | Rodrigo Citton Padilha dos Reis
   | `citton.padilha@ufrgs.br`
 institute: |
   | \textsc{Universidade Federal do Rio Grande do Sul}
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2022
+  | Porto Alegre, 2023
 ---
 
 # Objetivos da análise longitudinal {.allowframebreaks}
 
-- Nas ciências da saúde, os __estudos longitudinais__ desempenham um papel importante em aumentar nossa compreensão do __desenvolvimento__ e __persistência__ da doença.
+- Nas ciências da saúde (e em outras áreas do conhecimento, como economia e ciências sociais), os __estudos longitudinais__ desempenham um papel importante em aumentar nossa compreensão do __desenvolvimento__ e __persistência__ da doença.
 - Há muita __heterogeneidade__ natural __entre os indivíduos__ em termos de como as doenças se desenvolvem e progridem.
     <!-- + Essa heterogeneidade se deve a __fatores genéticos, ambientais, sociais e comportamentais__. -->
 
@@ -25,19 +25,33 @@ knitr::include_graphics(here::here('images', 'Environmental-health.jpg'))
 
 \framebreak
 
-- \structure{Delineamento de estudo longitudinal:} permite a descoberta de características individuais que podem explicar essas __diferenças interindividuais__ nas __mudanças nos resultados__ de saúde __ao longo do tempo__.
-    - Os participantes do estudo são \structure{medidos repetidamente ao longo da duração do estudo}, permitindo assim a avaliação direta de __mudanças na variável resposta ao longo do tempo__^[Em estudos transversais não é possível avaliar as mudanças individuais com base em uma __única "fotografia" da resposta__ do indivíduo em um determinado momento.].
+\begin{mybox}{Delineamento de estudo longitudinal} 
+
+Permite a descoberta de características individuais que podem explicar essas \textbf{diferenças interindividuais} nas \textbf{mudanças nos desfechos (respostas} de saúde \textbf{ao longo do tempo}.
+
+\end{mybox}
+
+- Os participantes do estudo são \structure{medidos repetidamente ao longo da duração do estudo}, permitindo assim a avaliação direta de __mudanças na variável resposta ao longo do tempo__^[Em estudos transversais não é possível avaliar as mudanças individuais com base em uma __única "fotografia" da resposta__ do indivíduo em um determinado momento.].
 
 ## Objetivos da análise longitudinal {.allowframebreaks}
 
-- A \structure{característica definidora de um estudo longitudinal} \alert{é que duas ou mais observações da variável resposta, realizadas em momentos diferentes, são obtidas em pelo menos alguns dos participantes do estudo}.
+\begin{mybox}{A característica definidora} 
+
+de um estudo longitudinal é \structure{que duas ou mais observações da variável resposta, realizadas em momentos diferentes, são obtidas em pelo menos alguns dos participantes do estudo}.
+
+\end{mybox}
 
 + Normalmente, o delineamento longitudinal exige um __número fixo de medidas repetidas__ a serem feitas __em todos os participantes__ do estudo __em um conjunto de pontos de tempo comuns__.
-    + As ocasiões de medição não são necessariamente distribuídas uniformemente ao longo da duração do estudo.
+    + As ocasiões de medição \alert{não são} necessariamente \alert{distribuídas uniformemente} ao longo da duração do estudo.
 
 \framebreak
 
-- O \structure{objetivo principal} de um estudo longitudinal é __caracterizar a mudança na resposta ao longo do tempo__.
+\begin{mybox}{O objetivo principal} 
+
+de um estudo longitudinal é \structure{caracterizar a mudança na resposta ao longo do tempo}.
+
+\end{mybox}
+
 - Também é interessante __determinar se essas mudanças__ dentro de cada indivíduo na resposta __estão relacionadas a covariáveis selecionadas__.
     + \structure{Exemplos:} grupo de tratamento, grupo etário, grupo de exposição a determinado fator (social, econômico, clínico, etc.).
     
@@ -87,14 +101,14 @@ p <- ggplot(data = chumbo.resumo,
   labs(x = "Semana",
        y = expression("Média nível de chumbo no sangue"~(mu*g/dL)),
        colour = "Grupo de tratamento") +
-  theme(legend.position = "bottom") + theme_bw()
+  theme_bw() + theme(legend.position = "bottom")
 p
 ```
 
-\framebreak
+## Abordagens de análise {.allowframebreaks}
 
-- Na forma mais elementar, uma medida da __mudança observada dentro de indivíduo__ na resposta pode ser conceituada em termos de  __"escores de mudança"__ ou __"escores de diferença"__.
-    - Por exemplo, as diferenças ($\Delta_y$) entre as medidas de pós-tratamento e pré-tratamento na resposta:
+- Na forma mais elementar, uma medida da __mudança__ observada __na resposta dentro de indivíduo__  pode ser conceituada em termos de  __"escores de mudança"__ ou __"escores de diferença"__.
+    - Por exemplo, as diferenças ($\Delta_y$) entre as medidas de pós-tratamento e pré-tratamento na resposta ($y$):
 
 $$
 \Delta_y = y_{t_f} - y_{t_0}.
@@ -118,7 +132,7 @@ knitr::include_graphics(here::here('images', 'escore_de_mudanca_2.png'))
 
 \framebreak
 
-Uma análise longitudinal das mudanças dentro de indivíduo procede em dois estágios conceitualmente distintos.
+Uma análise longitudinal das mudanças dentro de indivíduo procede em dois estágios conceitualmente distintos:
 
 1. A __mudança individual na resposta__ é caracterizada em termos de algum resumo apropriado das mudanças nas medidas repetidas em cada indivíduo durante o período de observação;
     + por exemplo, usando "escores de diferença" ou alguma forma de "trajetória de resposta".
@@ -153,13 +167,11 @@ Uma análise longitudinal das mudanças dentro de indivíduo procede em dois est
     + Em outros casos, os indivíduos podem ser animais ou objetos.
 - Em um estudo longitudinal os indivíduos são medidos repetidamente em diferentes __ocasiões__ ou __tempos__.
 
-::: {.block}
+\begin{mybox}{característica definidora}
 
-###
+Assim, adotando a terminologia introduzida até agora, a característica definidora de um estudo longitudinal é que as \structure{medidas da} variável \structure{resposta} são \structure{obtidas nos mesmos indivíduos em diversas ocasiões}.
 
-Assim, adotando a terminologia introduzida até agora, a característica definidora de um estudo longitudinal é que as medidas da variável resposta são obtidas nos mesmos indivíduos em diversas ocasiões.
-
-:::
+\end{mybox}
 
 ## Terminologia: dados balanceados {.allowframebreaks}
 
@@ -261,7 +273,7 @@ knitr::include_graphics(here::here('images', 'dados_desbalanceados.png'))
 
 \framebreak
 
-- Por exemplo, considere uma configuração em que cada indivíduo é medido em cada uma das $n$ ocasiões.
+- \structure{Por exemplo}, considere uma configuração em que cada indivíduo é medido em cada uma das $n$ ocasiões.
     + Em seguida, considere traçar a resposta média em cada ocasião.
     + Diferenças na resposta média ao longo do tempo medem a mudança dentro de cada indivíduo.
     + Isso ocorre porque a diferença nas médias também é a média das diferenças quando cada indivíduo é medido em todas as ocasiões.
@@ -269,7 +281,7 @@ knitr::include_graphics(here::here('images', 'dados_desbalanceados.png'))
 \framebreak
 
 - Quando há dados ausentes, um gráfico da resposta média sobre o tempo pode ser enganador.
-    + \alert{Mudanças ao longo do tempo podem refletir o padrão de ausência de dados, e não de mudança individual}.
+    + Mudanças ao longo do tempo podem refletir \alert{o padrão de ausência de dados}, e não de mudança individual.
 - Como discutiremos ao longo do curso, será necessário examinar cuidadosamente as suposições e a adequação da análise para determinar a validade das inferências com delineamentos desbalanceados e/ou ocorrência de dados ausentes. 
 
 <!-- ## Comentários -->
@@ -326,7 +338,7 @@ $$
 
 ## Notação: resposta média
 
-- Na análise de dados de um estudo longitudinal, o principal interesse está na resposta média.
+- Na análise de dados de um estudo longitudinal, o \structure{principal interesse está na resposta média}.
     + Mudanças ao longo do tempo na resposta média.
     + Como estas mudanças dependem de covariáveis (grupo de tratamento, exposições).
 - Denotamos a média ou o valor esperado de cada resposta $Y_{ij}$ por
@@ -356,7 +368,7 @@ $$
 ## Dependência e Correlação {.allowframebreaks}
 
 - Na estatística, as noções de dependência e independência têm significados precisos. 
-- Duas variáveis são consideradas independentes se a distribuição condicional de uma delas não depender da outra.
+- \structure{Duas variáveis são} consideradas \structure{independentes} se a distribuição condicional de uma delas não depender da outra.
 
 ::: {.block}
 
@@ -373,14 +385,14 @@ Por exemplo, o nível de colesterol LDL seria considerado independente do sexo s
     1. Quando o delineamento do estudo exigir que uma observação seja obtida de cada indivíduo __e__ os indivíduos sejam selecionados aleatoriamente de uma população maior.
     2. Quando o estudo exige que uma observação seja obtida de cada indivíduo e os indivíduos sejam aleatoriamente designados para diferentes condições de tratamento.
 
+<!-- \framebreak -->
+
+<!-- - Além disso, a suposição de observações independentes pode ser justificada em bases puramente físicas ou científicas, quando as respostas de indivíduos distintos no estudo são consideradas como completamente não relacionadas entre si. -->
+<!--     + Ou seja, a resposta de um indivíduo não influencia nem é influenciada pela resposta do outro. -->
+
 \framebreak
 
-- Além disso, a suposição de observações independentes pode ser justificada em bases puramente físicas ou científicas, quando as respostas de indivíduos distintos no estudo são consideradas como completamente não relacionadas entre si.
-    + Ou seja, a resposta de um indivíduo não influencia nem é influenciada pela resposta do outro.
-
-\framebreak
-
-- No caso em que mais de uma única observação é obtida no mesmo indivíduo, a suposição de observações independentes é simplesmente __insustentável__.
+- No caso em que mais de uma única observação é obtida no mesmo indivíduo, __a suposição__ de observações independentes __é__ simplesmente __insustentável__.
 - Ou seja, a resposta de um indivíduo em uma ocasião é muito provável que seja preditiva da resposta do mesmo indivíduo em uma ocasião futura.
     + Por exemplo, um indivíduo com um alto nível de colesterol LDL em uma ocasião é muito provável que também tenha um alto nível de colesterol LDL na próxima ocasião.
 - Além disso, com uma __variável resposta quantitativa__, essa dependência entre as medidas repetidas no mesmo indivíduo pode ser caracterizada pela sua __correlação__. 
