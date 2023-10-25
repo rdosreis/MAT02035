@@ -1,4 +1,4 @@
-## ----tlc, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, out.width='80%'------
+## ----tlc, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, out.width='80%'----------------------
 # ----------------------------------------------------
 # Carregando os pacotes
 
@@ -40,14 +40,14 @@ pairs(chumbo.df.p[,3:6], pch = 19, upper.panel = NULL)
 
 
 
-## ----tlc_cov, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE-------------------
+## ----tlc_cov, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE-----------------------------------
 
 knitr::kable(x = cov(chumbo.df.p[,3:6]),
              digits = 1)
 
 
 
-## ----tlc_cor, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE-------------------
+## ----tlc_cor, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE-----------------------------------
 
 knitr::kable(x = cor(chumbo.df.p[,3:6]),
              digits = 2)

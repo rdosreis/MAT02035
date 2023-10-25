@@ -3,14 +3,14 @@ title: "MAT02035 - Modelos para dados correlacionados"
 subtitle: "Dados longitudinais: conceitos básicos (continuação)"
 fontsize: 10pt
 author: |
-  | Rodrigo Citton P. dos Reis
+  | Rodrigo Citton Padilha dos Reis
   | `citton.padilha@ufrgs.br`
 institute: |
   | \textsc{Universidade Federal do Rio Grande do Sul}
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2022
+  | Porto Alegre, 2023
 ---
 
 # Exemplo: Tratamento em Crianças Expostas a Chumbo
@@ -314,7 +314,7 @@ $$
 - Para os dados do estudo, no grupo __succimer__, temos $\hat{\sigma}^2_1 = 25.2$, $\hat{\sigma}^2_2 = 58.9$ e $\hat{\sigma}_{12} = 15.5$, e portanto:
 
 $$
-\hat{\Var}(\hat{\delta}) = \frac{1}{50}(25.2 + 58.9 \color{purple}{- 2(15.5)}) = 1.06.
+\hat{\Var}(\hat{\delta}) = \frac{1}{50}(25.2 + 58.9 {\color{purple}{- 2(15.5)}}) = 1.06.
 $$
 
 - Se ignorássemos o fato que os dados são correlacionados e e procedêssemos com uma análise assumindo que todas as observações são independentes (e portanto, não correlacionados, com covariância zero), teríamos a seguinte estimativa __(incorreta)__ da variância da mudança na resposta média
