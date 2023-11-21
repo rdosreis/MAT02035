@@ -3,14 +3,14 @@ title: "MAT02035 - Modelos para dados correlacionados"
 subtitle: "Visão geral de modelos lineares para dados longitudinais"
 fontsize: 10pt
 author: |
-  | Rodrigo Citton P. dos Reis
+  | Rodrigo Citton Padilha dos Reis
   | `citton.padilha@ufrgs.br`
 institute: |
   | \textsc{Universidade Federal do Rio Grande do Sul}
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2022
+  | Porto Alegre, 2023
 ---
 
 # Introdução
@@ -102,8 +102,8 @@ $$
 
 O vetor $X_{ij}$ pode incluir dois tipos principais de covariáveis:
 
-i. Covariáveis cujos valores não mudam ao longo da duração do estudo. \structure{Exemplo:} tratamentos experimentais fixos.
-ii. covariáveis cujos valores mudam ao longo do tempo. \structure{Exemplo:} o tempo desde a linha de base, idade do indivíduo, o status atual do tabagismo e as exposições ambientais.
+i. Covariáveis cujos __valores não mudam__ ao longo da duração do estudo. \structure{Exemplo:} tratamentos experimentais fixos.
+ii. Covariáveis cujos __valores mudam__ ao longo do tempo. \structure{Exemplo:} o tempo desde a linha de base, idade do indivíduo, o status atual do tabagismo e as exposições ambientais.
 
 ## Vetor de covariáveis
 
@@ -496,7 +496,12 @@ $$
 ## A distribuição normal multivariada
 
 - No contexto de um estudo longitudinal, com $n_i$ medidas repetidas no $i$-ésimo indivíduo, temos um vetor de respostas e precisamos considerar sua __distribuição de probabilidade conjunta__.
-    - Enquanto uma função de densidade de probabilidade univariada descreve a probabilidade ou frequência relativa de ocorrência de valores particulares de uma única variável aleatória, uma função de densidade de probabilidade conjunta descreve a probabilidade ou frequência relativa com a qual o vetor de respostas assume um determinado conjunto de valores.
+
+\begin{mybox}{distribuição conjunta}
+
+Enquanto uma função de densidade de probabilidade univariada descreve a probabilidade ou frequência relativa de ocorrência de valores particulares de uma única variável aleatória, uma função de densidade de probabilidade conjunta descreve a probabilidade ou frequência relativa com a qual o vetor de respostas assume um determinado conjunto de valores.
+
+\end{mybox}
 
 ## A distribuição normal multivariada
 
@@ -570,7 +575,7 @@ em que $\Sigma_i^{-1}$ denota a inversa da matriz $\Sigma_i$.
 ## Avisos
 
 - __Para casa:__ ler o Capítulo 3 do livro "__Applied Longitudinal Analysis__". Caso ainda não tenha lido, leia também os Caps. 1 e 2.
-- __Próxima aula:__ Métodos de análise descritiva para dados longitudinais.
+- __Próxima aula:__ modelos lineares para dados longitudinais (abordagens de modelagem).
 
 ## Bons estudos!
 

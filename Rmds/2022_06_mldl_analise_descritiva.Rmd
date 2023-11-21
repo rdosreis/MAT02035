@@ -1,16 +1,16 @@
 ---
 title: "MAT02035 - Modelos para dados correlacionados"
-subtitle: "Visão geral de modelos lineares para dados longitudinais (continuação) - Métodos de análise descritiva"
+subtitle: "Métodos de análise descritiva para dados longitudinais: uma introdução"
 fontsize: 10pt
 author: |
-  | Rodrigo Citton P. dos Reis
+  | Rodrigo Citton Padilha dos Reis
   | `citton.padilha@ufrgs.br`
 institute: |
   | \textsc{Universidade Federal do Rio Grande do Sul}
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2022
+  | Porto Alegre, 2023
 ---
 
 # Questões preliminares

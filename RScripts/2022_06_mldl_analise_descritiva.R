@@ -1,19 +1,19 @@
-## ----carrega_dados, echo=TRUE, eval=FALSE, message=FALSE, warning=FALSE----------------
+## ----carrega_dados, echo=TRUE, eval=FALSE, message=FALSE, warning=FALSE---------------
 ## 
 ## # install.packages("haven")
-library(haven)
+## library(haven)
+## 
+## chumbo <- read_dta(file = "tlc.dta")
+## 
 
-chumbo <- read_dta(file = here::here("data","tlc.dta"))
 
-
-
-## ----largo, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------------------
+## ----largo, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------------------
 head(chumbo)
 
 
 
 
-## ----reshape, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------------
+## ----reshape, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------
 
 # install.packages("tidyr")
 library(tidyr)
@@ -22,18 +22,15 @@ chumbo.longo <- gather(data = chumbo,
                         key = "tempo",
                         value = "chumbo", -id, -trt)
 
-chumbo.longo2 <- pivot_longer(data = chumbo,
-                              cols = c(-id, -trt),
-                              names_to = "tempo", values_to = "chumbo")
 
 
-## ----reshape2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------------
+## ----reshape2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------
 
 head(chumbo.longo)
 
 
 
-## ----transforma_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------------
+## ----transforma_dados, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------
 
 chumbo.longo$tempo <- as.numeric(
   as.character(factor(chumbo.longo$tempo,
@@ -44,7 +41,7 @@ chumbo.longo$trt <- factor(chumbo.longo$trt,
 
 
 
-## ----transforma_dados2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------
+## ----transforma_dados2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE------------
 
 head(chumbo.longo)
 
@@ -91,7 +88,7 @@ p
 
 
 
-## ----resumo_medias, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-----------------
+## ----resumo_medias, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------
 
 # install.packages("dplyr")
 library(dplyr)
@@ -102,7 +99,7 @@ chumbo.resumo <- chumbo.longo %>%
 
 
 
-## ----resumo_medias2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------
+## ----resumo_medias2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------
 
 chumbo.resumo
 
@@ -123,7 +120,7 @@ p
 
 
 
-## ----resumo_ep, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------
+## ----resumo_ep, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------------------
 
 chumbo.resumo <- chumbo.longo %>% 
   group_by(trt, tempo) %>% 
@@ -133,7 +130,7 @@ chumbo.resumo <- chumbo.longo %>%
 
 
 
-## ----resumo_ep2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------------------
+## ----resumo_ep2, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE-------------------
 
 chumbo.resumo
 
@@ -174,7 +171,7 @@ p
 
 
 
-## ----fev_carrega_dados, echo=TRUE, eval=FALSE, message=FALSE, warning=FALSE------------
+## ----fev_carrega_dados, echo=TRUE, eval=FALSE, message=FALSE, warning=FALSE-----------
 ## 
 ## fev <- read_dta(file = "fev1.dta")
 ## 
@@ -187,7 +184,7 @@ p
 ## 
 
 
-## ----fev, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------------------
+## ----fev, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------------------------
 
 head(fev, 16)
 
@@ -238,7 +235,7 @@ p
 
 
 
-## ----filtra_succimer, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------
+## ----filtra_succimer, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE--------------
 
 chumbo.succimer <- chumbo %>% 
   filter(trt == 1) %>% 
@@ -250,7 +247,7 @@ chumbo.succimer <- chumbo %>%
 
 
 
-## ----grupo_succimer, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE----------------
+## ----grupo_succimer, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE---------------
 
 chumbo.succimer
 
