@@ -3,94 +3,98 @@ title: "MAT02035 - Modelos para dados correlacionados"
 subtitle: "Visão geral de modelos lineares para dados longitudinais (continuação) - modelagem"
 fontsize: 10pt
 author: |
-  | Rodrigo Citton P. dos Reis
+  | Rodrigo Citton Padilha dos Reis
   | `citton.padilha@ufrgs.br`
 institute: |
   | \textsc{Universidade Federal do Rio Grande do Sul}
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2022
+  | Porto Alegre, 2023
 ---
 
 # Modelando a média
 
-## Introdução
+## Introdução {.allowframebreaks}
 
 - Distinguem-se duas abordagens principais: 
     1. a análise de perfis de resposta;
     2. curvas paramétricas ou semi-paramétricas.
+
 - A análise dos dados longitudinais enfoca as mudanças na resposta média ao longo do tempo e na relação dessas mudanças com as covariáveis.
+
+\framebreak
+
 - O fato de as medidas obtidas no mesmo indivíduo não serem independentes, mas estarem correlacionadas positivamente é uma consideração importante em sua análise, mas para a maioria dos estudos longitudinais a correlação geralmente __não é de interesse científico__ em si.
 - Antes de discutir abordagens para modelar a resposta média ao longo do tempo, é importante esclarecer a distinção entre __parâmetros substantivos__ e __de incômodos (de perturbação)__ no contexto de um estudo longitudinal.
 
-## Parâmetros substantivos e de incômodo para dados longitudinais
+## Parâmetros substantivos e de incômodo para dados longitudinais {.allowframebreaks}
 
 - Nos modelos de regressão para dados longitudinais, os parâmetros de regressão $\beta$ relacionam as mudanças na resposta média ao longo do tempo às covariáveis e são geralmente considerados de __interesse primário__ ou intrínseco.
     + Podem ser definidos para resumir aspectos importantes das __questões de pesquisa__.
     + Nos referimos a esses parâmetros como __parâmetros substantivos__.
+
+\framebreak
+
 - Por outro lado, em muitas aplicações, parâmetros que resumem aspectos da covariância ou correlação entre as medidas repetidas são considerados de __interesse secundário__.
     + Os parâmetros associados a esses aspectos secundários dos dados costumam ser chamados de parâmetros __de incômodo__.
     + Para a análise de dados longitudinais, os parâmetros de correlação ou covariância são frequentemente considerados parâmetros de incômodo, uma vez que não há interesse intrínseco neles.
     
-## Parâmetros substantivos e de incômodo para dados longitudinais
 
 ::: {.block}
-###
+
+### Atenção
+
 $$
 \mbox{SECUNDÁRIO}\ \neq\ \mbox{NEGLIGENCIÁVEL}
 $$
+
 :::
+
+\framebreak
 
 - Em algumas configurações em que dados correlacionados surgem, pode haver uma reversão completa de funções.
 
 - Em estudos com famílias, o objetivo é determinar se a presença de doença em um membro da família aumenta o risco de doença para os parentes.
     + As __correlações__ entre irmãos e entre pais e filhos são de __interesse principal__ (e , neste caso, os parâmetros de regressão $\beta$ são de incômodo) porque suas magnitudes relativas podem ser usadas para fornecer evidências indiretas de risco genético para a doença devido ao compartilhamento do mesmo conjunto de genes.
 
-## Parâmetros substantivos e de incômodo para dados longitudinais
-
-::: {.block}
-###
-$$
-\mbox{SECUNDÁRIO}\ \neq\ \mbox{NEGLIGENCIÁVEL}
-$$
-:::
+\framebreak
 
 - Um exemplo adicional surge quando os pesquisadores estão interessados em avaliar a __heterogeneidade de um efeito de tratamento__ em uma população.
     + Nesse cenário, a __variância do efeito__ do tratamento é de __interesse primário__.
     
 ## Modelando a resposta média ao longo do tempo
 
-<!-- - Existem duas abordagens principais:  -->
-<!--     1. a análise de perfis de resposta; -->
-<!--     2. curvas paramétricas ou semi-paramétricas. -->
-::: {.block}
-### Análise de perfis
+- Existem duas abordagens principais:
+    1. a análise de perfis de resposta;
+    2. curvas paramétricas ou semi-paramétricas.
+
+## Análise de perfis
 
 - Permite descrever padrões arbitrários na resposta média ao longo do tempo.
     + Nenhuma tendência de tempo específica é assumida. Em vez disso, os __tempos de medição__ são considerados como __níveis de um fator discreto__.
     + Só é aplicável quando todos os indivíduos são medidos no mesmo conjunto de ocasiões e o número de ocasiões geralmente é pequeno \structure{($n_i = n$\ e $n$ pequeno)}. (Note, neste caso, $p$ está relacionado com $n$)
-:::
 
-::: {.block}
-### Curva paramétrica
+## Curva paramétrica
 
 - Assume uma tendência linear ou quadrática, por exemplo, para a resposta média ao longo do tempo.
     + Pode reduzir drasticamente o número de parâmetros do modelo.
     + Descrevem a __resposta média__ como uma __função explícita do tempo__.
     + Não há necessidade que todos os indivíduos no estudo tenham o mesmo conjunto de tempos de medição, nem o mesmo número de medidas repetidas.
-:::
 
 # Modelando a covariância
 
 ##  Modelando a covariância
 
-- A contabilização da correlação entre medidas repetidas completa a especificação de qualquer modelo de regressão para dados longitudinais e geralmente aumenta a eficiência ou a precisão com a qual os parâmetros de regressão podem ser estimados.
-- Quando um modelo apropriado para a covariância é adotado, erros padrão corretos são obtidos e inferências válidas sobre os parâmetros de regressão podem ser feitas.
+- A contabilização da correlação entre medidas repetidas completa a especificação de qualquer modelo de regressão para dados longitudinais.
+    - Aumenta a eficiência ou a precisão com a qual os parâmetros de regressão podem ser estimados.
+- Quando um modelo apropriado para a covariância é adotado
+    - erros padrão corretos são obtidos;
+    - inferências válidas sobre os parâmetros de regressão podem ser feitas.
 
 ##  Modelando a covariância
 
-- Além disso, quando há dados ausentes, a modelagem correta da covariância é frequentemente um requisito para obter estimativas válidas para os parâmetros de regressão.
+- Além disso, quando há \structure{dados ausentes}, a modelagem correta da covariância é frequentemente um requisito para obter estimativas válidas para os parâmetros de regressão.
 
 - Distinguem-se três abordagens principais: 
     1. covariância não estruturada;
@@ -99,7 +103,7 @@ $$
 
 ## Covariância não estruturada
 
-- Permite qualquer padrão arbitrário de covariância entre as medidas repetidas.
+- Esta abordagem permite qualquer padrão arbitrário de covariância entre as medidas repetidas.
     + Isso resulta no que normalmente é chamado de covariância "não estruturada".
     + Assim, quando existem $n$ medidas repetidas, as $n$ variâncias em cada ocasião e as $n \times (n - 1) / 2$ covariâncias (ou correlações) aos pares são estimadas.
 - Historicamente, a matriz de covariância não estruturada tem sido o modelo de escolha para a covariância na análise de perfis de resposta (mas também pode ser usada na análise de curvas paramétricas).
@@ -172,12 +176,15 @@ p1
 - Esses modelos podem ser usados com observações desigualmente espaçadas.
 - __Parcimônia:__ modelos paramétricos podem descrever adequadamente a estrutura de covariância entre as medidas repetidas com apenas alguns (poucos) parâmetros.
 
-## Estruturas de covariância de efeitos aleatórios
+## Estruturas de covariância de efeitos aleatórios {.allowframebreaks}
 
 - Uma estratégia alternativa e um tanto indireta para impor estrutura à covariância é através da introdução de __efeitos aleatórios__.
     + Uma das primeiras abordagens para analisar dados de medidas repetidas.
 - No chamado modelo __ANOVA univariada de medidas repetidas__, a correlação entre medidas repetidas é explicada pela inclusão de um único efeito aleatório específico individual.
     + Esse efeito pode ser pensado como um intercepto variando aleatoriamente, representando uma agregação de todos os fatores não observados ou não mensurados que tornam alguns indivíduos "altos respondedores" e outros "baixos respondedores".
+
+\framebreak
+
 - A consequência de adicionar um único efeito aleatório específico do indivíduo a todas as medidas em qualquer indivíduo é que as medidas repetidas resultantes serão __correlacionadas positivamente__.
     + Assim, a inclusão de efeitos aleatórios impõe estrutura à covariância.
 
