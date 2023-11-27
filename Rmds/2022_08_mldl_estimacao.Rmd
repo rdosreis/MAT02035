@@ -3,14 +3,14 @@ title: "MAT02035 - Modelos para dados correlacionados"
 subtitle: "Estimação e inferência estatística"
 fontsize: 10pt
 author: |
-  | Rodrigo Citton P. dos Reis
+  | Rodrigo Citton Padilha dos Reis
   | `citton.padilha@ufrgs.br`
 institute: |
   | \textsc{Universidade Federal do Rio Grande do Sul}
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2022
+  | Porto Alegre, 2023
 ---
 
 # Introdução
@@ -42,15 +42,16 @@ $$
 
 ## O método da máxima verossimilhança
 
-- Dado que foram feitas suposições completas sobre a distribuição do vetor de respostas, $Y_i$ (${Y_i\sim N(X_i\beta, \Sigma_i(\theta))}$), uma abordagem bem  geral de estimação é o __método da máxima verossimilhança__ \structure{(MV)}.
+Dado que foram feitas suposições completas sobre a distribuição do vetor de respostas, $Y_i$ (${Y_i\sim N(X_i\beta, \Sigma_i(\theta))}$), uma abordagem bem  geral de estimação é o __método da máxima verossimilhança__ \structure{(MV)}.
 
-###
-+ A ideia fundamental por trás da estimativa de MV é realmente bastante simples e é transmitida por seu nome: use como estimativas de $\beta$ e $\theta$ os valores que são mais prováveis \structure{(ou mais "verossímeis")} para os dados que foram realmente observados.
+### Estimação por máxima verossimilhanç
+
++ A ideia fundamental por trás da estimatição de MV é realmente bastante simples e é transmitida por seu nome: use como estimativas de $\beta$ e $\theta$ os valores que são mais prováveis \structure{(ou mais "verossímeis")} para os dados que foram realmente observados.
 + As estimativas de máxima verossimilhança de $\beta$ e $\theta$ são aqueles valores de $\beta$ e $\theta$ que maximizam a probabilidade conjunta das variáveis resposta __avaliadas em seus valores observados__.
 
 ## Estimação: máxima verossimilhança
 
-- A probabilidade das variáveis resposta avaliadas no conjunto fixo de valores observados e consideradas como função de $\beta$ e $\Sigma_i(\theta)$ é conhecida como __função de verossimilhança__.
+- A probabilidade das variáveis resposta avaliadas no conjunto fixo de valores observados e considerada como função de $\beta$ e $\Sigma_i(\theta)$ é conhecida como __função de verossimilhança__.
     + Assim, a estimativa de $\beta$ e $\theta$ provém __por maximizar__ a função de verossimilhança.
 - Os valores de $\beta$ e $\theta$ que maximizam a função de verossimilhança são chamados de __estimativas de máxima verossimilhança__ de $\beta$ e $\theta$, e geralmente são indicados por $\hat{\beta}$ e $\hat{\theta}$ (ou $\widehat{\Sigma}_i$, $\Sigma_i(\hat{\theta})$).
 
