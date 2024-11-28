@@ -1,0 +1,456 @@
+---
+title:   |
+  | \normalsize UNIVERSIDADE FEDERAL DO RIO GRANDE DO SUL
+  | \normalsize INSTITUTO DE MATEMÁTICA E ESTATÍSTICA
+  | \normalsize DEPARTAMENTO DE ESTATÍSTICA
+  | \normalsize MAT02035 - Modelos para dados correlacionados
+  |
+  | \bf{\normalsize Avaliação 02 ($2 \times 10$ pontos)}
+fontsize: 12pt
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+__Problema 1.__ No National Cooperative Gallstone Study (NCGS), um dos principais interesses era estudar a segurança da droga chenodiol para o tratamento de cálculos biliares de colesterol (Schoenfield et al., 1981; Wei e Lachin, 1984). Neste estudo, os pacientes foram aleatoriamente designados para dose alta (750 mg por dia), dose baixa (375 mg por dia) ou placebo. Nós nos concentramos em um subconjunto de dados em pacientes que tinham cálculos biliares flutuantes e que foram designados para os grupos de alta dose e placebo. 
+
+No NCGS, foi sugerido que o chenodiol dissolveria os cálculos biliares, mas, ao fazê-lo, poderia aumentar os níveis de colesterol sérico. Como resultado, o colesterol sérico (mg/dL) foi medido no início do estudo e aos 6, 12, 20 e 24 meses de acompanhamento. Muitas medições de colesterol estão faltando por causa de visitas perdidas, amostras de laboratório foram perdidas ou inadequadas, ou o acompanhamento do paciente foi encerrado.
+
+- Os dados de colesterol sérico do NCGS estão armazenados em um arquivo externo: colesterol.dta.
+- Cada linha do conjunto de dados contém as seguintes sete variáveis:
+    + `Group ID Y1 Y2 Y3 Y4 Y5` Nota: A variável categórica Group é codificada 1 = Alta Dose, 2 = Placebo.
+
+1. Carregando e descrevendo os dados.
+    a. Ler os dados do arquivo externo e mantê-los em formato "multivariado" ou "largo".
+    
+```{r, warning=FALSE, message=FALSE}
+# ----------------------------------------------------
+# Carregando pacotes do R
+library(here)
+library(haven)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+colesterol <- read_dta(file = here::here("data",
+                                         "cholesterol.dta"))
+colesterol$group <- factor(colesterol$group,
+                           labels = c("Alta Dose", "Placebo"))
+colesterol
+
+# ----------------------------------------------------
+# Reformatando o objeto: de "largo" para "longo"
+colesterol.longo <- gather(data = colesterol,
+                           key = "meses",
+                           value = "col.serico",
+                           -id,
+                           -group)
+# ----------------------------------------------------
+# Formata variáveis
+colesterol.longo$meses <- factor(colesterol.longo$meses,
+                                 labels = c(0, 6, 12, 20, 24))
+colesterol.longo$meses.num <-
+  as.numeric(as.character(colesterol.longo$meses))
+colesterol.longo$tempo <- as.numeric(colesterol.longo$meses)
+colesterol.longo
+
+```
+
+1. Carregando e descrevendo os dados.
+    b. Calcule as médias amostrais, desvios padrão e variâncias dos níveis de colesterol sérico em cada ocasião para cada grupo de tratamento.
+
+```{r, warning=FALSE, message=FALSE}
+colesterol.resumo <- colesterol.longo %>%
+  group_by(group, meses.num) %>%
+  summarise(
+    col_media = mean(col.serico, na.rm = TRUE),
+    col_dp = sd(col.serico, na.rm = TRUE)
+  ) %>%
+  mutate(col_var = col_dp ^ 2)
+colesterol.resumo %>%
+  knitr::kable(
+    format = "markdown",
+    digits = c(0, 0, 2, 2, 2),
+    col.names = c("Grupo", "Meses",
+                  "Média", "Desvio Padrão",
+                  "Variância"),
+    align = "llccc"
+  )
+```
+
+1. Carregando e descrevendo os dados.
+    c. Em um único gráfico, construa um gráfico de tempo que exiba a média do colesterol sérico versus o tempo (em meses) para os dois grupos de tratamento. Descreva as características gerais das tendências temporais para os dois grupos.
+
+```{r, warning=FALSE, message=FALSE, fig.align='center', out.width="90%"}
+p <- ggplot(data = colesterol.resumo,
+            mapping = aes(x = meses.num, y = col_media,
+                          colour = group)) +
+  geom_point() + geom_line() +
+  scale_color_brewer(palette = "Dark2") +
+  scale_x_continuous(breaks = c(0, 6, 12, 20, 24)) +
+  labs(x = "Tempo (em meses)",
+       y = "Nível médio do colesterol sérico",
+       colour = "Grupo") +
+  theme_bw() + theme(legend.position = "bottom")
+p
+```
+
+Os dois grupos de tratamento apresentam trajetórias crescentes ao longo do período de acompanhamento.
+
+1. Carregando e descrevendo os dados.
+    d. Em seguida leia os dados do arquivo externo e coloque os dados em formato "univariado" ou "longo", com cinco "registros" por indivíduo __(Dica: resolver este item após o item [a])__.
+2. Ajustando o modelo aos dados.
+    a. Assumindo uma matriz de covariância não estruturada, realize uma **análise dos perfis de resposta**. Determine se os padrões de mudança ao longo do tempo diferem nos dois grupos de tratamento.
+
+```{r, warning=FALSE, message=FALSE}
+# grupo de referência = Placebo
+colesterol.longo$group <- relevel(colesterol.longo$group,
+                                  ref = "Placebo")
+library(nlme)
+# matriz de covariância não estruturada
+mod.pr <- gls(
+  col.serico ~ meses * group,
+  na.action = na.omit,
+  corr = corSymm(form = ~ tempo | id),
+  weights = varIdent(form = ~ 1 | tempo),
+  method = "REML",
+  data = colesterol.longo
+)
+summary(mod.pr)
+```
+
+Vamos testar a hipótese de ausência de efeito de interação $grupo \times tempo$:
+
+$$
+H_{01} : \beta_7 = \beta_8 = \beta_9 = \beta_{10} = 0.
+$$
+
+```{r, warning=FALSE, message=FALSE}
+library(car)
+Anova(mod.pr)
+```
+
+Assim, ao nível de 5% de significância, não rejeitamos a hipótese de ausência de interação. Ou seja, os padrões de mudança ao longo do tempo podem não diferirem nos dois grupos de tratamento.
+
+2. Ajustando o modelo aos dados.
+    b. Exiba as matrizes de covariância e correlação $5 \times 5$ estimadas (pelo modelo) para as cinco medições repetidas de colesterol sérico.
+
+```{r, warning=FALSE, message=FALSE}
+# matriz de covariância estimada
+getVarCov(mod.pr)
+```
+
+2. Ajustando o modelo aos dados.
+    c. Tendo a linha de base (mês 0) e o grupo placebo (grupo 2) como grupo de referência, escreva o modelo de regressão para o colesterol sérico médio que corresponde à análise dos perfis de resposta no Questão [2.a] __(Dica: escreva a matriz de covariáveis para um indivíduo de cada grupo de tratamento)__.
+
+$$
+E(Y_i|X_i) = X_i\beta,
+$$
+em que $\beta = (\beta_1, \ldots, \beta_{10})$ é um vetor $10 \times 1$ de coeficientes de regressão, e $X_i$ é uma matriz de delineamento.
+
+Para um indivíduo do grupo "Alta Dose" com todas as 5 medidas repetidas (caso uma medida não for obtida, basta remover a linha referente a medida repetida), $X_i$ é dada por:
+
+$$
+X_i = \left(\begin{array}{cccccccccc}
+1 &0 &0 &0 &0 &1 &0 &0 &0 &0\\
+1 &1 &0 &0 &0 &1 &1 &0 &0 &0\\
+1 &0 &1 &0 &0 &1 &0 &1 &0 &0\\
+1 &0 &0 &1 &0 &1 &0 &0 &1 &0\\
+1 &0 &0 &0 &1 &1 &0 &0 &0 &1\\
+\end{array}
+\right),
+$$
+e para um indivíduo do grupo "Placebo" (grupo referência) com todas as 5 medidas repetidas, $X_i$ é dada por:
+$$
+X_i = \left(\begin{array}{cccccccccc}
+1 &0 &0 &0 &0 &0 &0 &0 &0 &0\\
+1 &1 &0 &0 &0 &0 &0 &0 &0 &0\\
+1 &0 &1 &0 &0 &0 &0 &0 &0 &0\\
+1 &0 &0 &1 &0 &0 &0 &0 &0 &0\\
+1 &0 &0 &0 &1 &0 &0 &0 &0 &0\\
+\end{array}
+\right).
+$$
+
+2. Ajustando o modelo aos dados.
+    d. Seja $L$ uma matriz de pesos conhecidos e $\beta$ o vetor de parâmetros de regressão linear do modelo assumido na Questão [2.c]. A hipótese nula de que os padrões de mudança ao longo do tempo não diferem nos dois grupos de tratamento pode ser expressa como $H_0: L\beta = 0$. Descreva uma matriz de pesos $L$ apropriada para esta hipótese nula.
+
+$$
+L = \left(\begin{array}{cccccccccc}
+0 &0 &0 &0 &0 &0 &1 &0 &0 &0\\
+0 &0 &0 &0 &0 &0 &0 &1 &0 &0\\
+0 &0 &0 &0 &0 &0 &0 &0 &1 &0\\
+0 &0 &0 &0 &0 &0 &0 &0 &0 &1\\
+\end{array}
+\right).
+$$
+
+Desta forma $H_0: L\beta = 0$ é equivalente a testar $H_0: \beta_7 = \beta_8 = \beta_9 = \beta_{10} = 0$. Note que os parâmetros $\beta_7, \beta_8, \beta_9, \beta_{10}$ são os parâmetros referentes aos termos de interação no modelo do ajustado.
+
+2. Ajustando o modelo aos dados.
+    e. Mostre como os coeficientes de regressão estimados a partir de uma análise de perfis de resposta podem ser usados para construir as médias específicas do tempo nos dois grupos. Compare essas médias estimadas com as médias amostrais obtidas na Questão [1.b].
+
+Seja $\mu(1)$ o vetor de médias do grupo "Alta Dose", e $\mu(2)$ o vetor de médias do grupo "Placebo", então
+
+$$
+\mu(2) = \left(\begin{array}{c}
+\mu_1(2)\\
+\mu_2(2)\\
+\mu_3(2)\\
+\mu_4(2)\\
+\mu_5(2)\\
+\end{array}\right)
+=
+\left(\begin{array}{c}
+\beta_1\\
+\beta_1 + \beta_2\\
+\beta_1 + \beta_3\\
+\beta_1 + \beta_4\\
+\beta_1 + \beta_5\\
+\end{array}\right),
+$$
+
+e
+
+$$
+\mu(1) = \left(\begin{array}{c}
+\mu_1(1)\\
+\mu_2(1)\\
+\mu_3(1)\\
+\mu_4(1)\\
+\mu_5(1)\\
+\end{array}\right)
+=
+\left(\begin{array}{c}
+\beta_1 + \beta_6\\
+(\beta_1 + \beta_6) + (\beta_2 + \beta_7)\\
+(\beta_1 + \beta_6) + (\beta_3 + \beta_8)\\
+(\beta_1 + \beta_6) + (\beta_4 + \beta_9)\\
+(\beta_1 + \beta_6) + (\beta_5 + \beta_{10})\\
+\end{array}\right).
+$$
+
+Substituindo os coeficientes pelas suas respectivas estimativas, obtemos estimativas para as médias de cada grupo em cada ocasião de medição.
+
+```{r, warning=FALSE, message=FALSE}
+# coeficientes estimados
+beta.chap <- as.numeric(coef(mod.pr))
+media.chap <- c(
+  beta.chap[1],
+  beta.chap[1] + beta.chap[2:5],
+  (beta.chap[1] + beta.chap[6]),
+  (beta.chap[1] + beta.chap[6]) + (beta.chap[2:5] + beta.chap[7:10])
+)
+# Média observada
+colesterol.media <- colesterol.longo %>%
+  group_by(group, meses) %>%
+  summarise(media_obs = mean(col.serico, na.rm = TRUE))
+colesterol.media$media_ajus <- media.chap
+colesterol.media %>%
+  knitr::kable(
+    format = "markdown",
+    digits = c(0, 0, 2, 2),
+    col.names = c("Grupo", "Meses",
+                  "Média observada", "Média ajustada"),
+    align = "llcc"
+  )
+```
+
+As estimativas das médias dos níveis séricos de colesterol obtidas pelo modelo são muito próximas das médias amostrais (coluna "Média observada"), demonstrando um ajuste adequado do modelo de perfis de respostas.
+
+\newpage
+
+__Problema 2.__ Em um estudo de ganho de peso (Box, 1950), os investigadores distribuíram aleatoriamente 30 ratos em três grupos de tratamento: o tratamento 1 era um controle (sem aditivo); os tratamentos 2 e 3 consistiram de dois aditivos diferentes (tiouracil e tiroxina, respectivamente) para a ingestão de água dos ratos. O peso, em gramas, foi medido no início (semana 0) e nas semanas 1, 2, 3 e 4. Devido a um acidente no início do estudo, os dados de 3 ratos do grupo tiroxina não estão disponíveis.
+
+- Os dados brutos são armazenados em um arquivo externo: rat.dta
+- Cada linha do conjunto de dados contém as seguintes sete variáveis:
+    + `ID Group Y1 Y2 Y3 Y4 Y5`
+- __Nota:__ A variável `Group` é codificada `1 = controle`, `2 = tiouracil` e `3 = tiroxina`.
+
+1. Carregando e descrevendo os dados.
+    a. Ler os dados do arquivo externo e colocar os dados em formato "univariado" ou "longo", com cinco "registros" por indivíduo.
+
+```{r, warning=FALSE, message=FALSE}
+# ----------------------------------------------------
+# Carregando pacotes do R
+
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+
+rat <- read_dta(file = here::here("data",
+                                  "rat.dta"))
+rat$group <- factor(rat$group,
+                    labels = c("Controle", "Tiouracil", "Tiroxina"))
+rat
+
+# ----------------------------------------------------
+# Reformatando o objeto: de "largo" para "longo"
+rat.longo <- gather(data = rat,
+                    key = "semanas",
+                    value = "peso",
+                    -id,
+                    -group)
+# ----------------------------------------------------
+# Formata variáveis
+rat.longo$semanas <- factor(rat.longo$semanas,
+                            labels = 0:4)
+rat.longo$semanas.num <- as.numeric(as.character(rat.longo$semanas))
+rat.longo$tempo <- as.numeric(rat.longo$semanas)
+rat.longo
+```
+
+1. Carregando e descrevendo os dados.
+    b. Em um único gráfico, construa um gráfico de tempo que exiba o peso médio versus o tempo (em semanas) para os três grupos. Descreva as características gerais das tendências temporais para os três grupos.
+
+```{r, warning=FALSE, message=FALSE, fig.align='center', out.width="90%"}
+library(dplyr)
+
+rat.resumo <- rat.longo %>%
+  group_by(group, semanas.num) %>%
+  summarise(peso_media = mean(peso, na.rm = TRUE))
+rat.resumo
+
+p <- ggplot(data = rat.resumo,
+            mapping = aes(x = semanas.num, y = peso_media,
+                          colour = group)) +
+  geom_point() + geom_line() +
+  scale_color_brewer(palette = "Dark2") +
+  scale_x_continuous(breaks = 0:4) +
+  labs(x = "Tempo (em semanas)",
+       y = "Média do peso (gramas)",
+       colour = "Grupo de tratamento") +
+  theme_bw() + theme(legend.position = "bottom")
+p
+```
+
+2. Ajustando o modelo aos dados.
+    a. Suponha que a taxa de aumento em cada grupo seja **aproximadamente constante** ao longo da duração do estudo. Assumindo uma matriz de covariância não estruturada, construa um teste para verificar se a taxa de aumento difere nos grupos **(Dica: adote a abordagem de curvas paramétricas ou semiparamétricas; tendências lineares)**.
+
+```{r, warning=FALSE, message=FALSE}
+library(nlme)
+
+# matriz de covariância não estruturada
+mod.cp <- gls(
+  peso ~ semanas.num + semanas.num:group,
+  na.action = na.omit,
+  corr = corSymm(form = ~ tempo | id),
+  weights = varIdent(form = ~ 1 | tempo),
+  method = "REML",
+  data = rat.longo
+)
+
+summary(mod.cp)
+```
+
+Vamos testar a hipótese de ausência de efeito de interação $grupo \times tempo$:
+
+$$
+H_{01} : \beta_3 = \beta_4 = 0.
+$$
+
+```{r, warning=FALSE, message=FALSE}
+library(car)
+
+Anova(mod.cp)
+```
+
+Assim, ao nível de 5% de significância, rejeitamos a hipótese de ausência de interação. Ou seja, a taxa de crescimento deve diferir entre os grupos de tratamento.
+
+2. Ajustando o modelo aos dados.
+    b. Em um único gráfico, construa um gráfico de tempo que exiba o peso médio estimado versus tempo (em semanas) para os três grupos de tratamento a partir dos resultados gerados na Questão [2.a].
+
+```{r, warning=FALSE, message=FALSE}
+library(ggeffects)
+
+media_chap_df <-
+  ggpredict(mod.cp, terms = c("semanas.num", "group"))
+media_chap_df
+```
+
+```{r, warning=FALSE, message=FALSE, fig.align='center', out.width="90%"}
+df_aux <- as.data.frame(media_chap_df)[c(6, 1, 2)]
+names(df_aux) <- c("group", "semanas.num", "peso_media")
+
+p2 <- p + geom_line(data = df_aux,
+                    linetype = "dashed")
+p2
+```
+
+2. Ajustando o modelo aos dados.
+    c. Com base nos resultados da Questão [2.a], qual é a taxa estimada de aumento do peso médio no grupo de controle (grupo 1)? Qual é a taxa estimada de aumento do peso médio no grupo tiouracil (grupo 2)? Qual é a taxa estimada de aumento do peso médio no grupo tiroxina (grupo 3)?
+
+- Taxa de crescimento estimada do grupo Controle é $\hat{\beta}_2 = 26.22$ gramas por semana.
+- Taxa de crescimento estimada do grupo Tiouracil é $\hat{\beta}_2 + \hat{\beta}_3 = 19.12$ gramas por semana.
+- Taxa de crescimento estimada do grupo Tiroxina é $\hat{\beta}_2 + \hat{\beta}_4 = 24.12$ gramas por semana.
+
+2. Ajustando o modelo aos dados.
+    d. Os investigadores do estudo conjecturaram que haveria um aumento no peso, mas que a taxa de aumento se estabilizaria no final do estudo. Eles também conjecturaram que este padrão de mudança pode diferir nos três grupos de tratamento. Assumindo uma matriz de covariância não estruturada, construa um teste desta hipótese **(Dica: ajustar um modelo de tendências lineares por partes -- splines lineares com um *nó* no tempo $t^{*} = 2$ semanas -- com interação com efeito de grupo e testar a hipótese d ausência de interação)**.
+
+```{r, warning=FALSE, message=FALSE}
+# modelo de curvas paramétricas
+# splines lineares
+# com matriz de covariância não estruturada
+mod.spline <-
+  gls(
+    peso ~ semanas.num + I((semanas.num - 2) * (semanas.num > 2)) +
+      semanas.num:group + I((semanas.num - 2) * (semanas.num > 2)):group,
+    corr = corSymm(form = ~ tempo | id),
+    weights = varIdent(form = ~ 1 | tempo),
+    method = "REML",
+    data = rat.longo
+  )
+
+summary(mod.spline)
+
+Anova(mod.spline)
+```
+
+Ao nível de 5% de significância rejeitamos a hipótese de ausência de interação entre tempo e grupo de tratamento. Assim, a conjetura dos pesquisadores deve estar correta.
+
+2. Ajustando o modelo aos dados.
+    e. Compare e contraste os resultados das Questões [2.a] e [2.d]. Será que um modelo com apenas uma tendência linear no tempo explica adequadamente o padrão de mudança nos três grupos de tratamentos? Forneça resultados que apoiem sua conclusão **(Dica: comparação de modelos via teste de hipóteses ou algum critério estatístico)**.
+
+Note que o modelo de **tendências lineares** é um caso particular (encaixado) do modelo linear por partes, quando fazemos $\beta_3 = \beta_6 = \beta_7 = 0$. Podemos utilizar o **teste da razão de verossimilhanças** para comparar os dois modelos. **Importante:** a construção de testes de razão de verossimilhanças comparando modelos encaixados para a média deve sempre ser baseada na log-verossimilhança MV, e não no REML.
+
+```{r, warning=FALSE, message=FALSE}
+# modelo linear por partes
+mod.cp <- update(mod.cp, method = "ML")
+
+# modelo de tendências lineares
+mod.spline <- update(mod.spline, method = "ML")
+
+anova(mod.spline, mod.cp)
+```
+
+Ao nível de 5% de significância, o teste indica que o modelo linear por partes melhora o ajuste global da resposta média ao longo do tempo quando comparado com o modelo linear.
+
+2. Ajustando o modelo aos dados.
+    f. Dado os resultados de todas as análises anteriores, que conclusões podem ser tiradas sobre o efeito dos aditivos nos padrões de mudança de peso?
+  
+```{r, warning=FALSE, message=FALSE, fig.align='center', out.width="90%"}  
+media_chap_df <-
+  ggpredict(mod.spline, terms = c("semanas.num", "group"))
+
+df_aux <- as.data.frame(media_chap_df)[c(6, 1, 2)]
+names(df_aux) <- c("group", "semanas.num", "peso_media")
+
+p3 <- p + geom_line(data = df_aux,
+                    linetype = "dashed")
+p3
+```
+
+Os resultados anteriores nos permitem concluir que:
+
+- O modelo de tendências lineares por partes com um nó em $t^{*} = 2$ apresenta um ajuste melhor que o modelo linear de taxa de crescimento constante.
+- Os grupos Controle e Tiroxina não diferem significativamente no ganho de peso ao longo do tempo, e apresentam taxa de crescimento constante ao longo do tempo.
+- O grupo Tiouracil difere significativamente no ganho de peso dos outros grupos, apresentam diminuição da taxa de crescimento após 2 semanas de estudo.
+    + Assim, o aditivo Tiouracil tem influência no ganho de peso de ratos.

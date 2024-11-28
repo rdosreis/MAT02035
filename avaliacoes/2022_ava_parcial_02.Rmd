@@ -1,0 +1,116 @@
+---
+title:   |
+  | \normalsize UNIVERSIDADE FEDERAL DO RIO GRANDE DO SUL
+  | \normalsize INSTITUTO DE MATEMÁTICA E ESTATÍSTICA
+  | \normalsize DEPARTAMENTO DE ESTATÍSTICA
+  | \normalsize MAT02035 - Modelos para dados correlacionados
+  |
+  | \bf{\normalsize Avaliação parcial 02}
+fontsize: 12pt
+output:
+  pdf_document: default
+---
+
+__Exercício 1 (3 pontos)__ Mais uma vez, considere o estudo TLC, um estudo aleatorizado, controlado por placebo, de um agente quelante administrado por via oral, o _succimer_, em crianças com níveis confirmados de chumbo no sangue de 20 a 44 $\mu$g/dL. As crianças do estudo tinham idades entre 12 e 33 meses e viviam em moradias deterioradas no centro da cidade. Dados sobre os níveis de chumbo no sangue na linha de base (semana 0), e nas semanas 1, 4 e 6 do primeiro período de tratamento foram coletados. Na figura abaixo é apresentado o gráfico de médias de repostas por grupos de tratamento em cada ocasião de medição.
+
+```{r tlc_p, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, fig.align='center', out.width="50%"}
+# ----------------------------------------------------
+# Carregando pacotes do R
+
+library(here)
+library(haven)
+library(tidyr)
+library(ggplot2)
+
+# ----------------------------------------------------
+# Carregando o arquivo de dados
+
+chumbo.df <- read_dta(file = here::here("data", "tlc.dta"))
+
+chumbo.df$trt <- factor(chumbo.df$trt, labels = c("Placebo", "Succimer"))
+
+# ----------------------------------------------------
+# Reformando o objeto: de "largo" para "longo"
+
+chumbo.df.longo <- gather(data = chumbo.df, key = "tempo", value = "chumbo", -id, -trt)
+
+# ----------------------------------------------------
+# Formata variáveis
+
+chumbo.df.longo$tempo <- factor(chumbo.df.longo$tempo, labels = c("0", "1", "4", "6"))
+chumbo.df.longo$tempo.num <- as.numeric(as.character(chumbo.df.longo$tempo))
+
+# ----------------------------------------------------
+
+library(plyr)
+
+chumbo.resumo <- ddply(chumbo.df.longo, ~ trt + tempo.num, summarize, chumbo.m = mean(chumbo))
+
+p <- ggplot(data = chumbo.resumo,
+            mapping = aes(x = tempo.num, y = chumbo.m, group = trt, colour = trt)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(breaks = c(0, 1, 4, 6)) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(x = "Tempo (em semanas)",
+       y = expression("Média nível de chumbo no sangue"~(mu*g/dL)),
+       colour = "Grupo de tratamento") +
+  theme_bw() +
+  theme(legend.position = "bottom")
+p
+```
+
+1. Sugira um modelo de regressão para a resposta média. Justifique a sua escolha. Como você classifica a abordagem do modelo escolhido: perfis de resposta ou curvas paramétricas?
+2. Com base no modelo que você propôs no item anterior, apresente a matriz de delineamento $X_i$ para um indivíduo do grupo _succimer_ e para um indivíduo do grupo placebo.
+3. Com base no modelo que você propôs, apresente uma hipótese estatística para testar se o padrão de mudanças ao longo do tempo difere entre os grupos. Além disso, descreva o teste (Wald, Razão de Verossimilhanças, ou outro) e a distribuição de referência.
+
+\newpage
+
+__Exercício 2 (3 pontos)__ Considere o estudo de crescimento dentário, as medidas da distância (mm) do centro da glândula pituitária à fissura pteromaxilar foram obtidas em 11 meninas e 16 meninos nas idades de 8, 10, 12 e 14 (Potthoff e Roy, 1964). Um modelo saturado (considerando efeitos de tempo, grupo [gênero], e interações $tempo \times grupo$) foi assumido para a resposta média, e os seguintes modelos para a covariância foram ajustados: (`mod.ne`) covariância não estruturada;  (`mod.sc`) simetria composta; (`mod.ar`) autorregressiva.
+
+1. Para este estudo acima, descreva $N$, o número de indivíduos, $n$, o número de medidas repetidas, e $t_{ij}$.
+2. Para cada um dos modelos de covariância, escreva a matriz $\mbox{Cov}(Y_i)$, em que $Y_i$ representa o vetor de respostas.
+3. Com base nas comparações abaixo ($gl$ representa os graus de liberdade, AIC é o Critério de Informação de Akaike, logVero é a log-verossimilhança maximizada, RV é a razão de verossimilhanças), escolha um modelo de covariância que se ajuste adequadamente aos dados. Justifique a sua resposta.
+
+|       | Modelo| $gl$|      AIC|    logVero|Teste   |  RV|   Valor $p$|
+|:------|-----:|--:|--------:|---------:|:------|--------:|--------:|
+|`mod.ne` |     1| 18| 450.0348| -207.0174|       |       |       |
+|`mod.ar` |     2| 10| 454.5472| -217.2736|1 vs 2 | 20.51237| 0.0086|
+
+\
+
+|       | Modelo| $gl$|      AIC|    logVero|Teste   |  RV|   Valor $p$|
+|:------|-----:|--:|--------:|---------:|:------|--------:|---------:|
+|`mod.ne` |     1| 18| 450.0348| -207.0174|       |       |        |
+|`mod.sc` |     2| 10| 443.4085| -211.7043|1 vs 2 | 9.373732| 0.3118|
+
+\
+
+|       | Modelo| $gl$|      AIC|    logVero|
+|:------|-----:|--:|--------:|---------:|
+|`mod.sc` |     1| 10| 443.4085| -211.7043|
+|`mod.ar` |     2| 10| 454.5472| -217.2736|
+
+\newpage
+
+__Exercício 3 (4 pontos)__ Em um estudo de terapias de exercícios, 37 pacientes foram designados para um dos dois programas de levantamento de peso (Freund et al., 1986). No primeiro programa (tratamento 1), o número de repetições foi aumentado à medida que os indivíduos ficaram mais fortes. No segundo programa (tratamento 2), o número de repetições foi fixado, mas a quantidade de peso foi aumentada à medida que os indivíduos ficaram mais fortes. As medidas de força foram obtidas na linha de base (dia 0) e nos dias 2, 4, 6, 8, 10 e 12.
+
+Os dados brutos são armazenados em um arquivo externo: `exercise.dta`.
+
+Cada linha do conjunto de dados contém as nove variáveis a seguir:
+
+`id` `group` (programa/grupo de tratamento)  `y0` `y2` `y4` `y6` `y8` `y10` `y12`
+
+__Nota:__ A variável categórica `group` (tratamento) é codificada 1 = Programa 1 (aumento do número de repetições), 2 = Programa 2 (aumento da quantidade de peso).
+
+1. Construa um gráfico de tempo que exiba a força média versus tempo (em dias) para os dois grupos de tratamento. __Descreva as características gerais das tendências temporais__ para os dois programas de exercícios.
+
+2. Ajuste um modelo com interceptos e inclinações aleatórios e permita que os valores médios do intercepto e da inclinação dependam do grupo de tratamento (ou seja, inclua o efeito principal de tratamento, uma tendência de tempo linear e uma interação tratamento por tendência de tempo linear como efeitos fixos).
+
+    a. Qual é a variância estimada dos interceptos aleatórios?
+    b. Qual é a variância estimada das inclinações aleatórias?
+    c. Qual é a correlação estimada entre os interceptos e as inclinações aleatórios?
+
+3. Um modelo com apenas interceptos variando aleatoriamente é defensável? Explique/justifique?
+4. Quais são as médias do intercepto e inclinação nos dois programas de exercícios?
+5. Com base na análise anterior, interprete o efeito do tratamento nas mudanças na força. Sua análise sugere uma diferença entre os dois grupos?

@@ -10,7 +10,7 @@ institute: |
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2023
+  | Porto Alegre, 2024
 # header-includes:
 #   - \titlegraphic{\hfill\includegraphics[height=1.5cm]{logos/ime.png}}
 ---
@@ -30,14 +30,21 @@ knitr::include_graphics(here::here('images', 'hi_my_name_is.png'))
 
 \ttfamily
 
-- Desde __outubro de 2017__ eu sou Professor do __Departamento de Estatística__ e faço parte do Corpo Docente do __Programa de Pós Graduação em Epidemiologia__ da __Universidade Federal do Rio Grande do sul__ (UFRGS). Além disso, eu atuo como pesquisador no __Estudo Longitudinal de Saúde do Adulto (ELSA-Brasil)__.
+- __Bacharel em Estatística__ pelo Departamento de Estatística da __Universidade Federal do Rio Grande do sul__ (UFRGS) em __2008__;
+- __Mestre__ (__2010__) e __Doutor__ (__2014__) __em Estatística__ pelo __Programa de Pós Graduação em Estatística__ da __Universidade Federal de Minas Gerais__.
+- Professor do __Departamento de Estatística__ da UFRGS;
+- Coordenador do __Programa de Pós Graduação em Epidemiologia__ da UFRGS;
+- Pesquisador no __Estudo Longitudinal de Saúde do Adulto (ELSA-Brasil)__;
+- Coordenador do __Centro de Dados__ do ELSA-Brasil.
 
-- Eu me formei __Bacharel em Estatística__ pelo Departamento de Estatística da UFRGS em __2008__, e __Mestre__ (__2010__) e __Doutor__ (__2014__) __em Estatística__ pelo __Programa de Pós Graduação em Estatística__ da __Universidade Federal de Minas Gerais__. 
-- A minha dissertação de mestrado, intitulada _Técnicas estatísticas para avaliação de novos marcadores de risco: aplicações envolvendo o Modelo de Cox_, foi orientada pelos Professores Enrico A. Colosimo e Maria do Carmo P. Nunes.
-- A minha tese de doutorado, intitulada _Análise hierárquica de múltiplos sistemas reparáveis_, foi orientada pelos Professores Enrico A. Colosimo e Gustavo L. Gilardoni.
+\framebreak
 
-- Os meus interesses de pesquisa são __Inferência causal em epidemiologia__, __Análise de mediação__, __Técnicas de amostragem__, __Modelos de predição de risco__ e __Análise de sobrevivência__.
-- Em estatística aplicada eu tenho interesse na __epidemiologia do Diabetes Mellitus__.
+- Interesses de pesquisa em:
+    + __epidemiologia do Diabetes Mellitus__
+    + __inferência causal em epidemiologia__
+    + __técnicas de amostragem__
+    + __modelos de predição de risco__
+    + __análise de sobrevivência__.
 
 <!-- - Eu sou um grande entusiasta do R! -->
 <!-- - Nascido em Porto Velho, morador de Porto Alegre, com uma passagem (estatisticamente) significante por Belo Horizonte! -->
@@ -123,39 +130,40 @@ __Área 1__
 2. Dados longitudinais
 3. Visão geral dos modelos lineares para dados longitudinais
 4. Estimação e inferência estatística
-5. Modelando a média
-6. Modelando a covariância
-7. Modelos lineares de efeitos mistos
-
 
 ## Conteúdo programático (cont.)
 
 __Área 2__
 
+5. Modelando a média
+6. Modelando a covariância
+7. Modelos lineares de efeitos mistos
 8. Modelos de efeitos fixos versus efeitos aleatórios
 9. Diagnóstico e análise de resíduos
-10. Revisão de modelos lineares generalizados (MLG)
-11. Modelos marginais: introdução e visão geral
-12. Modelos marginais: Equações de Estimação Generalizadas (GEE)
-13. Dados ausentes: conceitos básicos
-14. Modelos multiníveis
-15. Tópicos complementares
+
+
+## Conteúdo programático (cont.)
+
+__Área 3__
+
+10. Modelos marginais: introdução e visão geral
+11. Modelos marginais: Equações de Estimação Generalizadas (GEE)
+12. Modelos multiníveis
+13. Tópicos complementares
 
 ## Avaliação
 
-- Serão realizadas quatro atividades de avaliação (pelo menos uma em de cada área):
-    + duas provas ($P_1$ e $P_2$) presenciais e individuais;
-    + dois trabalhos em grupo ($T_1$ e $T_2$).
-- Cada atividade de avaliação vale 10 pontos
-- Será realizado uma prova presencial e individual como atividade de recuperação ($PR$)
-    + Para os alunos que não atingirem o conceito mínimo
+- Serão realizadas três atividades de avaliação (uma em de cada área):
+    + três provas ($P_1$, $P_2$ e $P_3$) presenciais e individuais.
+- Cada atividade de avaliação vale 10 pontos.
+- Será realizado uma prova presencial e individual como atividade de recuperação ($PR$):
+    + Para os alunos que não atingirem o conceito mínimo;
     + __Esta prova abrange todo o conteúdo da disciplina__
-
 
 ## Avaliação
 
 $$
-MF = \frac{P_1 + P_2 + T_1 + T_2}{4}
+MF = \frac{P_1 + P_2 + P_3}{3}
 $$
 
 + __A:__ $9 \leq MF \leq 10$
@@ -271,16 +279,16 @@ Daremos atenção a estruturas de __dados longitudinais__ e __dados agrupados (m
     - Fazer estimação e inferência (construção de intervalos de confiança e testes de hipóteses) com respeito às quantidades de interesse (coeficientes de regressão, componentes de variância, etc.);
     - Avaliar o modelo que melhor descreve os dados através da comparação de modelos;
 
-## Próxima aula
+<!-- ## Próxima aula -->
 
-- Introdução aos dados longitudinais e agrupados.
+<!-- - Introdução aos dados longitudinais e agrupados. -->
 
-## Por hoje é só! Sejam todos bem-vind@s!
+<!-- ## Por hoje é só! Sejam todos bem-vind@s! -->
 
-```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE, purl=FALSE}
+<!-- ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE, purl=FALSE} -->
 
-knitr::include_graphics(here('images', 'perna_longa.png'))
+<!-- knitr::include_graphics(here('images', 'perna_longa.png')) -->
 
-```
+<!-- ``` -->
 
 

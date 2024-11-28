@@ -10,7 +10,7 @@ institute: |
   | \textsc{Instituto de Matemática e Estatística}
   | \textsc{Departamento de Estatística}
 date: |
-  | Porto Alegre, 2023
+  | Porto Alegre, 2024
 ---
 
 # Introdução
@@ -29,29 +29,38 @@ $\looparrowright$ A __pesquisa estatística__ em __métodos para o delineamento_
     + Estudos de coorte no Brasil: \structure{coortes de Pelotas (1982)}; \structure{ELSA-Brasil (2007)}.
     + Estudos de coorte na Europa: \structure{1958 National Child Development Study}; \structure{The Rotterdam Study (1990)}.
 
-## Introdução
+## Introdução {.allowframebreaks}
 
-- O foco destes primeiros estudos foi a __morbidade__ e, especialmente, a __mortalidade__.
-- Pesquisadores procuravam __identificar as causas__ da morte prematura e avaliar a efetividade dos tratamentos para atrasar a morte e a morbidade.
+- Foco destes primeiros estudos: __morbidade__ e __mortalidade__.
+- Pesquisadores procuravam:
+    + __identificar as causas__ da morte prematura;
+    + avaliar a efetividade dos tratamentos para atrasar a morte e a morbidade.
+    
+\framebreak
+
 - Neste contexto, as abordagens de análise predominantes eram:
     + __Regressão logística__ (1960s).
     + A análise de dados de __tempo até o evento__ foi revolucionada pelo artigo de 1972 de \textbf{\textcolor{darkpastelgreen}{D. R. Cox}}\footnote{Reid, N. A Conversation with Sir David Cox. \emph{Statistical Science}, 9:439-455, 1994.}, descrevendo __modelo de riscos proporcionais__\footnote{Cox, D.R. Regression Models and Life-Tables. \emph{Journal of the Royal Statistical Society. Series B}, 34:187-220, 1972.}.
 
 ## Introdução
 
-- Embora o delineamento do FHS exigisse a __medição periódica__ das características do paciente, consideradas determinantes de doenças crônicas, o interesse pelos níveis e __padrões de mudança__ dessas características __ao longo do tempo__ foi inicialmente limitado.
+- Embora o delineamento do FHS exigisse a __medição periódica__ das características do paciente, o interesse pelos níveis e __padrões de mudança__ dessas características __ao longo do tempo__ foi inicialmente limitado.
 - Com avanços da pesquisa, investigadores começaram a fazer perguntas sobre o __comportamento__ desses __fatores de risco__.
-    + No FHS os pesquisadores começaram a perguntar se os __níveis de pressão arterial__ na infância eram preditivos de hipertensão na vida adulta.
-    + No _Coronary Artery Risk Development in Young Adults_ (CARDIA) _Study_\footnote{Friedman, G.D. \emph{et al}. CARDIA: study design, recruitment, and some characteristics of the examined subjects. \emph{Journal of Clinical Epidemiology}, 41:1105-1116, 1988.}, os investigadores procuraram identificar os determinantes da transição do estado normotenso\footnote{``pressão arterial normal''} ou normocolesterolêmico\footnote{``colesterol normal''} no início da vida adulta para hipertensão e hipercolesterolemia na meia-idade.
+    + Os __níveis de pressão arterial__ na infância eram preditivos de hipertensão na vida adulta?
+    + No _Coronary Artery Risk Development in Young Adults_ (CARDIA) _Study_\footnote{Friedman, G.D. \emph{et al}. CARDIA: study design, recruitment, and some characteristics of the examined subjects. \emph{Journal of Clinical Epidemiology}, 41:1105-1116, 1988.}: identificar os determinantes da transição do estado normotenso\footnote{``pressão arterial normal''} ou normocolesterolêmico\footnote{``colesterol normal''} no início da vida adulta para hipertensão e hipercolesterolemia na meia-idade.
 
 ## Introdução
 
-- Questões semelhantes estavam sendo colocadas em todos os contextos de doenças.
-- Os pesquisadores começaram a __acompanhar populações__ de todas as idades ao longo do tempo, tanto em estudos observacionais quanto em ensaios clínicos, para __entender o desenvolvimento e a persistência da doença e para identificar fatores que alteram o curso do desenvolvimento da doença__.
+<!-- - Questões semelhantes estavam sendo colocadas em todos os contextos de doenças. -->
+- Os pesquisadores começaram a __acompanhar populações__ de todas as idades ao longo do tempo,
+    + tanto em estudos observacionais quanto em ensaios clínicos, 
+- para entender
+    + o desenvolvimento e a persistência da doença
+    + e para identificar fatores que alteram o curso do desenvolvimento da doença.
 
 ## Introdução
 
-- Esse interesse nos padrões temporais de mudança nas características humanas ocorreu em um período em que os __avanços no poder da computação__ tornaram novas e mais intensivas __abordagens computacionais__ para a análise estatística disponíveis no _desktop_.
+- Esse interesse ocorreu em um período em que os __avanços no poder da computação__ tornaram novas e mais intensivas __abordagens computacionais__ para a análise estatística disponíveis no _desktop_.
 
 ```{r echo=FALSE, fig.align='center', message=FALSE, warning=FALSE, out.width='50%', paged.print=FALSE}
 knitr::include_graphics(here::here('images', 'dims.jpg'))
@@ -350,8 +359,10 @@ são casos em que a __média é não-linear__ nos parâmetros de regressão.
 
 ## O modelo linear
 
-- Em resumo, vemos o \structure{paradigma de regressão} como uma __abordagem flexível e versátil__ para analisar dados longitudinais e correlacionados que surgem de diversos tipos de estudos.
-- Modelos de regressão podem fornecer uma __descrição/explicação parcimoniosa__ de como a \structure{resposta média} em um estudo longitudinal \structure{muda ao longo do tempo}, e como essas mudanças estão relacionadas a covariáveis de interesse (sendo estas contínuas ou discretas) através de \structure{coeficientes de regressão} que se baseiam diretamente nas questões científicas de interesse principal.
+- Em resumo, o \structure{paradigma de regressão} é uma __abordagem flexível e versátil__ para analisar dados longitudinais e correlacionados que surgem de diversos tipos de estudos.
+- Modelos de regressão podem fornecer uma __descrição/explicação parcimoniosa__ de
+    + como a \structure{resposta média} em um estudo longitudinal \structure{muda ao longo do tempo},
+    + e como essas mudanças estão relacionadas a covariáveis de interesse (sendo estas contínuas ou discretas) através de \structure{coeficientes de regressão} que se baseiam diretamente nas questões científicas de interesse principal.
 
 ## Avisos
 

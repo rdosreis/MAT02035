@@ -48,7 +48,7 @@ p <- ggplot(data = chol.df.longo[which(chol.df.longo$id %in% ids), ],
 p
 
 
-## ----tlc_tb, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis'--------------------
+## ----tlc_tb, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE, results='asis'----
 # ----------------------------------------------------
 # Carregando o arquivo de dados
 
